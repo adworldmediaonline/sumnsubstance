@@ -13,7 +13,6 @@ import {
   Plus,
   Share2,
 } from 'lucide-react';
-import { SessionUser } from '@/lib/auth';
 
 interface Product {
   id: string;
@@ -31,7 +30,11 @@ interface Product {
 }
 
 interface FeaturedProductsProps {
-  user?: SessionUser | null;
+  user?: {
+    id: string;
+    email: string;
+    name?: string;
+  } | null;
 }
 
 const featuredProducts: Product[] = [

@@ -1,7 +1,6 @@
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import LegalPageLayout from '@/components/layout/legal-page-layout';
-import { getCurrentUser } from '@/lib/auth';
 
 const returnsContent = {
   title: 'Returns & Refund',
@@ -23,11 +22,9 @@ const returnsContent = {
 };
 
 export default async function ReturnsRefundPage() {
-  const user = await getCurrentUser();
-
   return (
     <div className="min-h-screen bg-white">
-      <Header user={user} cartItemCount={0} />
+      <Header cartItemCount={0} />
 
       <LegalPageLayout {...returnsContent}>
         <div className="space-y-12">

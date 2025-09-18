@@ -1,4 +1,3 @@
-// import { getCurrentUser } from '@/lib/auth';
 import ProductDetailsClient from './product-details-client';
 
 export default async function ProductDetailsPage() {
@@ -7,7 +6,6 @@ export default async function ProductDetailsPage() {
   // }
   // Fetch user data on the server
   // const params = await props.params;
-  const user = null;
 
-  return <ProductDetailsClient user={user} />;
+  return <ProductDetailsClient />;
 }

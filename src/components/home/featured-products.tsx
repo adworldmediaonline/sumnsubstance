@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ProductCard from '@/components/products/product-card';
-import { SessionUser } from '@/lib/auth';
 
 interface Product {
   id: string;
@@ -20,10 +19,6 @@ interface Product {
   shortDescription?: string;
   discount?: number;
   featured?: boolean;
-}
-
-interface FeaturedProductsProps {
-  user?: SessionUser | null;
 }
 
 // Mock products data
@@ -134,7 +129,7 @@ const featuredProducts: Product[] = [
   },
 ];
 
-export default function FeaturedProducts({ user }: FeaturedProductsProps) {
+export default function FeaturedProducts() {
   const handleAddToCart = (productId: string) => {
     console.log('Add to cart:', productId);
     // Add cart functionality here
@@ -171,7 +166,6 @@ export default function FeaturedProducts({ user }: FeaturedProductsProps) {
               key={product.id}
               product={product}
               variant="horizontal"
-              user={user}
               onAddToCart={handleAddToCart}
               onToggleWishlist={handleToggleWishlist}
               onQuickView={handleQuickView}

@@ -39,13 +39,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-interface ProductDetailsClientProps {
-  user: any | null;
-}
-
-export default function ProductDetailsClient({
-  user,
-}: ProductDetailsClientProps) {
+export default function ProductDetailsClient() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);

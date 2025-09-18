@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import { Star } from 'lucide-react';
 
 // Dynamic import for Swiper to avoid SSR issues

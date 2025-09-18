@@ -2,7 +2,6 @@
 
 import React from 'react';
 import ProductCard from './product-card';
-import { SessionUser } from '@/lib/auth';
 
 interface Product {
   id: string;
@@ -29,7 +28,6 @@ interface ProductGridProps {
   onToggleWishlist?: (productId: string) => void;
   onQuickView?: (productId: string) => void;
   className?: string;
-  user?: SessionUser | null;
   loading?: boolean;
   emptyMessage?: string;
 }
@@ -43,7 +41,6 @@ export default function ProductGrid({
   onToggleWishlist,
   onQuickView,
   className = '',
-  user,
   loading = false,
   emptyMessage = 'No products found',
 }: ProductGridProps) {
@@ -120,7 +117,6 @@ export default function ProductGrid({
           onAddToCart={onAddToCart}
           onToggleWishlist={onToggleWishlist}
           onQuickView={onQuickView}
-          user={user}
         />
       ))}
     </div>

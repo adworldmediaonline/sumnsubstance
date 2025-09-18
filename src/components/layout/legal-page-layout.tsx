@@ -30,6 +30,8 @@ export default function LegalPageLayout({
     }
   };
 
+  console.log(sidebarOpen);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

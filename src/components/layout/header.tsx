@@ -32,9 +32,8 @@ import {
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
-import { toast } from 'sonner';
+
+import { useState } from 'react';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -46,9 +45,7 @@ export default function Header({
   cartItemCount = 0,
   variant = 'default',
 }: HeaderProps) {
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
 
   // Theme variants
   const themes = {
@@ -293,7 +290,7 @@ export default function Header({
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => {}}
-                        disabled={isPending}
+                        disabled={false}
                         className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
                       >
                         {false ? (
@@ -301,7 +298,7 @@ export default function Header({
                         ) : (
                           <LogOut className="w-4 h-4 mr-2" />
                         )}
-                        {isPending ? 'Logging out...' : 'Sign Out'}
+                        {false ? 'Logging out...' : 'Sign Out'}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ProductCard from './product-card';
-import { SessionUser } from '@/lib/auth';
 
 interface Product {
   id: string;
@@ -34,7 +33,7 @@ interface ProductSectionProps {
   onToggleWishlist?: (productId: string) => void;
   onQuickView?: (productId: string) => void;
   className?: string;
-  user?: SessionUser | null;
+
   loading?: boolean;
 }
 
@@ -50,7 +49,7 @@ export default function ProductSection({
   onToggleWishlist,
   onQuickView,
   className = '',
-  user,
+
   loading = false,
 }: ProductSectionProps) {
   const displayProducts = products.slice(0, maxItems);
@@ -108,7 +107,6 @@ export default function ProductSection({
               onAddToCart={onAddToCart}
               onToggleWishlist={onToggleWishlist}
               onQuickView={onQuickView}
-              user={user}
             />
           ))}
         </div>
