@@ -18,7 +18,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,13 +25,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import {
-  checkoutFormSchema,
-  type CheckoutFormData,
+  minimalCheckoutFormSchema,
+  type MinimalCheckoutFormData,
 } from '@/lib/validations/order';
 import { useCartItems, useClearCart } from '@/store/cart-store';
 import { toast } from 'sonner';
@@ -54,10 +49,8 @@ export function CheckoutForm({
 }: CheckoutFormProps) {
   const cartItems = useCartItems();
   const clearCart = useClearCart();
-  const [sameAsBilling, setSameAsBilling] = useState(true);
 
-  const form = useForm<CheckoutFormData>({
-    resolver: zodResolver(checkoutFormSchema),
+  const form = useForm({
     mode: 'onChange',
     defaultValues: {
       customerInfo: {
@@ -68,7 +61,6 @@ export function CheckoutForm({
       },
       shippingAddress: {
         fullName: user?.name || '',
-        email: user?.email || '',
         phone: '',
         addressLine1: '',
         addressLine2: '',
@@ -76,35 +68,17 @@ export function CheckoutForm({
         state: '',
         postalCode: '',
         country: 'India',
+        isDefault: false,
       },
       shippingMethod: 'standard',
       paymentMethod: 'razorpay',
-      agreeToTerms: false,
-      subscribeNewsletter: false,
+      orderNotes: '',
     },
   });
 
-  // Auto-fill billing address when same as shipping is checked
-  useEffect(() => {
-    if (sameAsBilling) {
-      const shippingAddress = form.getValues('shippingAddress');
-      form.setValue('billingAddress', {
-        ...shippingAddress,
-        sameAsShipping: true,
-      });
-    }
-  }, [sameAsBilling, form]);
-
-  const onSubmit = async (data: CheckoutFormData) => {
+  const onSubmit = async (data: any) => {
     try {
       onProcessingChange(true);
-
-      // Validate that terms are agreed to
-      if (!data.agreeToTerms) {
-        toast.error('You must agree to the terms and conditions');
-        onProcessingChange(false);
-        return;
-      }
 
       // Process the order directly - all fields are validated by the form schema
       await processOrder(data);
@@ -116,7 +90,7 @@ export function CheckoutForm({
     }
   };
 
-  const processOrder = async (data: CheckoutFormData) => {
+  const processOrder = async (data: any) => {
     try {
       // Create order payload
       const orderPayload = {
@@ -126,9 +100,15 @@ export function CheckoutForm({
           price: item.product.price,
         })),
         customerInfo: data.customerInfo,
-        shippingAddress: data.shippingAddress,
-        billingAddress: data.billingAddress,
-        paymentMethod: data.paymentMethod,
+        shippingAddress: {
+          ...data.shippingAddress,
+          email: data.customerInfo.email, // Use customer email for shipping
+        },
+        billingAddress: {
+          ...data.shippingAddress,
+          email: data.customerInfo.email, // Use customer email for billing
+        },
+        paymentMethod: 'razorpay', // Default to Razorpay since it handles all payment methods
         shippingMethod: data.shippingMethod,
         orderNotes: data.orderNotes,
         userId: user?.id,
@@ -147,16 +127,13 @@ export function CheckoutForm({
         throw new Error('Failed to create order');
       }
 
-      const order = await orderResponse.json();
+      const orderResult = await orderResponse.json();
+      console.log('Order created:', orderResult);
 
-      // Process payment based on method
-      if (data.paymentMethod === 'razorpay') {
-        await processRazorpayPayment(order);
-      } else if (data.paymentMethod === 'cod') {
-        // For COD, redirect directly to success page
-        clearCart();
-        window.location.href = `/checkout/success?orderId=${order.id}`;
-      }
+      const order = orderResult.data; // Extract order data from response
+
+      // Process payment with Razorpay (handles all payment methods)
+      await processRazorpayPayment(order);
     } catch (error) {
       console.error('Order processing error:', error);
       throw error;
@@ -181,6 +158,9 @@ export function CheckoutForm({
           order_id: order.razorpayOrderId,
           handler: async (response: any) => {
             try {
+              console.log('Razorpay response:', response);
+              console.log('Order for verification:', order);
+
               // Verify payment
               const verificationResponse = await fetch('/api/payments/verify', {
                 method: 'POST',
@@ -438,158 +418,6 @@ export function CheckoutForm({
                   </FormItem>
                 )}
               />
-            </div>
-
-            <Separator />
-            <div className="space-y-4">
-              <h3 className="font-semibold">Shipping Method</h3>
-
-              <FormField
-                control={form.control}
-                name="shippingMethod"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                      >
-                        <div className="flex items-center space-x-2 border rounded-lg p-4">
-                          <RadioGroupItem value="standard" id="standard" />
-                          <Label htmlFor="standard" className="flex-1">
-                            <div>
-                              <p className="font-medium">Standard Delivery</p>
-                              <p className="text-sm font-medium">₹50</p>
-                            </div>
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-lg p-4">
-                          <RadioGroupItem value="express" id="express" />
-                          <Label htmlFor="express" className="flex-1">
-                            <div>
-                              <p className="font-medium">Express Delivery</p>
-                              <p className="text-sm font-medium">₹150</p>
-                            </div>
-                          </Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Payment & Review */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
-              Payment & Review
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="font-semibold">Payment Method</h3>
-
-              <FormField
-                control={form.control}
-                name="paymentMethod"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                      >
-                        <div className="flex items-center space-x-2 border rounded-lg p-4">
-                          <RadioGroupItem value="razorpay" id="razorpay" />
-                          <Label htmlFor="razorpay" className="flex-1">
-                            <div>
-                              <p className="font-medium">Card / UPI / Wallet</p>
-                            </div>
-                          </Label>
-                        </div>
-                        <div className="flex items-center space-x-2 border rounded-lg p-4">
-                          <RadioGroupItem value="cod" id="cod" />
-                          <Label htmlFor="cod" className="flex-1">
-                            <div>
-                              <p className="font-medium">Cash on Delivery</p>
-                            </div>
-                          </Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <Separator />
-            <div className="space-y-4">
-              <h3 className="font-semibold">Order Notes (Optional)</h3>
-
-              <FormField
-                control={form.control}
-                name="orderNotes"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Any special instructions for your order..."
-                        className="min-h-[100px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <Separator />
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="agreeToTerms"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        I agree to the{' '}
-                        <a
-                          href="/terms-conditions"
-                          target="_blank"
-                          className="text-primary hover:underline"
-                        >
-                          Terms & Conditions
-                        </a>{' '}
-                        and{' '}
-                        <a
-                          href="/privacy-policy"
-                          target="_blank"
-                          className="text-primary hover:underline"
-                        >
-                          Privacy Policy
-                        </a>{' '}
-                        *
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-
             </div>
           </CardContent>
         </Card>

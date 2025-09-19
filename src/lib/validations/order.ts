@@ -78,21 +78,15 @@ export const customerInfoSchema = z.object({
 export const checkoutFormSchema = z.object({
   customerInfo: customerInfoSchema,
   shippingAddress: shippingAddressSchema,
-  billingAddress: billingAddressSchema.optional(),
-  shippingMethod: z.enum(['standard', 'express'], {
-    required_error: 'Please select a shipping method',
-  }),
-  paymentMethod: z.enum(['razorpay', 'cod'], {
-    required_error: 'Please select a payment method',
-  }),
+  shippingMethod: z
+    .enum(['standard', 'express'])
+    .optional()
+    .default('standard'),
+  paymentMethod: z.enum(['razorpay', 'cod']).optional().default('razorpay'),
   orderNotes: z
     .string()
     .max(500, 'Order notes must be less than 500 characters')
     .optional(),
-  agreeToTerms: z.boolean().refine(val => val === true, {
-    message: 'You must agree to the terms and conditions',
-  }),
-  subscribeNewsletter: z.boolean().optional(),
 });
 
 // Order Creation Schema
@@ -247,6 +241,34 @@ export const orderAnalyticsSchema = z.object({
 
 // Export inferred types for use in components
 export type CheckoutFormData = z.infer<typeof checkoutFormSchema>;
+
+// Minimal checkout form schema (only essential fields)
+export const minimalCheckoutFormSchema = z.object({
+  customerInfo: z.object({
+    email: z.string().email('Please enter a valid email address'),
+    firstName: z.string().min(2, 'First name must be at least 2 characters'),
+    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+    phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  }),
+  shippingAddress: z.object({
+    fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+    email: z.string().email('Please enter a valid email address'),
+    phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+    addressLine1: z.string().min(5, 'Address must be at least 5 characters'),
+    addressLine2: z.string().optional(),
+    city: z.string().min(2, 'City must be at least 2 characters'),
+    state: z.string().min(2, 'State must be at least 2 characters'),
+    postalCode: z.string().min(5, 'Postal code must be at least 5 characters'),
+    country: z.string().default('India'),
+    isDefault: z.boolean().optional(),
+  }),
+  shippingMethod: z.enum(['standard', 'express']).default('standard'),
+  paymentMethod: z.enum(['razorpay', 'cod']).default('razorpay'),
+  orderNotes: z.string().max(500).optional(),
+});
+
+// Simplified checkout form type for the minimal form
+export type MinimalCheckoutFormData = z.infer<typeof minimalCheckoutFormSchema>;
 export type CreateOrderData = z.infer<typeof createOrderSchema>;
 export type UpdateOrderData = z.infer<typeof updateOrderSchema>;
 export type OrderQueryData = z.infer<typeof orderQuerySchema>;
