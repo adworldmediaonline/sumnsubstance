@@ -13,6 +13,8 @@ import {
   Share2,
 } from 'lucide-react';
 import type { SerializedProductWithCategory } from '@/server/queries/product';
+import { useAddItem, useGetItem } from '@/store/cart-store';
+import { toast } from 'sonner';
 
 interface Product extends SerializedProductWithCategory {
   // Additional frontend-only fields
@@ -39,10 +41,31 @@ export function FeaturedProductsClient({
   user,
 }: FeaturedProductsClientProps) {
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const addItem = useAddItem();
+  const getItem = useGetItem();
 
   const handleAddToCart = (productId: string) => {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
     const quantity = quantities[productId] || 1;
-    console.log('Add to cart:', productId, 'Quantity:', quantity);
+
+    // Convert to cart product format
+    const cartProduct = {
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      excerpt: product.excerpt,
+      mainImage: product.mainImage,
+      category: product.category,
+    };
+
+    addItem(cartProduct, quantity);
+    toast.success(`${product.name} added to cart!`);
+
+    // Reset quantity for this product
+    setQuantities(prev => ({ ...prev, [productId]: 1 }));
   };
 
   const handleToggleWishlist = (productId: string) => {

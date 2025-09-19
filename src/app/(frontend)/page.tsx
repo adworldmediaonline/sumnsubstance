@@ -22,7 +22,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <HeroBannerV2 cartItemCount={0} />
+      <HeroBannerV2 />
 
       <FeaturedProductsV3 products={featuredProducts} />
 

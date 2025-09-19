@@ -39,13 +39,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { authClient } from '../../lib/auth-client';
 import { useRouter } from 'next/navigation';
-import router from 'next/router';
+import { CartDropdown } from '@/components/cart/cart-dropdown';
 
 interface HeroBannerV2Props {
-  cartItemCount?: number;
+  // No props needed - cart state managed globally
 }
 
-export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
+export default function HeroBannerV2({}: HeroBannerV2Props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
@@ -143,18 +143,7 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
           </Button>
 
           {/* Cart */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="relative p-2 hover:bg-white/10 text-white hover:text-[#FFD700]"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#FFD700] text-[#228B22] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartItemCount}
-              </span>
-            )}
-          </Button>
+          <CartDropdown />
 
           {/* User Account - Desktop */}
           {!isPending && session ? (
