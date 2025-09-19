@@ -17,10 +17,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
-import { updateCategory, updateCategorySchema } from '@/app/actions/category';
+import { updateCategory } from '@/app/actions/category';
 import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { CategoryWithProducts } from '@/server/queries/category';
+import { updateCategorySchema } from '../../../../../lib/validations/category';
 
 type FormData = z.infer<typeof updateCategorySchema>;
 

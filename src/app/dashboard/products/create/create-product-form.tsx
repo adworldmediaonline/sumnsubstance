@@ -24,10 +24,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
-import { createProduct, createProductSchema } from '@/app/actions/product';
+import { createProduct } from '@/app/actions/product';
 import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { CategoryWithCount } from '@/server/queries/category';
+import { createProductSchema } from '../../../../lib/validations/product';
 
 type FormData = z.infer<typeof createProductSchema>;
 
