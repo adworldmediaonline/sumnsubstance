@@ -208,10 +208,10 @@ export default function FeaturedProductsV3({}: FeaturedProductsProps) {
                         index % 4 === 0
                           ? 'from-[#ffd469]/15 via-[#fff2d4]/10 to-white'
                           : index % 4 === 1
-                          ? 'from-[#233f1c]/10 via-white to-[#ffd469]/15'
-                          : index % 4 === 2
-                          ? 'from-white via-[#ffd469]/10 to-[#233f1c]/10'
-                          : 'from-[#233f1c]/15 via-[#2b3e1a]/5 to-[#ffd469]/10'
+                            ? 'from-[#233f1c]/10 via-white to-[#ffd469]/15'
+                            : index % 4 === 2
+                              ? 'from-white via-[#ffd469]/10 to-[#233f1c]/10'
+                              : 'from-[#233f1c]/15 via-[#2b3e1a]/5 to-[#ffd469]/10'
                       } flex items-center justify-center p-8 lg:p-12 relative`}
                     >
                       {/* Subtle floating elements */}

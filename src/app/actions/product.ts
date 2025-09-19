@@ -107,10 +107,23 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       additionalImages,
     } = validatedData;
 
-    // Check if product exists
-    const existingProduct = await prisma.product.findUnique({
-      where: { id },
-    });
+    // Check if product exists (with timeout handling)
+    let existingProduct;
+    try {
+      existingProduct = await prisma.product.findUnique({
+        where: { id },
+        select: { id: true, name: true, slug: true }, // Only select needed fields
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during product lookup:',
+        dbError
+      );
+      return {
+        success: false,
+        error: 'Database connection error. Please try again.',
+      };
+    }
 
     if (!existingProduct) {
       return {
@@ -120,9 +133,22 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     }
 
     // Check if category exists
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
-    });
+    let category;
+    try {
+      category = await prisma.category.findUnique({
+        where: { id: categoryId },
+        select: { id: true, name: true }, // Only select needed fields
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during category lookup:',
+        dbError
+      );
+      return {
+        success: false,
+        error: 'Database connection error. Please try again.',
+      };
+    }
 
     if (!category) {
       return {
@@ -152,27 +178,40 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       }
     }
 
-    // Update product
-    const updatedProduct = await prisma.product.update({
-      where: { id },
-      data: {
-        name,
-        description,
-        slug,
-        price: new Decimal(price),
-        categoryId,
-        mainImageUrl: mainImage?.url,
-        mainImagePublicId: mainImage?.publicId,
-        mainImageAlt: mainImage?.altText,
-        additionalImages:
-          additionalImages && additionalImages.length > 0
-            ? additionalImages
-            : null,
-      },
-      include: {
-        category: true,
-      },
-    });
+    // Update product with error handling
+    let updatedProduct;
+    try {
+      updatedProduct = await prisma.product.update({
+        where: { id },
+        data: {
+          name,
+          description,
+          slug,
+          price: new Decimal(price),
+          categoryId,
+          mainImageUrl: mainImage?.url,
+          mainImagePublicId: mainImage?.publicId,
+          mainImageAlt: mainImage?.altText,
+          additionalImages:
+            additionalImages && additionalImages.length > 0
+              ? additionalImages
+              : null,
+        },
+        include: {
+          category: true,
+        },
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during product update:',
+        dbError
+      );
+      return {
+        success: false,
+        error:
+          'Failed to update product due to database connection error. Please try again.',
+      };
+    }
 
     revalidatePath('/dashboard/products');
     revalidatePath(`/dashboard/products/${id}/edit`);
@@ -180,7 +219,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 
     return {
       success: true,
-      data: updatedProduct,
+      data: serializeProduct(updatedProduct),
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
