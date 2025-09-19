@@ -59,6 +59,11 @@ const data = {
       icon: IconPackage,
     },
     {
+      title: 'Orders',
+      url: '/dashboard/orders',
+      icon: IconShoppingCart,
+    },
+    {
       title: 'Analytics',
       url: '#',
       icon: IconChartBar,

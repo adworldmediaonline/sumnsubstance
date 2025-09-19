@@ -25,6 +25,7 @@ model User {
   initials      String?
   sessions      Session[]
   accounts      Account[]
+  orders        Order[]
 
   @@unique([email])
   @@map("user")
@@ -101,6 +102,99 @@ model Product {
   additionalImages Json?    // Store array of image objects
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+  orderItems       OrderItem[]
 
   @@map("product")
+}
+
+// Order Management System
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique // Human-readable order number
+
+  // Customer Information (supports both guest and authenticated users)
+  userId          String?     // Optional for guest checkout
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestEmail      String?     // For guest orders
+  guestName       String?     // For guest orders
+
+  // Order Status
+  status          OrderStatus @default(PENDING)
+
+  // Financial Information
+  subtotal        Decimal     @db.Decimal(10, 2)
+  tax             Decimal     @db.Decimal(10, 2)
+  shipping        Decimal     @db.Decimal(10, 2)
+  discount        Decimal     @db.Decimal(10, 2) @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+
+  // Payment Information
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentMethod   String?     // razorpay, card, etc.
+  razorpayOrderId String?     // Razorpay order ID
+  razorpayPaymentId String?   // Razorpay payment ID
+  razorpaySignature String?   // Razorpay signature for verification
+
+  // Shipping Address
+  shippingAddress Json        // Store complete address as JSON
+  billingAddress  Json?       // Optional separate billing address
+
+  // Order Items
+  items           OrderItem[]
+
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Order fulfillment
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  // Notes and tracking
+  notes           String?     // Internal notes
+  trackingNumber  String?     // Shipping tracking number
+
+  @@map("order")
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  // Item details (snapshot at time of order)
+  name      String   // Product name at time of order
+  price     Decimal  @db.Decimal(10, 2) // Price at time of order
+  quantity  Int
+  total     Decimal  @db.Decimal(10, 2) // price * quantity
+
+  // Product snapshot for order history
+  productSnapshot Json // Store product details at time of order
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_item")
+}
+
+// Enums for Order Management
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
 }
