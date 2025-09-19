@@ -19,6 +19,7 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
     const validatedData = createProductSchema.parse(data);
     const {
       name,
+      excerpt,
       description,
       price,
       categoryId,
@@ -53,6 +54,7 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
     const product = await prisma.product.create({
       data: {
         name,
+        excerpt,
         description,
         slug,
         price: new Decimal(price),
@@ -100,6 +102,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     const {
       id,
       name,
+      excerpt,
       description,
       price,
       categoryId,
@@ -185,6 +188,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         where: { id },
         data: {
           name,
+          excerpt,
           description,
           slug,
           price: new Decimal(price),

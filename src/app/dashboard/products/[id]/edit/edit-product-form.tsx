@@ -50,6 +50,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
       name: product.name,
       price: product.price,
       categoryId: product.categoryId,
+      excerpt: product.excerpt || '',
       description: product.description || '',
       mainImage: product.mainImage,
       additionalImages: product.additionalImages,
@@ -114,6 +115,28 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                     </span>
                   )}
                 </span>
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="excerpt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Excerpt</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter a short description (optional)"
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Brief description for product cards and listings (max 300
+                characters)
               </FormDescription>
               <FormMessage />
             </FormItem>

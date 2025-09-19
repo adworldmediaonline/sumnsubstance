@@ -89,7 +89,8 @@ model Category {
 model Product {
   id               String   @id @default(cuid())
   name             String
-  description      String?
+  excerpt          String?  // Short description for listings/cards
+  description      String?  // Full description for product details
   slug             String   @unique
   price            Decimal  @db.Decimal(10, 2)
   categoryId       String

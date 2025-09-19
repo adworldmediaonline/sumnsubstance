@@ -14,6 +14,10 @@ export const createProductSchema = z.object({
     .min(1, 'Product name is required')
     .max(200, 'Product name must be less than 200 characters')
     .trim(),
+  excerpt: z
+    .string()
+    .max(300, 'Excerpt must be less than 300 characters')
+    .optional(),
   description: z.string().optional(),
   price: z
     .number()
@@ -31,6 +35,10 @@ export const updateProductSchema = z.object({
     .min(1, 'Product name is required')
     .max(200, 'Product name must be less than 200 characters')
     .trim(),
+  excerpt: z
+    .string()
+    .max(300, 'Excerpt must be less than 300 characters')
+    .optional(),
   description: z.string().optional(),
   price: z
     .number()

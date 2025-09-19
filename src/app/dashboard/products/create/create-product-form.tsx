@@ -46,6 +46,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: '',
+      excerpt: '',
       description: '',
       price: 0,
       categoryId: '',
@@ -103,6 +104,28 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
                     </code>
                   </span>
                 )}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="excerpt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Excerpt</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter a short description (optional)"
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Brief description for product cards and listings (max 300
+                characters)
               </FormDescription>
               <FormMessage />
             </FormItem>
