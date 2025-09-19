@@ -57,9 +57,9 @@ export async function GET(
       trackingNumber: order.trackingNumber,
       notes: order.notes,
       estimatedDelivery,
-      shippingAddress: JSON.parse(order.shippingAddress),
+      shippingAddress: JSON.parse(order.shippingAddress as string),
       billingAddress: order.billingAddress
-        ? JSON.parse(order.billingAddress)
+        ? JSON.parse(order.billingAddress as string)
         : null,
       items: order.items.map(item => ({
         id: item.id,

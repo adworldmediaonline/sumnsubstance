@@ -117,7 +117,9 @@ export async function POST(request: NextRequest) {
         paymentMethod,
         razorpayOrderId,
         shippingAddress: JSON.stringify(shippingAddress),
-        billingAddress: billingAddress ? JSON.stringify(billingAddress) : null,
+        billingAddress: billingAddress
+          ? JSON.stringify(billingAddress)
+          : undefined,
         notes: orderNotes,
         items: {
           create: orderItems,
@@ -142,7 +144,7 @@ export async function POST(request: NextRequest) {
         total: order.total.toNumber(),
         razorpayOrderId: order.razorpayOrderId,
         paymentMethod: order.paymentMethod,
-        items: order.items.map(item => ({
+        items: order.items.map((item: any) => ({
           id: item.id,
           name: item.name,
           price: item.price.toNumber(),

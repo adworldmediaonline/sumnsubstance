@@ -128,8 +128,6 @@ export function CheckoutForm({
       }
 
       const orderResult = await orderResponse.json();
-      console.log('Order created:', orderResult);
-
       const order = orderResult.data; // Extract order data from response
 
       // Process payment with Razorpay (handles all payment methods)
@@ -158,9 +156,6 @@ export function CheckoutForm({
           order_id: order.razorpayOrderId,
           handler: async (response: any) => {
             try {
-              console.log('Razorpay response:', response);
-              console.log('Order for verification:', order);
-
               // Verify payment
               const verificationResponse = await fetch('/api/payments/verify', {
                 method: 'POST',
