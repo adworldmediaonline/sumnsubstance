@@ -178,10 +178,13 @@ export function CartSummary() {
           <Button
             className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-primary via-primary/90 to-primary hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={loading}
+            asChild
           >
-            <CreditCard className="h-5 w-5 mr-2" />
-            Proceed to Checkout
-            <ArrowRight className="h-5 w-5 ml-2" />
+            <Link href="/checkout">
+              <CreditCard className="h-5 w-5 mr-2" />
+              Proceed to Checkout
+              <ArrowRight className="h-5 w-5 ml-2" />
+            </Link>
           </Button>
 
           <Link href="/" className="block">

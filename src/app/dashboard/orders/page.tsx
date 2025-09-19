@@ -12,21 +12,24 @@ export const metadata: Metadata = {
 };
 
 interface OrdersPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     limit?: string;
     status?: string;
     paymentStatus?: string;
     search?: string;
-  };
+  }>;
 }
 
 export default async function OrdersPage({ searchParams }: OrdersPageProps) {
-  const page = parseInt(searchParams.page || '1');
-  const limit = parseInt(searchParams.limit || '10');
-  const status = searchParams.status?.split(',').filter(Boolean);
-  const paymentStatus = searchParams.paymentStatus?.split(',').filter(Boolean);
-  const search = searchParams.search;
+  const resolvedSearchParams = await searchParams;
+  const page = parseInt(resolvedSearchParams.page || '1');
+  const limit = parseInt(resolvedSearchParams.limit || '10');
+  const status = resolvedSearchParams.status?.split(',').filter(Boolean);
+  const paymentStatus = resolvedSearchParams.paymentStatus
+    ?.split(',')
+    .filter(Boolean);
+  const search = resolvedSearchParams.search;
 
   const { orders, totalCount, analytics } = await getOrders({
     page,

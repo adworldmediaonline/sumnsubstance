@@ -38,8 +38,6 @@ import { useCartItems, useClearCart } from '@/store/cart-store';
 import { toast } from 'sonner';
 
 interface CheckoutFormProps {
-  currentStep: number;
-  onStepChange: (step: number) => void;
   isProcessing: boolean;
   onProcessingChange: (processing: boolean) => void;
   user?: {
@@ -50,8 +48,6 @@ interface CheckoutFormProps {
 }
 
 export function CheckoutForm({
-  currentStep,
-  onStepChange,
   isProcessing,
   onProcessingChange,
   user,
@@ -62,6 +58,7 @@ export function CheckoutForm({
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchema),
+    mode: 'onChange',
     defaultValues: {
       customerInfo: {
         email: user?.email || '',
@@ -102,50 +99,15 @@ export function CheckoutForm({
     try {
       onProcessingChange(true);
 
-      // Step 1: Customer Information
-      if (currentStep === 1) {
-        // Validate customer information
-        const customerInfo = data.customerInfo;
-        if (
-          !customerInfo.email ||
-          !customerInfo.firstName ||
-          !customerInfo.lastName ||
-          !customerInfo.phone
-        ) {
-          toast.error('Please fill in all required customer information');
-          return;
-        }
-        onStepChange(2);
+      // Validate that terms are agreed to
+      if (!data.agreeToTerms) {
+        toast.error('You must agree to the terms and conditions');
+        onProcessingChange(false);
         return;
       }
 
-      // Step 2: Shipping Information
-      if (currentStep === 2) {
-        // Validate shipping address
-        const shippingAddress = data.shippingAddress;
-        if (
-          !shippingAddress.fullName ||
-          !shippingAddress.addressLine1 ||
-          !shippingAddress.city ||
-          !shippingAddress.state ||
-          !shippingAddress.postalCode
-        ) {
-          toast.error('Please fill in all required shipping information');
-          return;
-        }
-        onStepChange(3);
-        return;
-      }
-
-      // Step 3: Payment Processing
-      if (currentStep === 3) {
-        if (!data.agreeToTerms) {
-          toast.error('You must agree to the terms and conditions');
-          return;
-        }
-
-        await processOrder(data);
-      }
+      // Process the order directly - all fields are validated by the form schema
+      await processOrder(data);
     } catch (error) {
       console.error('Checkout error:', error);
       toast.error('An error occurred during checkout. Please try again.');
@@ -280,465 +242,394 @@ export function CheckoutForm({
     }
   };
 
-  const goToPreviousStep = () => {
-    if (currentStep > 1) {
-      onStepChange(currentStep - 1);
-    }
+  const getAllFormContent = () => {
+    return (
+      <div className="space-y-6">
+        {/* Customer Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Customer Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="customerInfo.firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your first name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="customerInfo.lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your last name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="customerInfo.email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="customerInfo.phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        placeholder="Enter your phone number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Shipping Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Shipping Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="shippingAddress.fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter full name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="shippingAddress.addressLine1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address Line 1 *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter street address" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="shippingAddress.addressLine2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address Line 2</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Apartment, suite, etc. (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter city" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>State *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter state" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.postalCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Postal Code *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter postal code" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="shippingAddress.phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number *</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="tel"
+                        placeholder="Enter phone number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Separator />
+            <div className="space-y-4">
+              <h3 className="font-semibold">Shipping Method</h3>
+
+              <FormField
+                control={form.control}
+                name="shippingMethod"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                      >
+                        <div className="flex items-center space-x-2 border rounded-lg p-4">
+                          <RadioGroupItem value="standard" id="standard" />
+                          <Label htmlFor="standard" className="flex-1">
+                            <div>
+                              <p className="font-medium">Standard Delivery</p>
+                              <p className="text-sm font-medium">₹50</p>
+                            </div>
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2 border rounded-lg p-4">
+                          <RadioGroupItem value="express" id="express" />
+                          <Label htmlFor="express" className="flex-1">
+                            <div>
+                              <p className="font-medium">Express Delivery</p>
+                              <p className="text-sm font-medium">₹150</p>
+                            </div>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Payment & Review */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" />
+              Payment & Review
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="font-semibold">Payment Method</h3>
+
+              <FormField
+                control={form.control}
+                name="paymentMethod"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                      >
+                        <div className="flex items-center space-x-2 border rounded-lg p-4">
+                          <RadioGroupItem value="razorpay" id="razorpay" />
+                          <Label htmlFor="razorpay" className="flex-1">
+                            <div>
+                              <p className="font-medium">Card / UPI / Wallet</p>
+                            </div>
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2 border rounded-lg p-4">
+                          <RadioGroupItem value="cod" id="cod" />
+                          <Label htmlFor="cod" className="flex-1">
+                            <div>
+                              <p className="font-medium">Cash on Delivery</p>
+                            </div>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Separator />
+            <div className="space-y-4">
+              <h3 className="font-semibold">Order Notes (Optional)</h3>
+
+              <FormField
+                control={form.control}
+                name="orderNotes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Any special instructions for your order..."
+                        className="min-h-[100px]"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Separator />
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="agreeToTerms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        I agree to the{' '}
+                        <a
+                          href="/terms-conditions"
+                          target="_blank"
+                          className="text-primary hover:underline"
+                        >
+                          Terms & Conditions
+                        </a>{' '}
+                        and{' '}
+                        <a
+                          href="/privacy-policy"
+                          target="_blank"
+                          className="text-primary hover:underline"
+                        >
+                          Privacy Policy
+                        </a>{' '}
+                        *
+                      </FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   };
 
-  const getStepContent = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Customer Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="customerInfo.firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your first name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your last name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="Enter your email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="tel"
-                          placeholder="Enter your phone number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 2:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Shipping Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Shipping Address */}
-              <div className="space-y-4">
-                <h3 className="font-semibold">Shipping Address</h3>
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter full name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.addressLine1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address Line 1 *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter street address" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.addressLine2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address Line 2</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Apartment, suite, etc. (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="shippingAddress.city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>City *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter city" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="shippingAddress.state"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>State *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter state" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="shippingAddress.postalCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Postal Code *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter postal code" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="tel"
-                          placeholder="Enter phone number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Shipping Method */}
-              <Separator />
-              <div className="space-y-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <Truck className="h-4 w-4" />
-                  Shipping Method
-                </h3>
-
-                <FormField
-                  control={form.control}
-                  name="shippingMethod"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                        >
-                          <div className="flex items-center space-x-2 border rounded-lg p-4">
-                            <RadioGroupItem value="standard" id="standard" />
-                            <Label htmlFor="standard" className="flex-1">
-                              <div>
-                                <p className="font-medium">Standard Delivery</p>
-                                <p className="text-sm text-muted-foreground">
-                                  5-7 business days
-                                </p>
-                                <p className="text-sm font-medium">₹50</p>
-                              </div>
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2 border rounded-lg p-4">
-                            <RadioGroupItem value="express" id="express" />
-                            <Label htmlFor="express" className="flex-1">
-                              <div>
-                                <p className="font-medium">Express Delivery</p>
-                                <p className="text-sm text-muted-foreground">
-                                  2-3 business days
-                                </p>
-                                <p className="text-sm font-medium">₹150</p>
-                              </div>
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      case 3:
-        return (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CreditCard className="h-5 w-5" />
-                Payment & Review
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Payment Method */}
-              <div className="space-y-4">
-                <h3 className="font-semibold">Payment Method</h3>
-
-                <FormField
-                  control={form.control}
-                  name="paymentMethod"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                        >
-                          <div className="flex items-center space-x-2 border rounded-lg p-4">
-                            <RadioGroupItem value="razorpay" id="razorpay" />
-                            <Label htmlFor="razorpay" className="flex-1">
-                              <div>
-                                <p className="font-medium">
-                                  Card / UPI / Wallet
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  Secure payment via Razorpay
-                                </p>
-                              </div>
-                            </Label>
-                          </div>
-                          <div className="flex items-center space-x-2 border rounded-lg p-4">
-                            <RadioGroupItem value="cod" id="cod" />
-                            <Label htmlFor="cod" className="flex-1">
-                              <div>
-                                <p className="font-medium">Cash on Delivery</p>
-                                <p className="text-sm text-muted-foreground">
-                                  Pay when you receive
-                                </p>
-                              </div>
-                            </Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Order Notes */}
-              <Separator />
-              <div className="space-y-4">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Order Notes (Optional)
-                </h3>
-
-                <FormField
-                  control={form.control}
-                  name="orderNotes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Any special instructions for your order..."
-                          className="min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Terms and Newsletter */}
-              <Separator />
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="agreeToTerms"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>
-                          I agree to the{' '}
-                          <a
-                            href="/terms-conditions"
-                            target="_blank"
-                            className="text-primary hover:underline"
-                          >
-                            Terms & Conditions
-                          </a>{' '}
-                          and{' '}
-                          <a
-                            href="/privacy-policy"
-                            target="_blank"
-                            className="text-primary hover:underline"
-                          >
-                            Privacy Policy
-                          </a>{' '}
-                          *
-                        </FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="subscribeNewsletter"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>
-                          Subscribe to our newsletter for updates and offers
-                        </FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const getButtonText = () => {
-    switch (currentStep) {
-      case 1:
-        return 'Continue to Shipping';
-      case 2:
-        return 'Continue to Payment';
-      case 3:
-        return isProcessing ? 'Processing...' : 'Complete Order';
-      default:
-        return 'Continue';
-    }
+  const onError = (errors: any) => {
+    console.log('Form validation errors:', errors);
+    toast.error('Please fill in all required fields correctly');
+    onProcessingChange(false);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {getStepContent()}
+      <form
+        onSubmit={form.handleSubmit(onSubmit, onError)}
+        className="space-y-6"
+      >
+        {getAllFormContent()}
 
-        {/* Navigation Buttons */}
+        {/* Submit Button */}
         <Card>
           <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={goToPreviousStep}
-                disabled={currentStep === 1 || isProcessing}
-              >
-                Previous Step
-              </Button>
-
+            <div className="flex justify-center">
               <Button
                 type="submit"
                 disabled={isProcessing}
                 className="min-w-[200px]"
+                size="lg"
               >
-                {isProcessing && currentStep === 3 ? (
+                {isProcessing ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                    Processing...
+                    Processing Order...
                   </>
                 ) : (
                   <>
-                    {getButtonText()}
-                    {currentStep < 3 && <Check className="ml-2 h-4 w-4" />}
+                    Complete Order
+                    <Check className="ml-2 h-4 w-4" />
                   </>
                 )}
               </Button>

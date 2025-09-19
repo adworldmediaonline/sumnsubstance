@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import type { SerializedOrder } from '@/types/order';
+import type { Prisma } from '@prisma/client';
 
 interface GetOrdersParams {
   page?: number;
@@ -101,8 +102,10 @@ export async function getOrders({
       paymentMethod: order.paymentMethod || undefined,
       razorpayOrderId: order.razorpayOrderId || undefined,
       razorpayPaymentId: order.razorpayPaymentId || undefined,
-      shippingAddress: JSON.parse(order.shippingAddress),
-      billingAddress: order.billingAddress ? JSON.parse(order.billingAddress) : undefined,
+      shippingAddress: JSON.parse(order.shippingAddress as string),
+      billingAddress: order.billingAddress
+        ? JSON.parse(order.billingAddress as string)
+        : undefined,
       items: order.items.map(item => ({
         id: item.id,
         name: item.name,
@@ -114,10 +117,12 @@ export async function getOrders({
           id: item.product.id,
           name: item.product.name,
           slug: item.product.slug,
-          mainImage: item.product.mainImageUrl ? {
-            url: item.product.mainImageUrl,
-            altText: item.product.mainImageAlt || undefined,
-          } : undefined,
+          mainImage: item.product.mainImageUrl
+            ? {
+                url: item.product.mainImageUrl,
+                altText: item.product.mainImageAlt || undefined,
+              }
+            : undefined,
         },
       })),
       createdAt: order.createdAt.toISOString(),
@@ -126,11 +131,13 @@ export async function getOrders({
       deliveredAt: order.deliveredAt?.toISOString(),
       notes: order.notes || undefined,
       trackingNumber: order.trackingNumber || undefined,
-      user: order.user ? {
-        id: order.user.id,
-        name: order.user.name,
-        email: order.user.email,
-      } : undefined,
+      user: order.user
+        ? {
+            id: order.user.id,
+            name: order.user.name,
+            email: order.user.email,
+          }
+        : undefined,
     }));
 
     return {
@@ -151,7 +158,9 @@ export async function getOrders({
   }
 }
 
-export async function getOrderById(id: string): Promise<SerializedOrder | null> {
+export async function getOrderById(
+  id: string
+): Promise<SerializedOrder | null> {
   try {
     const order = await prisma.order.findUnique({
       where: { id },
@@ -200,8 +209,10 @@ export async function getOrderById(id: string): Promise<SerializedOrder | null> 
       paymentMethod: order.paymentMethod || undefined,
       razorpayOrderId: order.razorpayOrderId || undefined,
       razorpayPaymentId: order.razorpayPaymentId || undefined,
-      shippingAddress: JSON.parse(order.shippingAddress),
-      billingAddress: order.billingAddress ? JSON.parse(order.billingAddress) : undefined,
+      shippingAddress: JSON.parse(order.shippingAddress as string),
+      billingAddress: order.billingAddress
+        ? JSON.parse(order.billingAddress as string)
+        : undefined,
       items: order.items.map(item => ({
         id: item.id,
         name: item.name,
@@ -213,10 +224,12 @@ export async function getOrderById(id: string): Promise<SerializedOrder | null> 
           id: item.product.id,
           name: item.product.name,
           slug: item.product.slug,
-          mainImage: item.product.mainImageUrl ? {
-            url: item.product.mainImageUrl,
-            altText: item.product.mainImageAlt || undefined,
-          } : undefined,
+          mainImage: item.product.mainImageUrl
+            ? {
+                url: item.product.mainImageUrl,
+                altText: item.product.mainImageAlt || undefined,
+              }
+            : undefined,
         },
       })),
       createdAt: order.createdAt.toISOString(),
@@ -225,11 +238,13 @@ export async function getOrderById(id: string): Promise<SerializedOrder | null> 
       deliveredAt: order.deliveredAt?.toISOString(),
       notes: order.notes || undefined,
       trackingNumber: order.trackingNumber || undefined,
-      user: order.user ? {
-        id: order.user.id,
-        name: order.user.name,
-        email: order.user.email,
-      } : undefined,
+      user: order.user
+        ? {
+            id: order.user.id,
+            name: order.user.name,
+            email: order.user.email,
+          }
+        : undefined,
     };
   } catch (error) {
     console.error('Error fetching order by ID:', error);
@@ -239,38 +254,34 @@ export async function getOrderById(id: string): Promise<SerializedOrder | null> 
 
 async function calculateOrderAnalytics() {
   try {
-    const [
-      totalOrders,
-      totalRevenue,
-      ordersByStatus,
-      recentOrders,
-    ] = await Promise.all([
-      prisma.order.count(),
-      prisma.order.aggregate({
-        _sum: { total: true },
-        where: { paymentStatus: 'COMPLETED' },
-      }),
-      prisma.order.groupBy({
-        by: ['status'],
-        _count: { status: true },
-      }),
-      prisma.order.findMany({
-        take: 10,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          total: true,
-          createdAt: true,
-        },
-      }),
-    ]);
+    const [totalOrders, totalRevenue, ordersByStatus, recentOrders] =
+      await Promise.all([
+        prisma.order.count(),
+        prisma.order.aggregate({
+          _sum: { total: true },
+          where: { paymentStatus: 'COMPLETED' },
+        }),
+        prisma.order.groupBy({
+          by: ['status'],
+          _count: { status: true },
+        }),
+        prisma.order.findMany({
+          take: 10,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            total: true,
+            createdAt: true,
+          },
+        }),
+      ]);
 
     const revenue = totalRevenue._sum.total?.toNumber() || 0;
     const averageOrderValue = totalOrders > 0 ? revenue / totalOrders : 0;
 
-    const statusCounts = ordersByStatus.reduce((acc, item) => {
-      acc[item.status] = item._count.status;
-      return acc;
-    }, {} as Record<string, number>);
+    const statusCounts: Record<string, number> = {};
+    ordersByStatus.forEach((item: any) => {
+      statusCounts[item.status] = item._count.status;
+    });
 
     return {
       totalOrders,

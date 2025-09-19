@@ -1,7 +1,6 @@
 import { Resend } from 'resend';
-import { OrderEmailTemplate } from './templates/order-confirmation';
-import { ShippedOrderTemplate } from './templates/order-shipped';
-import { DeliveredOrderTemplate } from './templates/order-delivered';
+import { render } from '@react-email/render';
+import { OrderEmailTemplate } from './templates/order-confirmation-react';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -20,11 +19,9 @@ export async function sendOrderConfirmationEmail({
   customerName,
 }: OrderEmailData) {
   try {
-    const { data, error } = await resend.emails.send({
-      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
-      to: [customerEmail],
-      subject: `Order Confirmation - ${order.orderNumber}`,
-      react: OrderEmailTemplate({
+    // Render the email template to HTML (same pattern as your existing email system)
+    const emailHtml = await render(
+      OrderEmailTemplate({
         customerName,
         orderNumber: order.orderNumber,
         orderDate: order.createdAt,
@@ -41,7 +38,14 @@ export async function sendOrderConfirmationEmail({
         total: order.total.toNumber(),
         shippingAddress: JSON.parse(order.shippingAddress),
         estimatedDelivery: calculateEstimatedDelivery(order.createdAt),
-      }),
+      })
+    );
+
+    const { data, error } = await resend.emails.send({
+      from: `SumnSubstance <${process.env.EMAIL_FROM}>`,
+      to: [customerEmail],
+      subject: `Order Confirmation - ${order.orderNumber}`,
+      html: emailHtml,
     });
 
     if (error) {
@@ -59,73 +63,35 @@ export async function sendOrderConfirmationEmail({
 
 /**
  * Send order shipped email
+ * TODO: Implement when ShippedOrderTemplate is created
  */
+/*
 export async function sendOrderShippedEmail({
   order,
   customerEmail,
   customerName,
 }: OrderEmailData & { trackingNumber?: string }) {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
-      to: [customerEmail],
-      subject: `Your Order is Shipped - ${order.orderNumber}`,
-      react: ShippedOrderTemplate({
-        customerName,
-        orderNumber: order.orderNumber,
-        trackingNumber: order.trackingNumber,
-        estimatedDelivery: calculateEstimatedDelivery(
-          order.shippedAt || order.createdAt,
-          'shipped'
-        ),
-        shippingAddress: JSON.parse(order.shippingAddress),
-      }),
-    });
-
-    if (error) {
-      console.error('Shipped email error:', error);
-      throw new Error('Failed to send shipped email');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Order shipped email error:', error);
-    throw error;
-  }
+  // Implementation will be added when template is available
+  console.log('Order shipped email would be sent for:', order.orderNumber);
+  return null;
 }
+*/
 
 /**
  * Send order delivered email
+ * TODO: Implement when DeliveredOrderTemplate is created
  */
+/*
 export async function sendOrderDeliveredEmail({
   order,
   customerEmail,
   customerName,
 }: OrderEmailData) {
-  try {
-    const { data, error } = await resend.emails.send({
-      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
-      to: [customerEmail],
-      subject: `Order Delivered - ${order.orderNumber}`,
-      react: DeliveredOrderTemplate({
-        customerName,
-        orderNumber: order.orderNumber,
-        deliveryDate: order.deliveredAt,
-        orderItems: order.items,
-      }),
-    });
-
-    if (error) {
-      console.error('Delivered email error:', error);
-      throw new Error('Failed to send delivered email');
-    }
-
-    return data;
-  } catch (error) {
-    console.error('Order delivered email error:', error);
-    throw error;
-  }
+  // Implementation will be added when template is available
+  console.log('Order delivered email would be sent for:', order.orderNumber);
+  return null;
 }
+*/
 
 /**
  * Send admin order notification

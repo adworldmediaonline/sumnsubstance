@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, OrderStatus, PaymentStatus } from '@prisma/client';
 
 // Order-related types for the application
 export interface ShippingAddress {
@@ -135,25 +135,8 @@ export interface SerializedOrderItem {
   };
 }
 
-// Order Status Enums (matching Prisma schema)
-export enum OrderStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  PROCESSING = 'PROCESSING',
-  SHIPPED = 'SHIPPED',
-  DELIVERED = 'DELIVERED',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED',
-}
-
-export enum PaymentStatus {
-  PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED',
-  REFUNDED = 'REFUNDED',
-}
+// Order Status Enums are now imported from Prisma client
+export { OrderStatus, PaymentStatus };
 
 // Order creation payload
 export interface CreateOrderPayload {
