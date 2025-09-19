@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import slugify from 'slugify';
+import { Decimal } from '@prisma/client/runtime/library';
+import { serializeProduct } from '@/lib/serializers';
 import {
   createProductSchema,
   updateProductSchema,
@@ -45,7 +47,7 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
       data: {
         name,
         slug,
-        price,
+        price: new Decimal(price),
         categoryId,
       },
       include: {
@@ -58,7 +60,7 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
 
     return {
       success: true,
-      data: product,
+      data: serializeProduct(product),
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -133,7 +135,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       data: {
         name,
         slug,
-        price,
+        price: new Decimal(price),
         categoryId,
       },
       include: {

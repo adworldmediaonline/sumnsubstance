@@ -29,6 +29,7 @@ import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { CategoryWithCount } from '@/server/queries/category';
 import { createProductSchema } from '@/lib/validations/product';
+import { RichTextEditor } from '../../../../components/rich-text-editor';
 
 type FormData = z.infer<typeof createProductSchema>;
 
@@ -44,6 +45,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: '',
+      description: '',
       price: 0,
       categoryId: '',
     },
@@ -98,6 +100,27 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
                     </code>
                   </span>
                 )}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Description</FormLabel>
+              <FormControl>
+                <RichTextEditor
+                  {...field}
+                  placeholder="Write your blog content here..."
+                  size="lg"
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the description of the product
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -1,5 +1,9 @@
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import {
+  serializeCategoryWithProducts,
+  SerializedCategoryWithProducts,
+} from '@/lib/serializers';
 
 export async function getCategories() {
   try {
@@ -23,7 +27,9 @@ export async function getCategories() {
   }
 }
 
-export async function getCategoryById(id: string) {
+export async function getCategoryById(
+  id: string
+): Promise<SerializedCategoryWithProducts | null> {
   try {
     const category = await prisma.category.findUnique({
       where: { id },
@@ -41,14 +47,20 @@ export async function getCategoryById(id: string) {
       },
     });
 
-    return category;
+    if (!category) {
+      return null;
+    }
+
+    return serializeCategoryWithProducts(category);
   } catch (error) {
     console.error('Failed to fetch category:', error);
     throw new Error('Failed to fetch category');
   }
 }
 
-export async function getCategoryBySlug(slug: string) {
+export async function getCategoryBySlug(
+  slug: string
+): Promise<SerializedCategoryWithProducts | null> {
   try {
     const category = await prisma.category.findUnique({
       where: { slug },
@@ -66,7 +78,11 @@ export async function getCategoryBySlug(slug: string) {
       },
     });
 
-    return category;
+    if (!category) {
+      return null;
+    }
+
+    return serializeCategoryWithProducts(category);
   } catch (error) {
     console.error('Failed to fetch category by slug:', error);
     throw new Error('Failed to fetch category by slug');
@@ -125,13 +141,5 @@ export type CategoryWithCount = Prisma.CategoryGetPayload<{
   };
 }>;
 
-export type CategoryWithProducts = Prisma.CategoryGetPayload<{
-  include: {
-    products: true;
-    _count: {
-      select: {
-        products: true;
-      };
-    };
-  };
-}>;
+// Re-export types from serializers for convenience
+export type { SerializedCategoryWithProducts } from '@/lib/serializers';

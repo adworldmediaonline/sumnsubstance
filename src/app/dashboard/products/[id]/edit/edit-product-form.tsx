@@ -28,13 +28,13 @@ import { updateProduct } from '@/app/actions/product';
 import { updateProductSchema } from '@/lib/validations/product';
 import { toast } from 'sonner';
 import slugify from 'slugify';
-import type { ProductWithCategory } from '@/server/queries/product';
+import type { SerializedProductWithCategory } from '@/server/queries/product';
 import type { CategoryWithCount } from '@/server/queries/category';
-
+import { RichTextEditor } from '../../../../../components/rich-text-editor';
 type FormData = z.infer<typeof updateProductSchema>;
 
 interface EditProductFormProps {
-  product: ProductWithCategory;
+  product: SerializedProductWithCategory;
   categories: CategoryWithCount[];
 }
 
@@ -47,8 +47,9 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     defaultValues: {
       id: product.id,
       name: product.name,
-      price: parseFloat(product.price.toString()),
+      price: product.price,
       categoryId: product.categoryId,
+      description: product.description || '',
     },
   });
 
@@ -94,22 +95,43 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                 />
               </FormControl>
               <FormDescription>
-                <div className="space-y-1">
-                  <div>
+                <span className="block space-y-1">
+                  <span className="block">
                     Current slug:{' '}
                     <code className="bg-muted px-1 py-0.5 rounded text-xs">
                       /{product.slug}
                     </code>
-                  </div>
+                  </span>
                   {hasNameChanged && previewSlug && (
-                    <div>
+                    <span className="block">
                       New slug will be:{' '}
                       <code className="bg-muted px-1 py-0.5 rounded text-xs">
                         /{previewSlug}
                       </code>
-                    </div>
+                    </span>
                   )}
-                </div>
+                </span>
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Description</FormLabel>
+              <FormControl>
+                <RichTextEditor
+                  {...field}
+                  placeholder="Write your blog content here..."
+                  size="lg"
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the description of the product
               </FormDescription>
               <FormMessage />
             </FormItem>

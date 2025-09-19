@@ -20,13 +20,13 @@ import { Loader2 } from 'lucide-react';
 import { updateCategory } from '@/app/actions/category';
 import { toast } from 'sonner';
 import slugify from 'slugify';
-import type { CategoryWithProducts } from '@/server/queries/category';
+import type { SerializedCategoryWithProducts } from '@/server/queries/category';
 import { updateCategorySchema } from '@/lib/validations/category';
 
 type FormData = z.infer<typeof updateCategorySchema>;
 
 interface EditCategoryFormProps {
-  category: CategoryWithProducts;
+  category: SerializedCategoryWithProducts;
 }
 
 export function EditCategoryForm({ category }: EditCategoryFormProps) {
@@ -83,22 +83,22 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
                 />
               </FormControl>
               <FormDescription>
-                <div className="space-y-1">
-                  <div>
+                <span className="block space-y-1">
+                  <span className="block">
                     Current slug:{' '}
                     <code className="bg-muted px-1 py-0.5 rounded text-xs">
                       /{category.slug}
                     </code>
-                  </div>
+                  </span>
                   {hasNameChanged && previewSlug && (
-                    <div>
+                    <span className="block">
                       New slug will be:{' '}
                       <code className="bg-muted px-1 py-0.5 rounded text-xs">
                         /{previewSlug}
                       </code>
-                    </div>
+                    </span>
                   )}
-                </div>
+                </span>
               </FormDescription>
               <FormMessage />
             </FormItem>

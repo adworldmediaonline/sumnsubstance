@@ -6,6 +6,7 @@ export const createProductSchema = z.object({
     .min(1, 'Product name is required')
     .max(200, 'Product name must be less than 200 characters')
     .trim(),
+  description: z.string().optional(),
   price: z
     .number()
     .min(0.01, 'Price must be greater than 0')
@@ -20,6 +21,7 @@ export const updateProductSchema = z.object({
     .min(1, 'Product name is required')
     .max(200, 'Product name must be less than 200 characters')
     .trim(),
+  description: z.string().optional(),
   price: z
     .number()
     .min(0.01, 'Price must be greater than 0')
