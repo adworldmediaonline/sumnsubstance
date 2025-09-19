@@ -17,7 +17,14 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
   try {
     // Validate input
     const validatedData = createProductSchema.parse(data);
-    const { name, price, categoryId } = validatedData;
+    const {
+      name,
+      description,
+      price,
+      categoryId,
+      mainImage,
+      additionalImages,
+    } = validatedData;
 
     // Check if category exists
     const category = await prisma.category.findUnique({
@@ -46,9 +53,17 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
     const product = await prisma.product.create({
       data: {
         name,
+        description,
         slug,
         price: new Decimal(price),
         categoryId,
+        mainImageUrl: mainImage?.url,
+        mainImagePublicId: mainImage?.publicId,
+        mainImageAlt: mainImage?.altText,
+        additionalImages:
+          additionalImages && additionalImages.length > 0
+            ? additionalImages
+            : null,
       },
       include: {
         category: true,
@@ -82,7 +97,15 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
     // Validate input
     const validatedData = updateProductSchema.parse(data);
-    const { id, name, price, categoryId } = validatedData;
+    const {
+      id,
+      name,
+      description,
+      price,
+      categoryId,
+      mainImage,
+      additionalImages,
+    } = validatedData;
 
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({
@@ -134,9 +157,17 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       where: { id },
       data: {
         name,
+        description,
         slug,
         price: new Decimal(price),
         categoryId,
+        mainImageUrl: mainImage?.url,
+        mainImagePublicId: mainImage?.publicId,
+        mainImageAlt: mainImage?.altText,
+        additionalImages:
+          additionalImages && additionalImages.length > 0
+            ? additionalImages
+            : null,
       },
       include: {
         category: true,

@@ -23,6 +23,7 @@ import {
   Heart,
   Leaf,
   Loader2,
+  LogIn,
   LogOut,
   Menu,
   Package,
@@ -37,6 +38,8 @@ import Link from 'next/link';
 
 import { useState } from 'react';
 import { authClient } from '../../lib/auth-client';
+import { useRouter } from 'next/navigation';
+import router from 'next/router';
 
 interface HeroBannerV2Props {
   cartItemCount?: number;
@@ -45,7 +48,7 @@ interface HeroBannerV2Props {
 export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
-
+  const router = useRouter();
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#8FBC8F] via-[#9ACD32] to-[#7CB342] overflow-hidden">
       {/* Background decorative elements */}
@@ -163,9 +166,9 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
                     className="relative h-9 w-9 rounded-full hover:bg-white/10"
                   >
                     <Avatar className="h-9 w-9">
-                      <AvatarImage src={''} alt={''} />
+                      <AvatarImage src={session.user.image ?? ''} alt={''} />
                       <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                        {''}
+                        {session.user.initials ?? ''}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -177,9 +180,11 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
                 >
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{''}</p>
+                      <p className="text-sm font-medium leading-none">
+                        {session.user.name}
+                      </p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {''}
+                        {session.user.email}
                       </p>
                       {false && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
@@ -191,7 +196,7 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
                   <DropdownMenuSeparator />
 
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
+                    <Link href="/dashboard/" className="cursor-pointer">
                       <UserIcon className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </Link>
@@ -226,34 +231,31 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="cursor-pointer text-red-600 focus:text-red-600"
-                    onClick={() => {}}
+                    onClick={() => {
+                      authClient.signOut({
+                        fetchOptions: {
+                          onSuccess: () => {
+                            router.push('/');
+                          },
+                        },
+                      });
+                    }}
                     disabled={false}
                   >
-                    {false ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <LogOut className="mr-2 h-4 w-4" />
-                    )}
-                    <span>Log out</span>
+                    <LogOut className="mr-2 h-4 w-4" /> <span>Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-
-              <Button
-                onClick={() => {}}
-                className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
-              >
-                <User className="w-4 h-4 mr-2" />
-                Login
-              </Button>
             </div>
           ) : (
             <Button
-              onClick={() => {}}
+              asChild
               className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
             >
-              <User className="w-4 h-4 mr-2" />
-              Login
+              <Link href="/sign-in">
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </Link>
             </Button>
           )}
 
