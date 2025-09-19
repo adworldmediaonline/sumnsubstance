@@ -21,7 +21,7 @@ import { updateCategory } from '@/app/actions/category';
 import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { CategoryWithProducts } from '@/server/queries/category';
-import { updateCategorySchema } from '../../../../../lib/validations/category';
+import { updateCategorySchema } from '@/lib/validations/category';
 
 type FormData = z.infer<typeof updateCategorySchema>;
 

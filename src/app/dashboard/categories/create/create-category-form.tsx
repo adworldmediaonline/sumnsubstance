@@ -20,7 +20,7 @@ import { Loader2 } from 'lucide-react';
 import { createCategory } from '@/app/actions/category';
 import { toast } from 'sonner';
 import slugify from 'slugify';
-import { createCategorySchema } from '../../../../lib/validations/category';
+import { createCategorySchema } from '@/lib/validations/category';
 
 type FormData = z.infer<typeof createCategorySchema>;
 

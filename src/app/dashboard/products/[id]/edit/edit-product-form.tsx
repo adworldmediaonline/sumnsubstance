@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { updateProduct } from '@/app/actions/product';
-import { updateProductSchema } from '../../../../../lib/validations/product';
+import { updateProductSchema } from '@/lib/validations/product';
 import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { ProductWithCategory } from '@/server/queries/product';
