@@ -1,38 +1,47 @@
 import { Prisma } from '@prisma/client';
 
+// Base types for better type safety
+export interface ImageData {
+  url: string;
+  publicId: string;
+  altText?: string;
+}
+
 // Product serialization utilities
 export type ProductWithCategory = Prisma.ProductGetPayload<{
   include: { category: true };
 }>;
 
-export type SerializedProduct = Omit<Prisma.ProductGetPayload<{}>, 'price'> & {
+export type CategoryWithProducts = Prisma.CategoryGetPayload<{
+  include: { products: true };
+}>;
+
+// Serialized types with proper JSON-safe fields
+export type SerializedProduct = Omit<
+  Prisma.ProductGetPayload<Record<string, never>>,
+  | 'price'
+  | 'mainImageUrl'
+  | 'mainImagePublicId'
+  | 'mainImageAlt'
+  | 'additionalImages'
+> & {
   price: number;
+  mainImage?: ImageData;
+  additionalImages?: ImageData[];
 };
 
 export type SerializedProductWithCategory = Omit<
   ProductWithCategory,
-  'price' | 'additionalImages'
+  | 'price'
+  | 'mainImageUrl'
+  | 'mainImagePublicId'
+  | 'mainImageAlt'
+  | 'additionalImages'
 > & {
   price: number;
-  mainImage?: {
-    url: string;
-    publicId: string;
-    altText?: string;
-  };
-  additionalImages?: {
-    url: string;
-    publicId: string;
-    altText?: string;
-  }[];
+  mainImage?: ImageData;
+  additionalImages?: ImageData[];
 };
-
-// Category serialization utilities
-export type CategoryWithProducts = Prisma.CategoryGetPayload<{
-  include: {
-    products: true;
-    _count: { select: { products: true } };
-  };
-}>;
 
 export type SerializedCategoryWithProducts = Omit<
   CategoryWithProducts,
@@ -41,54 +50,118 @@ export type SerializedCategoryWithProducts = Omit<
   products: SerializedProduct[];
 };
 
-// Serialization functions
-export function serializeProduct<T extends { 
-  price: Prisma.Decimal;
-  mainImageUrl?: string | null;
-  mainImagePublicId?: string | null;
-  mainImageAlt?: string | null;
-  additionalImages?: any;
-}>(
-  product: T
-): Omit<T, 'price' | 'mainImageUrl' | 'mainImagePublicId' | 'mainImageAlt' | 'additionalImages'> & { 
-  price: number;
-  mainImage?: {
-    url: string;
-    publicId: string;
-    altText?: string;
-  };
-  additionalImages?: {
-    url: string;
-    publicId: string;
-    altText?: string;
-  }[];
-} {
-  const mainImage = product.mainImageUrl && product.mainImagePublicId 
-    ? {
-        url: product.mainImageUrl,
-        publicId: product.mainImagePublicId,
-        altText: product.mainImageAlt || undefined,
-      }
-    : undefined;
+// Helper function to parse additional images safely
+function parseAdditionalImages(
+  additionalImages: unknown
+): ImageData[] | undefined {
+  if (!additionalImages) return undefined;
 
-  const additionalImages = product.additionalImages 
-    ? (Array.isArray(product.additionalImages) ? product.additionalImages : [])
-    : [];
+  try {
+    if (typeof additionalImages === 'string') {
+      const parsed = JSON.parse(additionalImages);
+      return Array.isArray(parsed) ? parsed : undefined;
+    }
 
-  return {
-    ...product,
-    price: product.price.toNumber(),
-    mainImage,
-    additionalImages,
-  } as any;
+    return Array.isArray(additionalImages) ? additionalImages : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
-export function serializeProducts<T extends { price: Prisma.Decimal }>(
+// Core serialization function with proper type safety
+export function serializeProduct<
+  T extends {
+    price: Prisma.Decimal;
+    mainImageUrl?: string | null;
+    mainImagePublicId?: string | null;
+    mainImageAlt?: string | null;
+    additionalImages?: unknown;
+  },
+>(
+  product: T
+): Omit<
+  T,
+  | 'price'
+  | 'mainImageUrl'
+  | 'mainImagePublicId'
+  | 'mainImageAlt'
+  | 'additionalImages'
+> & {
+  price: number;
+  mainImage?: ImageData;
+  additionalImages?: ImageData[];
+} {
+  // Process main image
+  const mainImage: ImageData | undefined =
+    product.mainImageUrl && product.mainImagePublicId
+      ? {
+          url: product.mainImageUrl,
+          publicId: product.mainImagePublicId,
+          altText: product.mainImageAlt || undefined,
+        }
+      : undefined;
+
+  // Process additional images
+  const additionalImages = parseAdditionalImages(product.additionalImages);
+
+  // Return serialized product with proper typing
+  const {
+    price,
+    mainImageUrl: _url,
+    mainImagePublicId: _publicId,
+    mainImageAlt: _alt,
+    additionalImages: _images,
+    ...rest
+  } = product;
+
+  return {
+    ...rest,
+    price: price.toNumber(),
+    mainImage,
+    additionalImages,
+  } as Omit<
+    T,
+    | 'price'
+    | 'mainImageUrl'
+    | 'mainImagePublicId'
+    | 'mainImageAlt'
+    | 'additionalImages'
+  > & {
+    price: number;
+    mainImage?: ImageData;
+    additionalImages?: ImageData[];
+  };
+}
+
+// Serialize multiple products
+export function serializeProducts<
+  T extends {
+    price: Prisma.Decimal;
+    mainImageUrl?: string | null;
+    mainImagePublicId?: string | null;
+    mainImageAlt?: string | null;
+    additionalImages?: unknown;
+  },
+>(
   products: T[]
-): (Omit<T, 'price'> & { price: number })[] {
+): Array<
+  Omit<
+    T,
+    | 'price'
+    | 'mainImageUrl'
+    | 'mainImagePublicId'
+    | 'mainImageAlt'
+    | 'additionalImages'
+  > & {
+    price: number;
+    mainImage?: ImageData;
+    additionalImages?: ImageData[];
+  }
+> {
   return products.map(serializeProduct);
 }
 
+// Serialize category with products
 export function serializeCategoryWithProducts(
   category: CategoryWithProducts
 ): SerializedCategoryWithProducts {

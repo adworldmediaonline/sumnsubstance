@@ -23,14 +23,12 @@ import {
   Heart,
   Leaf,
   Loader2,
-  LogIn,
   LogOut,
   Menu,
   Package,
   Search,
   Settings,
   Shield,
-  ShoppingCart,
   User,
   UserIcon,
 } from 'lucide-react';
@@ -41,11 +39,7 @@ import { authClient } from '../../lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { CartDropdown } from '@/components/cart/cart-dropdown';
 
-interface HeroBannerV2Props {
-  // No props needed - cart state managed globally
-}
-
-export default function HeroBannerV2({}: HeroBannerV2Props) {
+export default function HeroBannerV2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();

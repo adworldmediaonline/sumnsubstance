@@ -8,14 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Upload,
-  X,
-  Image as ImageIcon,
-  Loader2,
-  GripVertical,
-  Edit3,
-} from 'lucide-react';
+import { Upload, X, Loader2, GripVertical, Edit3 } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import {

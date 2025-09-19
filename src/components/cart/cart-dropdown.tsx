@@ -6,7 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -44,37 +43,52 @@ function CartItemComponent({
   disabled?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg transition-colors">
-      {/* Product Image */}
-      <div className="relative h-12 w-12 rounded-md overflow-hidden bg-muted">
-        {item.product.mainImage ? (
-          <Image
-            src={item.product.mainImage.url}
-            alt={item.product.mainImage.altText || item.product.name}
-            fill
-            className="object-cover"
-            sizes="48px"
-          />
-        ) : (
-          <div className="h-full w-full flex items-center justify-center">
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-          </div>
-        )}
+    <div className="p-3 hover:bg-muted/50 rounded-lg transition-colors space-y-2">
+      {/* Top Row: Image, Info, and Remove Button */}
+      <div className="flex items-center gap-3">
+        {/* Product Image */}
+        <div className="relative h-12 w-12 rounded-md overflow-hidden bg-muted flex-shrink-0">
+          {item.product.mainImage ? (
+            <Image
+              src={item.product.mainImage.url}
+              alt={item.product.mainImage.altText || item.product.name}
+              fill
+              className="object-cover"
+              sizes="48px"
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+            </div>
+          )}
+        </div>
+
+        {/* Product Info */}
+        <div className="flex-1 min-w-0">
+          <h4 className="font-medium text-sm truncate">{item.product.name}</h4>
+          <p className="text-xs text-muted-foreground">
+            {item.product.category.name}
+          </p>
+          <p className="text-sm font-medium">
+            ₹{item.product.price.toLocaleString()}
+          </p>
+        </div>
+
+        {/* Remove Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0 text-destructive hover:text-destructive flex-shrink-0"
+          onClick={onRemove}
+          disabled={disabled}
+        >
+          <X className="h-3 w-3" />
+        </Button>
       </div>
 
-      {/* Product Info */}
-      <div className="flex-1 min-w-0">
-        <h4 className="font-medium text-sm truncate">{item.product.name}</h4>
-        <p className="text-xs text-muted-foreground">
-          {item.product.category.name}
-        </p>
-        <p className="text-sm font-medium">
-          ₹{item.product.price.toLocaleString()}
-        </p>
-      </div>
-
-      {/* Quantity Controls */}
-      <div className="flex items-center gap-2">
+      {/* Bottom Row: Quantity Controls */}
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">Quantity:</span>
         <div className="flex items-center border rounded-md">
           <Button
             variant="ghost"
@@ -98,17 +112,6 @@ function CartItemComponent({
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-
-        {/* Remove Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-          onClick={onRemove}
-          disabled={disabled}
-        >
-          <X className="h-3 w-3" />
-        </Button>
       </div>
     </div>
   );

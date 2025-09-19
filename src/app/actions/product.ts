@@ -64,8 +64,8 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
         mainImageAlt: mainImage?.altText,
         additionalImages:
           additionalImages && additionalImages.length > 0
-            ? additionalImages
-            : null,
+            ? JSON.stringify(additionalImages)
+            : undefined,
       },
       include: {
         category: true,
@@ -198,8 +198,8 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
           mainImageAlt: mainImage?.altText,
           additionalImages:
             additionalImages && additionalImages.length > 0
-              ? additionalImages
-              : null,
+              ? JSON.stringify(additionalImages)
+              : undefined,
         },
         include: {
           category: true,

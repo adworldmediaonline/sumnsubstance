@@ -2,21 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import {
-  Heart,
-  Star,
-  ShoppingBag,
-  CheckCircle,
-  Sparkles,
-  Minus,
-  Plus,
-  Share2,
-} from 'lucide-react';
-import type { SerializedProductWithCategory } from '@/server/queries/product';
-import { useAddItem, useGetItem } from '@/store/cart-store';
+import { Heart, Star, ShoppingBag, Minus, Plus, Share2 } from 'lucide-react';
+import type { SerializedProductWithCategory } from '@/lib/serializers';
+import { useAddItem } from '@/store/cart-store';
 import { toast } from 'sonner';
 
-interface Product extends SerializedProductWithCategory {
+interface FeaturedProduct extends SerializedProductWithCategory {
   // Additional frontend-only fields
   isWishlisted?: boolean;
   inStock?: boolean;
@@ -24,25 +15,17 @@ interface Product extends SerializedProductWithCategory {
   // Fields to be added later
   originalPrice?: number;
   benefits?: string[];
-  excerpt?: string;
 }
 
 interface FeaturedProductsClientProps {
-  products: Product[];
-  user?: {
-    id: string;
-    email: string;
-    name?: string;
-  } | null;
+  products: FeaturedProduct[];
 }
 
 export function FeaturedProductsClient({
   products,
-  user,
 }: FeaturedProductsClientProps) {
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const addItem = useAddItem();
-  const getItem = useGetItem();
 
   const handleAddToCart = (productId: string) => {
     const product = products.find(p => p.id === productId);
@@ -56,7 +39,7 @@ export function FeaturedProductsClient({
       name: product.name,
       slug: product.slug,
       price: product.price,
-      excerpt: product.excerpt,
+      excerpt: product.excerpt || undefined,
       mainImage: product.mainImage,
       category: product.category,
     };
@@ -72,7 +55,7 @@ export function FeaturedProductsClient({
     console.log('Toggle wishlist:', productId);
   };
 
-  const handleShare = (product: Product) => {
+  const handleShare = (product: FeaturedProduct) => {
     if (navigator.share) {
       navigator.share({
         title: product.name,

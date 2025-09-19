@@ -12,13 +12,10 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const folder = formData.get('folder') as string || 'products';
+    const folder = (formData.get('folder') as string) || 'products';
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
     // Validate file type
@@ -43,27 +40,35 @@ export async function POST(request: NextRequest) {
 
     // Upload to Cloudinary
     const result = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          folder,
-          resource_type: 'image',
-          transformation: [
-            { width: 1200, height: 1200, crop: 'limit' },
-            { quality: 'auto' },
-            { format: 'auto' }
-          ],
-        },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(result);
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder,
+            resource_type: 'image',
+            transformation: [
+              { width: 1200, height: 1200, crop: 'limit' },
+              { quality: 'auto' },
+              { format: 'auto' },
+            ],
+          },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
           }
-        }
-      ).end(buffer);
+        )
+        .end(buffer);
     });
 
-    const uploadResult = result as any;
+    const uploadResult = result as {
+      public_id: string;
+      secure_url: string;
+      width: number;
+      height: number;
+      format: string;
+    };
 
     return NextResponse.json({
       success: true,
@@ -76,7 +81,6 @@ export async function POST(request: NextRequest) {
         altText: file.name.split('.')[0], // Use filename without extension as default alt text
       },
     });
-
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json(
@@ -105,7 +109,6 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: 'Image deleted successfully',
     });
-
   } catch (error) {
     console.error('Delete error:', error);
     return NextResponse.json(

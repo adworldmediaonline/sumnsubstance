@@ -2,30 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { Shield, Sparkles } from 'lucide-react';
 import { FeaturedProductsClient } from './featured-products-client';
-import type { SerializedProductWithCategory } from '@/server/queries/product';
-
-interface Product extends SerializedProductWithCategory {
-  // Additional frontend-only fields
-  isWishlisted?: boolean;
-  inStock?: boolean;
-  featured?: boolean;
-  // Fields to be added later
-  originalPrice?: number;
-  benefits?: string[];
-}
+import type { SerializedProductWithCategory } from '@/lib/serializers';
 
 interface FeaturedProductsProps {
-  products: Product[];
-  user?: {
-    id: string;
-    email: string;
-    name?: string;
-  } | null;
+  products: SerializedProductWithCategory[];
 }
 
 export default function FeaturedProductsV3({
   products,
-  user,
 }: FeaturedProductsProps) {
   return (
     <section className="py-20 bg-gradient-to-br from-[#ffd469]/10 via-white to-[#233f1c]/10 font-sans relative overflow-hidden">
@@ -59,7 +43,7 @@ export default function FeaturedProductsV3({
         </div>
 
         {/* Enhanced Product Grid with Gradients */}
-        <FeaturedProductsClient products={products} user={user} />
+        <FeaturedProductsClient products={products} />
 
         {/* Enhanced CTA with Beautiful Gradients */}
         <div className="text-center mt-16">

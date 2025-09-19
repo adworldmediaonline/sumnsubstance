@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { CartStore, CartProduct, CartItem } from '@/types/cart';
+import type { CartStore, CartProduct } from '@/types/cart';
 
 // Enterprise-level Zustand store with middleware
 export const useCartStore = create<CartStore>()(
