@@ -36,6 +36,7 @@ import {
 import Link from 'next/link';
 
 import { useState } from 'react';
+import { authClient } from '../../lib/auth-client';
 
 interface HeroBannerV2Props {
   cartItemCount?: number;
@@ -43,6 +44,7 @@ interface HeroBannerV2Props {
 
 export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: session, isPending } = authClient.useSession();
 
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#8FBC8F] via-[#9ACD32] to-[#7CB342] overflow-hidden">
@@ -152,90 +154,100 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
           </Button>
 
           {/* User Account - Desktop */}
-          <div className="hidden md:block">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-9 w-9 rounded-full hover:bg-white/10"
-                >
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                      {''}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-64 bg-white/95 backdrop-blur-sm"
-                align="end"
-                forceMount
-              >
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{''}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {''}
-                    </p>
-                    {false && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
-                        Admin
-                      </span>
-                    )}
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="cursor-pointer">
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/dashboard/user/profile"
-                    className="cursor-pointer"
+          {!isPending && session ? (
+            <div className="hidden md:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full hover:bg-white/10"
                   >
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Account Settings</span>
-                  </Link>
-                </DropdownMenuItem>
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={''} alt={''} />
+                      <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                        {''}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-64 bg-white/95 backdrop-blur-sm"
+                  align="end"
+                  forceMount
+                >
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{''}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {''}
+                      </p>
+                      {false && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
+                          Admin
+                        </span>
+                      )}
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem asChild>
-                  <Link href="/orders" className="cursor-pointer">
-                    <Package className="mr-2 h-4 w-4" />
-                    <span>My Orders</span>
-                  </Link>
-                </DropdownMenuItem>
-
-                {false && (
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/admin" className="cursor-pointer">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Admin Panel</span>
+                    <Link href="/dashboard" className="cursor-pointer">
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
-                )}
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer text-red-600 focus:text-red-600"
-                  onClick={() => {}}
-                  disabled={false}
-                >
-                  {false ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <LogOut className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/dashboard/user/profile"
+                      className="cursor-pointer"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Account Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders" className="cursor-pointer">
+                      <Package className="mr-2 h-4 w-4" />
+                      <span>My Orders</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  {false && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard/admin" className="cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    </DropdownMenuItem>
                   )}
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    onClick={() => {}}
+                    disabled={false}
+                  >
+                    {false ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <LogOut className="mr-2 h-4 w-4" />
+                    )}
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                onClick={() => {}}
+                className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </Button>
+            </div>
+          ) : (
             <Button
               onClick={() => {}}
               className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
@@ -243,7 +255,7 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
               <User className="w-4 h-4 mr-2" />
               Login
             </Button>
-          </div>
+          )}
 
           {/* Mobile Menu */}
           <div className="md:hidden">

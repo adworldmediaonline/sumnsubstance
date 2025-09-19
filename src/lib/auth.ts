@@ -82,7 +82,7 @@ export const auth = betterAuth({
         }
         await sendOTP({
           otp,
-          appName: 'BETTER-AUTH',
+          appName: 'SUMNSUBSTANCE',
           subject,
           email,
         });
