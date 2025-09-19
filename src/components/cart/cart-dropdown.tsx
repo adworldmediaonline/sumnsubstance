@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -120,12 +120,19 @@ function CartItemComponent({
 // Main cart dropdown component
 export function CartDropdown({ className }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
   const items = useCartItems();
   const itemCount = useCartItemCount();
   const totalPrice = useCartTotalPrice();
   const updateQuantity = useUpdateQuantity();
   const removeItem = useRemoveItem();
   const clearCart = useClearCart();
+
+  // Prevent hydration mismatch by only showing cart data after hydration
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const handleUpdateQuantity = (productId: string, quantity: number) => {
     updateQuantity(productId, quantity);
@@ -149,7 +156,7 @@ export function CartDropdown({ className }: { className?: string }) {
           className={`relative p-2 hover:bg-white/10 text-white hover:text-[#FFD700] ${className}`}
         >
           <ShoppingCart className="h-5 w-5" />
-          {itemCount > 0 && (
+          {isHydrated && itemCount > 0 && (
             <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-[#FFD700] text-[#228B22] hover:bg-[#FFD700]/90"
@@ -168,7 +175,7 @@ export function CartDropdown({ className }: { className?: string }) {
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-lg">Shopping Cart</h3>
-            {items.length > 0 && (
+            {isHydrated && items.length > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -181,7 +188,15 @@ export function CartDropdown({ className }: { className?: string }) {
             )}
           </div>
 
-          {items.length === 0 ? (
+          {!isHydrated ? (
+            <div className="text-center py-8">
+              <div className="animate-pulse">
+                <div className="h-12 w-12 bg-muted rounded-full mx-auto mb-4"></div>
+                <div className="h-4 bg-muted rounded w-32 mx-auto mb-4"></div>
+                <div className="h-10 bg-muted rounded w-40 mx-auto"></div>
+              </div>
+            </div>
+          ) : items.length === 0 ? (
             <div className="text-center py-8">
               <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground mb-4">Your cart is empty</p>
@@ -210,38 +225,40 @@ export function CartDropdown({ className }: { className?: string }) {
               <Separator className="my-4" />
 
               {/* Cart Summary */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">
-                    Total ({itemCount} item{itemCount !== 1 ? 's' : ''})
-                  </span>
-                  <span className="font-bold text-lg">
-                    ₹{totalPrice.toLocaleString()}
-                  </span>
-                </div>
+              {isHydrated && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">
+                      Total ({itemCount} item{itemCount !== 1 ? 's' : ''})
+                    </span>
+                    <span className="font-bold text-lg">
+                      ₹{totalPrice.toLocaleString()}
+                    </span>
+                  </div>
 
-                {/* Action Buttons */}
-                <div className="space-y-2">
-                  <Button
-                    asChild
-                    className="w-full"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Link href="/cart">
-                      <ShoppingCart className="mr-2 h-4 w-4" />
-                      View Cart
-                    </Link>
-                  </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Link href="/checkout">Checkout</Link>
-                  </Button>
+                  {/* Action Buttons */}
+                  <div className="space-y-2">
+                    <Button
+                      asChild
+                      className="w-full"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link href="/cart">
+                        <ShoppingCart className="mr-2 h-4 w-4" />
+                        View Cart
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link href="/checkout">Checkout</Link>
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
         </div>
