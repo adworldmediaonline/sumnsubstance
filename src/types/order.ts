@@ -117,6 +117,11 @@ export interface SerializedOrder {
   };
 }
 
+// Extended type for order details page with additional fields
+export interface SerializedOrderWithDetails extends SerializedOrder {
+  estimatedDelivery?: string;
+}
+
 export interface SerializedOrderItem {
   id: string;
   name: string;

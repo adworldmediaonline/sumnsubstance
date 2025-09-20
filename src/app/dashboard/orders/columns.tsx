@@ -3,23 +3,16 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { MoreHorizontal, Eye, Package, Truck, Mail } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
 import {
   getOrderStatusColor,
   getPaymentStatusColor,
 } from '@/lib/utils/order-client-utils';
 import type { SerializedOrder } from '@/types/order';
+import { OrderActions } from '@/components/orders/order-actions';
 
 // Component to handle dropdown hydration
 function OrderActionsDropdown({ order }: { order: SerializedOrder }) {
@@ -38,46 +31,7 @@ function OrderActionsDropdown({ order }: { order: SerializedOrder }) {
     );
   }
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/orders/${order.id}`}>
-            <Eye className="mr-2 h-4 w-4" />
-            View Details
-          </Link>
-        </DropdownMenuItem>
-
-        <DropdownMenuItem asChild>
-          <Link href={`/dashboard/orders/${order.id}/edit`}>
-            <Package className="mr-2 h-4 w-4" />
-            Update Status
-          </Link>
-        </DropdownMenuItem>
-
-        {order.status === 'CONFIRMED' && (
-          <DropdownMenuItem>
-            <Truck className="mr-2 h-4 w-4" />
-            Mark as Shipped
-          </DropdownMenuItem>
-        )}
-
-        <DropdownMenuItem>
-          <Mail className="mr-2 h-4 w-4" />
-          Send Email
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+  return <OrderActions order={order} />;
 }
 
 export const orderColumns: ColumnDef<SerializedOrder>[] = [

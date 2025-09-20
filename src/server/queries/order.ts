@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import type { SerializedOrder } from '@/types/order';
 import type { Prisma } from '@prisma/client';
+import { calculateDeliveryDate } from '@/lib/utils/order-utils';
 
 interface GetOrdersParams {
   page?: number;
@@ -245,6 +246,17 @@ export async function getOrderById(
             email: order.user.email,
           }
         : undefined,
+      estimatedDelivery: order.deliveredAt
+        ? undefined
+        : calculateDeliveryDate(
+            order.createdAt,
+            'standard'
+          ).max.toLocaleDateString('en-IN', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }),
     };
   } catch (error) {
     console.error('Error fetching order by ID:', error);
