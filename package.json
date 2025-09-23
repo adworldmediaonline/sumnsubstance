@@ -11,6 +11,7 @@
     "format:check": "biome format .",
     "check": "pnpm lint && pnpm format",
     "check:ci": "pnpm lint",
+    "type-check": "tsc --noEmit",
     "gen": "prisma generate --no-engine",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
