@@ -45,11 +45,8 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Install Biome
-        run: pnpm add -D @biomejs/biome
-
-      - name: Run Biome checks
-        run: pnpm biome check --write --unsafe .
+      - name: Run ESLint
+        run: pnpm lint
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
