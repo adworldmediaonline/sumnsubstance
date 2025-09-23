@@ -43,11 +43,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { SerializedOrder } from '@/types/order';
 import {
   updateOrderStatus,
-  updatePaymentStatus,
   sendOrderEmail,
   addOrderNotes,
   type UpdateOrderStatusData,
-  type UpdatePaymentStatusData,
   type SendOrderEmailData,
   type AddOrderNotesData,
 } from '@/app/actions/order';
@@ -231,7 +229,12 @@ export function OrderActions({ order }: OrderActionsProps) {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <Select
+                value={selectedStatus}
+                onValueChange={(value: string) =>
+                  setSelectedStatus(value as typeof selectedStatus)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
@@ -287,7 +290,9 @@ export function OrderActions({ order }: OrderActionsProps) {
               <Label htmlFor="email-type">Email Type</Label>
               <Select
                 value={selectedEmailType}
-                onValueChange={(value: any) => setSelectedEmailType(value)}
+                onValueChange={(value: string) =>
+                  setSelectedEmailType(value as typeof selectedEmailType)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select email type" />

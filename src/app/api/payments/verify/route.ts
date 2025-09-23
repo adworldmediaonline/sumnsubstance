@@ -4,6 +4,44 @@ import prisma from '@/lib/prisma';
 import { razorpayPaymentSchema } from '@/lib/validations/order';
 import { sendOrderConfirmationEmail } from '@/lib/email/order-emails';
 
+// Helper function to serialize order data for email
+function serializeOrderData(order: {
+  id: string;
+  orderNumber: string;
+  createdAt: Date;
+  subtotal: { toNumber: () => number };
+  tax: { toNumber: () => number };
+  shipping: { toNumber: () => number };
+  discount: { toNumber: () => number };
+  total: { toNumber: () => number };
+  items?: Array<{
+    price: { toNumber: () => number };
+    total: { toNumber: () => number };
+    name: string;
+    quantity: number;
+  }>;
+  shippingAddress?: unknown;
+  [key: string]: unknown;
+}) {
+  return {
+    ...order,
+    subtotal: order.subtotal.toNumber(),
+    tax: order.tax.toNumber(),
+    shipping: order.shipping.toNumber(),
+    discount: order.discount.toNumber(),
+    total: order.total.toNumber(),
+    items:
+      order.items?.map(item => ({
+        ...item,
+        price: item.price.toNumber(),
+        total: item.total.toNumber(),
+      })) || [],
+    shippingAddress: order.shippingAddress
+      ? JSON.parse(order.shippingAddress as string)
+      : null,
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -56,7 +94,7 @@ export async function POST(request: NextRequest) {
 
       if (customerEmail && customerName) {
         await sendOrderConfirmationEmail({
-          order,
+          order: serializeOrderData(order),
           customerEmail,
           customerName,
         });

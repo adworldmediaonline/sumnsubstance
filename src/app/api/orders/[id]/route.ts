@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import {
-  calculateDeliveryDate,
-  formatOrderNumber,
-} from '@/lib/utils/order-utils';
+import { calculateDeliveryDate } from '@/lib/utils/order-utils';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     // Fetch order with all related data
     const order = await prisma.order.findUnique({

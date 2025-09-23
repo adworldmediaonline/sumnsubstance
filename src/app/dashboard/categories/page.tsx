@@ -1,12 +1,6 @@
 import { getCategories } from '@/server/queries/category';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Plus, Package } from 'lucide-react';
 import Link from 'next/link';
 import { DataTable } from '@/components/data-table/data-table';

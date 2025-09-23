@@ -115,6 +115,7 @@ export interface SerializedOrder {
     name: string;
     email: string;
   };
+  estimatedDelivery?: string;
 }
 
 // Extended type for order details page with additional fields
@@ -128,7 +129,7 @@ export interface SerializedOrderItem {
   price: number;
   quantity: number;
   total: number;
-  productSnapshot: any;
+  productSnapshot: Record<string, unknown>;
   product: {
     id: string;
     name: string;

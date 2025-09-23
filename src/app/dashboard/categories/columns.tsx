@@ -1,40 +1,32 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Edit, Trash2, Package, FolderOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { DeleteCategoryButton } from "./delete-category-button";
-import Link from "next/link";
-import type { CategoryWithCount } from "@/server/queries/category";
+import { ColumnDef } from '@tanstack/react-table';
+import { Edit, Package, FolderOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+
+import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
+import { DeleteCategoryButton } from './delete-category-button';
+import Link from 'next/link';
+import type { CategoryWithCount } from '@/server/queries/category';
 
 export const categoryColumns: ColumnDef<CategoryWithCount>[] = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onCheckedChange={value => row.toggleSelected(!!value)}
         aria-label="Select row"
       />
     ),
@@ -42,7 +34,7 @@ export const categoryColumns: ColumnDef<CategoryWithCount>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Category" />
     ),
@@ -64,7 +56,7 @@ export const categoryColumns: ColumnDef<CategoryWithCount>[] = [
     },
   },
   {
-    accessorKey: "_count.products",
+    accessorKey: '_count.products',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Products" />
     ),
@@ -75,51 +67,51 @@ export const categoryColumns: ColumnDef<CategoryWithCount>[] = [
           <Package className="h-4 w-4 text-muted-foreground" />
           <span className="font-medium">{count}</span>
           <span className="text-sm text-muted-foreground">
-            {count === 1 ? "product" : "products"}
+            {count === 1 ? 'product' : 'products'}
           </span>
         </div>
       );
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: 'createdAt',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.getValue("createdAt"));
+      const date = new Date(row.getValue('createdAt'));
       return (
         <div className="text-sm text-muted-foreground">
-          {date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
+          {date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
           })}
         </div>
       );
     },
   },
   {
-    accessorKey: "updatedAt",
+    accessorKey: 'updatedAt',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Updated" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.getValue("updatedAt"));
+      const date = new Date(row.getValue('updatedAt'));
       return (
         <div className="text-sm text-muted-foreground">
-          {date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
+          {date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
           })}
         </div>
       );
     },
   },
   {
-    id: "actions",
-    header: "Actions",
+    id: 'actions',
+    header: 'Actions',
     cell: ({ row }) => {
       const category = row.original;
 

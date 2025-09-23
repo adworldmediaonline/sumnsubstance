@@ -60,6 +60,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
         toast.error(result.error);
       }
     } catch (error) {
+      console.error('Error updating category:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

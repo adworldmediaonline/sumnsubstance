@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -447,10 +448,12 @@ export default function HeroBannerV2() {
               <div className="w-[500px] h-[500px] bg-white/10 backdrop-blur-sm rounded-full border border-white/20 flex items-center justify-center relative overflow-hidden">
                 {/* Product Image from Unsplash - Made bigger and better styled */}
                 <div className="w-[450px] h-[450px] rounded-full overflow-hidden shadow-2xl relative border-4 border-white/30">
-                  <img
+                  <Image
                     src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&h=800&fit=crop&crop=center"
                     alt="Natural Skincare Product"
-                    className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                    fill
+                    className="object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                    sizes="450px"
                   />
                   {/* Enhanced overlay for better product presentation */}
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#228B22]/20"></div>

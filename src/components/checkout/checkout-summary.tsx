@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ShoppingCart, Shield, Truck, CreditCard, Package } from 'lucide-react';
+import { ShoppingCart, Package } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
@@ -12,11 +12,10 @@ import {
   useCartTotalPrice,
 } from '@/store/cart-store';
 
-interface CheckoutSummaryProps {
-  isProcessing: boolean;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface CheckoutSummaryProps {}
 
-export function CheckoutSummary({ isProcessing }: CheckoutSummaryProps) {
+export function CheckoutSummary({}: CheckoutSummaryProps) {
   const items = useCartItems();
   const count = useCartItemCount();
   const subtotal = useCartTotalPrice();

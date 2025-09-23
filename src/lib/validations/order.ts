@@ -155,7 +155,7 @@ export const razorpayOrderSchema = z.object({
     .max(99999999, 'Maximum order amount is ₹999,999.99'),
   currency: z.string().default('INR'),
   receipt: z.string().min(1, 'Receipt is required'),
-  notes: z.record(z.string()).optional(),
+  notes: z.record(z.string(), z.string()).optional(),
 });
 
 // Razorpay Payment Verification Schema
@@ -173,13 +173,13 @@ export const orderQuerySchema = z.object({
     .transform(val => parseInt(val) || 1)
     .pipe(z.number().int().min(1))
     .optional()
-    .default('1'),
+    .default(1),
   limit: z
     .string()
     .transform(val => parseInt(val) || 10)
     .pipe(z.number().int().min(1).max(100))
     .optional()
-    .default('10'),
+    .default(10),
   status: z
     .string()
     .transform(val => val.split(',').filter(Boolean))

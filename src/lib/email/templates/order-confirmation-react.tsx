@@ -72,7 +72,7 @@ export function OrderEmailTemplate({
           {/* Order Details */}
           <Section style={orderDetails}>
             <Heading style={h2}>Order #{orderNumber}</Heading>
-            <Text style={orderDate}>
+            <Text style={orderDateStyle}>
               Order Date:{' '}
               {new Date(orderDate).toLocaleDateString('en-IN', {
                 weekday: 'long',
@@ -249,7 +249,7 @@ const h3 = {
   padding: '0 20px',
 };
 
-const orderDate = {
+const orderDateStyle = {
   color: '#666',
   fontSize: '14px',
   margin: '0',

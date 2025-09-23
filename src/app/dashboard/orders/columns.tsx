@@ -149,7 +149,7 @@ export const orderColumns: ColumnDef<SerializedOrder>[] = [
     accessorKey: 'items',
     header: 'Items',
     cell: ({ row }) => {
-      const items = row.getValue('items') as any[];
+      const items = row.getValue('items') as Array<{ quantity: number }>;
       const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
       return (
         <div className="text-center">

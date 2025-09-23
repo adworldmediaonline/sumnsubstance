@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Deal } from '@/types/home';
 
@@ -73,10 +74,12 @@ export default function DealsSection() {
             >
               {/* Product Image */}
               <div className="relative h-48 bg-gradient-to-br from-[#ffd469]/20 to-[#ffd469]/30 overflow-hidden">
-                <img
+                <Image
                   src={deal.image}
                   alt={deal.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                 <div

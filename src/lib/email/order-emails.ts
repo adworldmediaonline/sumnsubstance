@@ -4,8 +4,41 @@ import { OrderEmailTemplate } from './templates/order-confirmation-react';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Helper function to safely convert Decimal or number to number
+function toNumber(value: { toNumber?: () => number } | number): number {
+  return typeof value === 'number' ? value : value.toNumber?.() || 0;
+}
+
 interface OrderEmailData {
-  order: any;
+  order: {
+    id: string;
+    orderNumber: string;
+    total: { toNumber?: () => number } | number;
+    subtotal: { toNumber?: () => number } | number;
+    tax: { toNumber?: () => number } | number;
+    shipping: { toNumber?: () => number } | number;
+    discount: { toNumber?: () => number } | number;
+    createdAt: Date;
+    items: Array<{
+      name: string;
+      quantity: number;
+      price: { toNumber?: () => number } | number;
+      total: { toNumber?: () => number } | number;
+      productSnapshot?: { mainImage?: { url?: string } };
+    }>;
+    shippingAddress:
+      | string
+      | {
+          fullName: string;
+          addressLine1: string;
+          addressLine2?: string;
+          city: string;
+          state: string;
+          postalCode: string;
+          country: string;
+          phone: string;
+        };
+  };
   customerEmail: string;
   customerName: string;
 }
@@ -24,19 +57,22 @@ export async function sendOrderConfirmationEmail({
       OrderEmailTemplate({
         customerName,
         orderNumber: order.orderNumber,
-        orderDate: order.createdAt,
-        orderItems: order.items.map((item: any) => ({
+        orderDate: order.createdAt.toISOString(),
+        orderItems: order.items.map(item => ({
           name: item.name,
           quantity: item.quantity,
-          price: item.price.toNumber(),
-          total: item.total.toNumber(),
+          price: toNumber(item.price),
+          total: toNumber(item.total),
           image: item.productSnapshot?.mainImage?.url,
         })),
-        subtotal: order.subtotal.toNumber(),
-        shipping: order.shipping.toNumber(),
-        tax: order.tax.toNumber(),
-        total: order.total.toNumber(),
-        shippingAddress: JSON.parse(order.shippingAddress),
+        subtotal: toNumber(order.subtotal),
+        shipping: toNumber(order.shipping),
+        tax: toNumber(order.tax),
+        total: toNumber(order.total),
+        shippingAddress:
+          typeof order.shippingAddress === 'string'
+            ? JSON.parse(order.shippingAddress)
+            : order.shippingAddress,
         estimatedDelivery: calculateEstimatedDelivery(order.createdAt),
       })
     );
@@ -96,7 +132,21 @@ export async function sendOrderDeliveredEmail({
 /**
  * Send admin order notification
  */
-export async function sendAdminOrderNotification(order: any) {
+export async function sendAdminOrderNotification(order: {
+  id: string;
+  orderNumber: string;
+  total: { toNumber?: () => number } | number;
+  createdAt: Date;
+  paymentMethod: string;
+  user?: { name?: string; email?: string } | null;
+  guestName?: string;
+  guestEmail?: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    total: { toNumber?: () => number } | number;
+  }>;
+}) {
   try {
     const adminEmail =
       process.env.ADMIN_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL;
@@ -113,8 +163,8 @@ export async function sendAdminOrderNotification(order: any) {
       html: `
         <h2>New Order Alert</h2>
         <p><strong>Order Number:</strong> ${order.orderNumber}</p>
-        <p><strong>Customer:</strong> ${order.user?.name || order.guestName} (${order.user?.email || order.guestEmail})</p>
-        <p><strong>Total:</strong> ₹${order.total.toNumber().toLocaleString()}</p>
+        <p><strong>Customer:</strong> ${order.user?.name || order.guestName || 'Guest'} (${order.user?.email || order.guestEmail || 'No email'})</p>
+        <p><strong>Total:</strong> ₹${toNumber(order.total).toLocaleString()}</p>
         <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
         <p><strong>Items:</strong> ${order.items.length}</p>
         <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
@@ -123,8 +173,8 @@ export async function sendAdminOrderNotification(order: any) {
         <ul>
           ${order.items
             .map(
-              (item: any) => `
-            <li>${item.name} x ${item.quantity} = ₹${item.total.toNumber().toLocaleString()}</li>
+              item => `
+            <li>${item.name} x ${item.quantity} = ₹${toNumber(item.total).toLocaleString()}</li>
           `
             )
             .join('')}

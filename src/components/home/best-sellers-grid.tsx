@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Star, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BEST_SELLERS } from '@/constants/home-data';
@@ -25,11 +26,13 @@ export default function BestSellersGrid() {
               className="group bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 hover:-translate-y-1 border border-gray-100/50 flex flex-col h-full"
             >
               <div className="relative overflow-hidden">
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#ffd469]/10 via-white to-[#233f1c]/5 overflow-hidden">
-                  <img
+                <div className="aspect-[4/3] bg-gradient-to-br from-[#ffd469]/10 via-white to-[#233f1c]/5 overflow-hidden relative">
+                  <Image
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                   />
                 </div>
                 <div

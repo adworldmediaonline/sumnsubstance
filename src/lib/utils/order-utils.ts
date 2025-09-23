@@ -198,7 +198,48 @@ export function canRefundOrder(
 /**
  * Generate order receipt data
  */
-export function generateOrderReceipt(order: any) {
+export function generateOrderReceipt(order: {
+  id: string;
+  orderNumber: string;
+  total: number;
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  discount: number;
+  createdAt: Date;
+  user?: { name?: string; email?: string } | null;
+  guestName?: string;
+  guestEmail?: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    total: number;
+  }>;
+  shippingAddress:
+    | string
+    | {
+        fullName: string;
+        addressLine1: string;
+        addressLine2?: string;
+        city: string;
+        state: string;
+        postalCode: string;
+        country: string;
+      };
+  billingAddress?:
+    | string
+    | {
+        fullName: string;
+        addressLine1: string;
+        addressLine2?: string;
+        city: string;
+        state: string;
+        postalCode: string;
+        country: string;
+      }
+    | null;
+}) {
   return {
     orderNumber: order.orderNumber,
     orderDate: order.createdAt,
@@ -206,7 +247,7 @@ export function generateOrderReceipt(order: any) {
       name: order.user?.name || order.guestName,
       email: order.user?.email || order.guestEmail,
     },
-    items: order.items.map((item: any) => ({
+    items: order.items.map(item => ({
       name: item.name,
       quantity: item.quantity,
       price: item.price,
@@ -219,9 +260,14 @@ export function generateOrderReceipt(order: any) {
       discount: order.discount,
       total: order.total,
     },
-    shippingAddress: JSON.parse(order.shippingAddress),
+    shippingAddress:
+      typeof order.shippingAddress === 'string'
+        ? JSON.parse(order.shippingAddress)
+        : order.shippingAddress,
     billingAddress: order.billingAddress
-      ? JSON.parse(order.billingAddress)
+      ? typeof order.billingAddress === 'string'
+        ? JSON.parse(order.billingAddress)
+        : order.billingAddress
       : null,
   };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
@@ -206,12 +206,13 @@ const ImageUpload = React.forwardRef<HTMLDivElement, ImageUploadProps>(
       })
     );
 
-    const currentImages =
-      variant === 'single'
+    const currentImages = useMemo(() => {
+      return variant === 'single'
         ? value
           ? [value as ImageData]
           : []
         : (value as ImageData[]) || [];
+    }, [variant, value]);
 
     const canUploadMore =
       variant === 'single'

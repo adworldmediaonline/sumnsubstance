@@ -73,6 +73,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
         toast.error(result.error);
       }
     } catch (error) {
+      console.error('Error creating product:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
         total: order.total.toNumber(),
         razorpayOrderId: order.razorpayOrderId,
         paymentMethod: order.paymentMethod,
-        items: order.items.map((item: any) => ({
+        items: order.items.map((item) => ({
           id: item.id,
           name: item.name,
           price: item.price.toNumber(),

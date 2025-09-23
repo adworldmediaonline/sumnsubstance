@@ -107,10 +107,10 @@ export function serializeProduct<
   // Return serialized product with proper typing
   const {
     price,
-    mainImageUrl: _url,
-    mainImagePublicId: _publicId,
-    mainImageAlt: _alt,
-    additionalImages: _images,
+    mainImageUrl: _url, // eslint-disable-line @typescript-eslint/no-unused-vars
+    mainImagePublicId: _publicId, // eslint-disable-line @typescript-eslint/no-unused-vars
+    mainImageAlt: _alt, // eslint-disable-line @typescript-eslint/no-unused-vars
+    additionalImages: _images, // eslint-disable-line @typescript-eslint/no-unused-vars
     ...rest
   } = product;
 

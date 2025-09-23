@@ -31,7 +31,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
     .filter(Boolean);
   const search = resolvedSearchParams.search;
 
-  const { orders, totalCount, analytics } = await getOrders({
+  const { orders, analytics } = await getOrders({
     page,
     limit,
     status,
@@ -65,9 +65,6 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
             data={orders}
             searchKey="orderNumber"
             searchPlaceholder="Search orders..."
-            totalCount={totalCount}
-            pageSize={limit}
-            currentPage={page}
           />
         </CardContent>
       </Card>

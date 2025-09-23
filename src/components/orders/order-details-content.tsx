@@ -1,9 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import {
   ArrowLeft,
   Package,
-  Truck,
   MapPin,
   CreditCard,
   User,
@@ -16,7 +16,6 @@ import { Badge } from '@/components/ui/badge';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -127,11 +126,15 @@ export function OrderDetailsContent({ order }: OrderDetailsContentProps) {
             {order.items.map(item => (
               <div key={item.id} className="flex items-center space-x-4">
                 {item.product.mainImage && (
-                  <img
-                    src={item.product.mainImage.url}
-                    alt={item.product.mainImage.altText || item.name}
-                    className="h-16 w-16 rounded-md object-cover"
-                  />
+                  <div className="relative h-16 w-16 rounded-md overflow-hidden">
+                    <Image
+                      src={item.product.mainImage.url}
+                      alt={item.product.mainImage.altText || item.name}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
+                    />
+                  </div>
                 )}
                 <div className="flex-1">
                   <h4 className="font-medium">{item.name}</h4>

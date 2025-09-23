@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -31,7 +31,16 @@ interface OrderData {
     price: number;
     total: number;
   }>;
-  shippingAddress: any;
+  shippingAddress: {
+    fullName: string;
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+  };
 }
 
 export function OrderSuccessContent() {
@@ -43,17 +52,7 @@ export function OrderSuccessContent() {
 
   const orderId = searchParams.get('orderId');
 
-  useEffect(() => {
-    if (!orderId) {
-      setError('Order ID not found');
-      setLoading(false);
-      return;
-    }
-
-    fetchOrderData();
-  }, [orderId]);
-
-  const fetchOrderData = async () => {
+  const fetchOrderData = useCallback(async () => {
     try {
       const response = await fetch(`/api/orders/${orderId}`);
 
@@ -63,13 +62,23 @@ export function OrderSuccessContent() {
 
       const data = await response.json();
       setOrderData(data.data);
-    } catch (error) {
-      console.error('Error fetching order:', error);
+    } catch {
+      console.error('Error fetching order');
       setError('Failed to load order details');
     } finally {
       setLoading(false);
     }
-  };
+  }, [orderId]);
+
+  useEffect(() => {
+    if (!orderId) {
+      setError('Order ID not found');
+      setLoading(false);
+      return;
+    }
+
+    fetchOrderData();
+  }, [orderId, fetchOrderData]);
 
   const handleDownloadReceipt = async () => {
     try {
@@ -84,7 +93,7 @@ export function OrderSuccessContent() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
       toast.success('Receipt downloaded successfully');
-    } catch (error) {
+    } catch {
       toast.error('Failed to download receipt');
     }
   };

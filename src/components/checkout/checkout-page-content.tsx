@@ -2,31 +2,20 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
-  ShoppingBag,
   ArrowLeft,
-  Lock,
-  CreditCard,
-  Truck,
-  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { CheckoutForm } from '@/components/checkout/checkout-form';
 import { CheckoutSummary } from '@/components/checkout/checkout-summary';
 import { EmptyCartRedirect } from '@/components/checkout/empty-cart-redirect';
 import {
   useCartItems,
-  useCartItemCount,
-  useCartTotalPrice,
 } from '@/store/cart-store';
 import { authClient } from '@/lib/auth-client';
 
 export function CheckoutPageContent() {
-  const router = useRouter();
   const { data: session } = authClient.useSession();
   const items = useCartItems();
 
@@ -66,7 +55,7 @@ export function CheckoutPageContent() {
       {/* Order Summary Section */}
       <div className="lg:col-span-1">
         <div className="sticky top-8">
-          <CheckoutSummary isProcessing={isProcessing} />
+          <CheckoutSummary />
         </div>
       </div>
     </div>

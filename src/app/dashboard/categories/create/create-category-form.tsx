@@ -53,6 +53,7 @@ export function CreateCategoryForm() {
         toast.error(result.error);
       }
     } catch (error) {
+      console.error('Error creating category:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

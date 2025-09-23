@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface OrderEmailTemplateProps {
   customerName: string;
@@ -15,7 +16,16 @@ interface OrderEmailTemplateProps {
   shipping: number;
   tax: number;
   total: number;
-  shippingAddress: any;
+  shippingAddress: {
+    fullName: string;
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+  };
   estimatedDelivery: string;
 }
 
@@ -109,17 +119,24 @@ export function OrderEmailTemplate({
               }}
             >
               {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.name}
+                <div
                   style={{
                     width: '60px',
                     height: '60px',
-                    objectFit: 'cover',
-                    borderRadius: '8px',
                     marginRight: '16px',
+                    position: 'relative',
                   }}
-                />
+                >
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    style={{
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                    }}
+                  />
+                </div>
               )}
               <div style={{ flex: 1 }}>
                 <h4
@@ -299,13 +316,23 @@ export function ShippedOrderTemplate({
   orderNumber,
   trackingNumber,
   estimatedDelivery,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   shippingAddress,
 }: {
   customerName: string;
   orderNumber: string;
   trackingNumber?: string;
   estimatedDelivery: string;
-  shippingAddress: any;
+  shippingAddress: {
+    fullName: string;
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+  };
 }) {
   return (
     <div
@@ -385,12 +412,18 @@ export function DeliveredOrderTemplate({
   customerName,
   orderNumber,
   deliveryDate,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   orderItems,
 }: {
   customerName: string;
   orderNumber: string;
   deliveryDate: string;
-  orderItems: any[];
+  orderItems: Array<{
+    name: string;
+    quantity: number;
+    price: number;
+    total: number;
+  }>;
 }) {
   return (
     <div

@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
 import type { SerializedOrder } from '@/types/order';
-import type { Prisma } from '@prisma/client';
 import { calculateDeliveryDate } from '@/lib/utils/order-utils';
 
 interface GetOrdersParams {
@@ -24,7 +23,7 @@ export async function getOrders({
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: any = {};
+    const where: Record<string, unknown> = {};
 
     if (status && status.length > 0) {
       where.status = { in: status };
@@ -113,7 +112,7 @@ export async function getOrders({
         price: item.price.toNumber(),
         quantity: item.quantity,
         total: item.total.toNumber(),
-        productSnapshot: item.productSnapshot,
+        productSnapshot: item.productSnapshot as Record<string, unknown>,
         product: {
           id: item.product.id,
           name: item.product.name,
@@ -220,7 +219,7 @@ export async function getOrderById(
         price: item.price.toNumber(),
         quantity: item.quantity,
         total: item.total.toNumber(),
-        productSnapshot: item.productSnapshot,
+        productSnapshot: item.productSnapshot as Record<string, unknown>,
         product: {
           id: item.product.id,
           name: item.product.name,
@@ -287,11 +286,17 @@ async function calculateOrderAnalytics() {
         }),
       ]);
 
+    // Type assertion for ordersByStatus to fix TypeScript inference issue
+    const typedOrdersByStatus = ordersByStatus as Array<{
+      status: string;
+      _count: { status: number };
+    }>;
+
     const revenue = totalRevenue._sum.total?.toNumber() || 0;
     const averageOrderValue = totalOrders > 0 ? revenue / totalOrders : 0;
 
     const statusCounts: Record<string, number> = {};
-    ordersByStatus.forEach((item: any) => {
+    typedOrdersByStatus.forEach(item => {
       statusCounts[item.status] = item._count.status;
     });
 

@@ -7,7 +7,24 @@ import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { sendOrderConfirmationEmail } from '@/lib/email/order-emails';
 
 // Helper function to serialize order data for client components
-function serializeOrderData(order: any) {
+function serializeOrderData(order: {
+  id: string;
+  orderNumber: string;
+  createdAt: Date;
+  subtotal: { toNumber: () => number };
+  tax: { toNumber: () => number };
+  shipping: { toNumber: () => number };
+  discount: { toNumber: () => number };
+  total: { toNumber: () => number };
+  items?: Array<{
+    price: { toNumber: () => number };
+    total: { toNumber: () => number };
+    name: string;
+    quantity: number;
+  }>;
+  shippingAddress?: unknown;
+  [key: string]: unknown;
+}) {
   return {
     ...order,
     subtotal: order.subtotal.toNumber(),
@@ -16,11 +33,14 @@ function serializeOrderData(order: any) {
     discount: order.discount.toNumber(),
     total: order.total.toNumber(),
     items:
-      order.items?.map((item: any) => ({
+      order.items?.map(item => ({
         ...item,
         price: item.price.toNumber(),
         total: item.total.toNumber(),
       })) || [],
+    shippingAddress: order.shippingAddress
+      ? JSON.parse(order.shippingAddress as string)
+      : null,
   };
 }
 
@@ -85,7 +105,13 @@ export async function updateOrderStatus(
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData: {
+      status: OrderStatus;
+      updatedAt: Date;
+      trackingNumber?: string;
+      shippedAt?: Date;
+      deliveredAt?: Date;
+    } = {
       status: status as OrderStatus,
       updatedAt: new Date(),
     };
@@ -252,7 +278,7 @@ export async function sendOrderEmail(
     switch (type) {
       case 'confirmation':
         await sendOrderConfirmationEmail({
-          order,
+          order: serializeOrderData(order),
           customerEmail,
           customerName,
         });

@@ -1,18 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  CreditCard,
-  Truck,
-  FileText,
-  Check,
-} from 'lucide-react';
+import { User, MapPin, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -24,13 +14,32 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  minimalCheckoutFormSchema,
-  type MinimalCheckoutFormData,
-} from '@/lib/validations/order';
 import { useCartItems, useClearCart } from '@/store/cart-store';
 import { toast } from 'sonner';
+
+// Define form data type
+interface CheckoutFormData {
+  customerInfo: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+  };
+  shippingAddress: {
+    fullName: string;
+    phone: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    isDefault: boolean;
+  };
+  shippingMethod: string;
+  paymentMethod: string;
+  orderNotes: string;
+}
 
 interface CheckoutFormProps {
   isProcessing: boolean;
@@ -76,7 +85,7 @@ export function CheckoutForm({
     },
   });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CheckoutFormData) => {
     try {
       onProcessingChange(true);
 
@@ -90,7 +99,7 @@ export function CheckoutForm({
     }
   };
 
-  const processOrder = async (data: any) => {
+  const processOrder = async (data: CheckoutFormData) => {
     try {
       // Create order payload
       const orderPayload = {
@@ -138,7 +147,12 @@ export function CheckoutForm({
     }
   };
 
-  const processRazorpayPayment = async (order: any) => {
+  const processRazorpayPayment = async (order: {
+    id: string;
+    razorpayOrderId: string;
+    total: number;
+    orderNumber: string;
+  }) => {
     try {
       // Load Razorpay script
       const script = document.createElement('script');
@@ -154,7 +168,11 @@ export function CheckoutForm({
           name: 'SumnSubstance',
           description: `Order #${order.orderNumber}`,
           order_id: order.razorpayOrderId,
-          handler: async (response: any) => {
+          handler: async (response: {
+            razorpay_payment_id: string;
+            razorpay_order_id: string;
+            razorpay_signature: string;
+          }) => {
             try {
               // Verify payment
               const verificationResponse = await fetch('/api/payments/verify', {
@@ -203,7 +221,11 @@ export function CheckoutForm({
           },
         };
 
-        const razorpay = new (window as any).Razorpay(options);
+        const razorpay = new (
+          window as unknown as {
+            Razorpay: new (options: unknown) => { open: () => void };
+          }
+        ).Razorpay(options);
         razorpay.open();
       };
 
@@ -420,7 +442,7 @@ export function CheckoutForm({
     );
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: Record<string, unknown>) => {
     console.log('Form validation errors:', errors);
     toast.error('Please fill in all required fields correctly');
     onProcessingChange(false);
