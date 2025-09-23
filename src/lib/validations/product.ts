@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Image schema
 const imageSchema = z.object({
   id: z.string().optional(),
-  url: z.string().url('Invalid image URL'),
+  url: z.url('Invalid image URL'),
   publicId: z.string().min(1, 'Public ID is required'),
   altText: z.string().optional(),
 });
