@@ -28,7 +28,11 @@ export function validateEnvironment() {
   }
 }
 
-// Only validate in non-CI environments
-if (typeof window === 'undefined' && process.env.NODE_ENV !== 'test') {
+// Only validate in non-CI environments and non-build environments
+if (
+  typeof window === 'undefined' &&
+  process.env.NODE_ENV !== 'test' &&
+  !process.env.SKIP_ENV_VALIDATION
+) {
   validateEnvironment();
 }

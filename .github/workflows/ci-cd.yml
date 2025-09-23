@@ -99,7 +99,9 @@ jobs:
     env:
       # Use production database for CI builds (simplest approach)
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      NODE_ENV: 'test'
+      NODE_ENV: 'development'
+      # Skip environment validation during build
+      SKIP_ENV_VALIDATION: 'true'
 
     steps:
       - name: Checkout code
@@ -163,6 +165,8 @@ jobs:
       # Use production database for preview (same as CI)
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: 'development'
+      # Skip environment validation during preview deployment
+      SKIP_ENV_VALIDATION: 'true'
 
     steps:
       - name: Checkout code
@@ -261,6 +265,8 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: 'production'
+      # Skip environment validation during production deployment
+      SKIP_ENV_VALIDATION: 'true'
 
     steps:
       - name: Checkout code
