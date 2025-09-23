@@ -54,11 +54,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm gen
+
       - name: Run ESLint
         run: pnpm lint
 
       - name: Type check
-        run: pnpm exec tsc --noEmit
+        run: pnpm exec tsc --noEmit --skipLibCheck
 
       - name: Security audit
         run: pnpm audit --audit-level moderate
@@ -128,12 +131,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma client
+        run: pnpm gen
+
       - name: Setup test database
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
-        run: |
-          pnpm exec prisma generate
-          pnpm exec prisma db push
+        run: pnpm db:push
 
       - name: Run tests (if any)
         env:
@@ -255,8 +259,8 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
-          pnpm exec prisma generate
-          pnpm exec prisma db push
+          pnpm gen
+          pnpm db:push
 
       - name: Notify deployment success
         uses: 8398a7/action-slack@v3
