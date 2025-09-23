@@ -97,11 +97,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality-checks
     env:
-      # Use production database for CI builds (simplest approach)
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # Minimal environment variables to get build working
+      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy' }}
       NODE_ENV: 'development'
-      # Skip environment validation during build
       SKIP_ENV_VALIDATION: 'true'
+      # Provide dummy values for build process
+      RESEND_API_KEY: 'dummy-resend-key'
+      RESEND_FROM_EMAIL: 'preview@example.com'
+      BETTER_AUTH_SECRET: 'dummy-secret-for-preview'
+      BETTER_AUTH_URL: 'http://localhost:3000'
+      CLOUDINARY_CLOUD_NAME: 'dummy-cloud'
+      CLOUDINARY_API_KEY: 'dummy-cloudinary-key'
+      CLOUDINARY_API_SECRET: 'dummy-cloudinary-secret'
+      NEXT_PUBLIC_RAZORPAY_KEY_ID: 'dummy-razorpay-key'
+      RAZORPAY_KEY_SECRET: 'dummy-razorpay-secret'
+      RAZORPAY_WEBHOOK_SECRET: 'dummy-webhook-secret'
+      GOOGLE_CLIENT_ID: 'dummy-google-client-id'
+      GOOGLE_CLIENT_SECRET: 'dummy-google-client-secret'
 
     steps:
       - name: Checkout code
@@ -163,10 +175,22 @@ jobs:
     if: github.event_name == 'pull_request'
     env:
       # Use production database for preview (same as CI)
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy' }}
       NODE_ENV: 'development'
-      # Skip environment validation during preview deployment
       SKIP_ENV_VALIDATION: 'true'
+      # Provide dummy values for build process
+      RESEND_API_KEY: 'dummy-resend-key'
+      RESEND_FROM_EMAIL: 'preview@example.com'
+      BETTER_AUTH_SECRET: 'dummy-secret-for-preview'
+      BETTER_AUTH_URL: 'http://localhost:3000'
+      CLOUDINARY_CLOUD_NAME: 'dummy-cloud'
+      CLOUDINARY_API_KEY: 'dummy-cloudinary-key'
+      CLOUDINARY_API_SECRET: 'dummy-cloudinary-secret'
+      NEXT_PUBLIC_RAZORPAY_KEY_ID: 'dummy-razorpay-key'
+      RAZORPAY_KEY_SECRET: 'dummy-razorpay-secret'
+      RAZORPAY_WEBHOOK_SECRET: 'dummy-webhook-secret'
+      GOOGLE_CLIENT_ID: 'dummy-google-client-id'
+      GOOGLE_CLIENT_SECRET: 'dummy-google-client-secret'
 
     steps:
       - name: Checkout code
@@ -265,8 +289,20 @@ jobs:
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: 'production'
-      # Skip environment validation during production deployment
       SKIP_ENV_VALIDATION: 'true'
+      # Provide dummy values for build process
+      RESEND_API_KEY: 'dummy-resend-key'
+      RESEND_FROM_EMAIL: 'preview@example.com'
+      BETTER_AUTH_SECRET: 'dummy-secret-for-preview'
+      BETTER_AUTH_URL: 'http://localhost:3000'
+      CLOUDINARY_CLOUD_NAME: 'dummy-cloud'
+      CLOUDINARY_API_KEY: 'dummy-cloudinary-key'
+      CLOUDINARY_API_SECRET: 'dummy-cloudinary-secret'
+      NEXT_PUBLIC_RAZORPAY_KEY_ID: 'dummy-razorpay-key'
+      RAZORPAY_KEY_SECRET: 'dummy-razorpay-secret'
+      RAZORPAY_WEBHOOK_SECRET: 'dummy-webhook-secret'
+      GOOGLE_CLIENT_ID: 'dummy-google-client-id'
+      GOOGLE_CLIENT_SECRET: 'dummy-google-client-secret'
 
     steps:
       - name: Checkout code
