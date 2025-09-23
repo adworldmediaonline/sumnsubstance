@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "prisma generate --no-engine && next build --turbopack",
+    "build:ci": "prisma generate --no-engine && SKIP_ENV_VALIDATION=true next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "gen": "prisma generate --no-engine",
