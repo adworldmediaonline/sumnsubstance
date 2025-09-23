@@ -1,26 +1,23 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "complexity": {
-        "all": true
+        "recommended": true
       },
       "correctness": {
-        "all": true
+        "recommended": true
       },
       "style": {
-        "all": true
+        "recommended": true
       },
       "suspicious": {
-        "all": true
+        "recommended": true
       },
       "performance": {
-        "all": true
+        "recommended": true
       }
     }
   },
@@ -46,7 +43,7 @@
     }
   },
   "files": {
-    "include": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx", "*.json"],
+    "includes": ["src/**/*", "*.ts", "*.tsx", "*.js", "*.jsx", "*.json"],
     "ignore": [
       "node_modules/**",
       ".next/**",
