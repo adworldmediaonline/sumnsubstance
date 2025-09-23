@@ -6,9 +6,6 @@ import { z } from 'zod';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { sendOrderConfirmationEmail } from '@/lib/email/order-emails';
 
-// Force dynamic rendering to avoid static generation issues with email components
-export const dynamic = 'force-dynamic';
-
 // Helper function to serialize order data for client components
 function serializeOrderData(order: {
   id: string;
@@ -383,6 +380,14 @@ export async function addOrderNotes(data: z.infer<typeof addOrderNotesSchema>) {
     };
   }
 }
+
+// Export functions for use in components
+export {
+  updateOrderStatus,
+  updatePaymentStatus,
+  sendOrderEmail,
+  addOrderNotes,
+};
 
 // Export types for use in components
 export type UpdateOrderStatusData = z.infer<typeof updateOrderStatusSchema>;
