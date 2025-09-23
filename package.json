@@ -7,6 +7,10 @@
     "build": "prisma generate --no-engine && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "check": "pnpm lint && pnpm format",
+    "check:ci": "pnpm lint",
     "gen": "prisma generate --no-engine",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
