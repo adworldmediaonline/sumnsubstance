@@ -10,7 +10,7 @@
     "lint:biome": "biome lint .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "check": "biome check --write .",
+    "check": "biome check --write --unsafe .",
     "check:ci": "biome check .",
     "gen": "prisma generate --no-engine",
     "db:push": "prisma db push",
