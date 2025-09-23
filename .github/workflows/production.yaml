@@ -45,8 +45,29 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
+      - name: Run Tests
+        run: pnpm test
+
+      - name: Run Type Checking
+        run: pnpm type-check
+
+      - name: Run Build Verification
+        run: pnpm build
+
+      - name: Security Audit
+        run: pnpm audit
+
+      - name: Dependency Check
+        run: pnpm outdated
+
       - name: Run ESLint
         run: pnpm lint
+
+      - name: Bundle Size Analysis
+        run: pnpm bundle-analyzer
+
+      - name: Lighthouse CI
+        run: pnpm lighthouse-ci
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
