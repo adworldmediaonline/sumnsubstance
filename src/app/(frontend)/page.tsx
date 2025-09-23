@@ -1,7 +1,7 @@
 import {
   HeroBannerV2,
   FeaturedProductsV3,
-  // TestimonialsSection,
+  TestimonialsSection,
   TrustBadges,
   NewsletterSection,
 } from '../../components/home';
