@@ -17,9 +17,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
-import { createCategory, createCategorySchema } from '@/app/actions/category';
+import { createCategory } from '@/app/actions/category';
 import { toast } from 'sonner';
 import slugify from 'slugify';
+import { createCategorySchema } from '@/lib/validations/category';
 
 type FormData = z.infer<typeof createCategorySchema>;
 
@@ -52,6 +53,7 @@ export function CreateCategoryForm() {
         toast.error(result.error);
       }
     } catch (error) {
+      console.error('Error creating category:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);

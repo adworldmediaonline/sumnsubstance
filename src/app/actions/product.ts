@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import slugify from 'slugify';
+import { Decimal } from '@prisma/client/runtime/library';
+import { serializeProduct } from '@/lib/serializers';
 import {
   createProductSchema,
   updateProductSchema,
@@ -15,7 +17,15 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
   try {
     // Validate input
     const validatedData = createProductSchema.parse(data);
-    const { name, price, categoryId } = validatedData;
+    const {
+      name,
+      excerpt,
+      description,
+      price,
+      categoryId,
+      mainImage,
+      additionalImages,
+    } = validatedData;
 
     // Check if category exists
     const category = await prisma.category.findUnique({
@@ -44,9 +54,18 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
     const product = await prisma.product.create({
       data: {
         name,
+        excerpt,
+        description,
         slug,
-        price,
+        price: new Decimal(price),
         categoryId,
+        mainImageUrl: mainImage?.url,
+        mainImagePublicId: mainImage?.publicId,
+        mainImageAlt: mainImage?.altText,
+        additionalImages:
+          additionalImages && additionalImages.length > 0
+            ? JSON.stringify(additionalImages)
+            : undefined,
       },
       include: {
         category: true,
@@ -58,7 +77,7 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
 
     return {
       success: true,
-      data: product,
+      data: serializeProduct(product),
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -80,12 +99,34 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   try {
     // Validate input
     const validatedData = updateProductSchema.parse(data);
-    const { id, name, price, categoryId } = validatedData;
+    const {
+      id,
+      name,
+      excerpt,
+      description,
+      price,
+      categoryId,
+      mainImage,
+      additionalImages,
+    } = validatedData;
 
-    // Check if product exists
-    const existingProduct = await prisma.product.findUnique({
-      where: { id },
-    });
+    // Check if product exists (with timeout handling)
+    let existingProduct;
+    try {
+      existingProduct = await prisma.product.findUnique({
+        where: { id },
+        select: { id: true, name: true, slug: true }, // Only select needed fields
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during product lookup:',
+        dbError
+      );
+      return {
+        success: false,
+        error: 'Database connection error. Please try again.',
+      };
+    }
 
     if (!existingProduct) {
       return {
@@ -95,9 +136,22 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
     }
 
     // Check if category exists
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
-    });
+    let category;
+    try {
+      category = await prisma.category.findUnique({
+        where: { id: categoryId },
+        select: { id: true, name: true }, // Only select needed fields
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during category lookup:',
+        dbError
+      );
+      return {
+        success: false,
+        error: 'Database connection error. Please try again.',
+      };
+    }
 
     if (!category) {
       return {
@@ -127,19 +181,41 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       }
     }
 
-    // Update product
-    const updatedProduct = await prisma.product.update({
-      where: { id },
-      data: {
-        name,
-        slug,
-        price,
-        categoryId,
-      },
-      include: {
-        category: true,
-      },
-    });
+    // Update product with error handling
+    let updatedProduct;
+    try {
+      updatedProduct = await prisma.product.update({
+        where: { id },
+        data: {
+          name,
+          excerpt,
+          description,
+          slug,
+          price: new Decimal(price),
+          categoryId,
+          mainImageUrl: mainImage?.url,
+          mainImagePublicId: mainImage?.publicId,
+          mainImageAlt: mainImage?.altText,
+          additionalImages:
+            additionalImages && additionalImages.length > 0
+              ? JSON.stringify(additionalImages)
+              : undefined,
+        },
+        include: {
+          category: true,
+        },
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connection error during product update:',
+        dbError
+      );
+      return {
+        success: false,
+        error:
+          'Failed to update product due to database connection error. Please try again.',
+      };
+    }
 
     revalidatePath('/dashboard/products');
     revalidatePath(`/dashboard/products/${id}/edit`);
@@ -147,7 +223,7 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 
     return {
       success: true,
-      data: updatedProduct,
+      data: serializeProduct(updatedProduct),
     };
   } catch (error) {
     if (error instanceof z.ZodError) {

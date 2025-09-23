@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,21 +30,20 @@ import {
   Search,
   Settings,
   Shield,
-  ShoppingCart,
   User,
   UserIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 
 import { useState } from 'react';
+import { authClient } from '../../lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { CartDropdown } from '@/components/cart/cart-dropdown';
 
-interface HeroBannerV2Props {
-  cartItemCount?: number;
-}
-
-export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
+export default function HeroBannerV2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { data: session, isPending } = authClient.useSession();
+  const router = useRouter();
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#8FBC8F] via-[#9ACD32] to-[#7CB342] overflow-hidden">
       {/* Background decorative elements */}
@@ -138,112 +138,110 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
           </Button>
 
           {/* Cart */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="relative p-2 hover:bg-white/10 text-white hover:text-[#FFD700]"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#FFD700] text-[#228B22] text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartItemCount}
-              </span>
-            )}
-          </Button>
+          <CartDropdown />
 
           {/* User Account - Desktop */}
-          <div className="hidden md:block">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-9 w-9 rounded-full hover:bg-white/10"
-                >
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                      {''}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-64 bg-white/95 backdrop-blur-sm"
-                align="end"
-                forceMount
-              >
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{''}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {''}
-                    </p>
-                    {false && (
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
-                        Admin
-                      </span>
-                    )}
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="cursor-pointer">
-                    <UserIcon className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/dashboard/user/profile"
-                    className="cursor-pointer"
+          {!isPending && session ? (
+            <div className="hidden md:block">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full hover:bg-white/10"
                   >
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Account Settings</span>
-                  </Link>
-                </DropdownMenuItem>
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={session.user.image ?? ''} alt={''} />
+                      <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                        {session.user.initials ?? ''}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-64 bg-white/95 backdrop-blur-sm"
+                  align="end"
+                  forceMount
+                >
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {session.user.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {session.user.email}
+                      </p>
+                      {false && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
+                          Admin
+                        </span>
+                      )}
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuItem asChild>
-                  <Link href="/orders" className="cursor-pointer">
-                    <Package className="mr-2 h-4 w-4" />
-                    <span>My Orders</span>
-                  </Link>
-                </DropdownMenuItem>
-
-                {false && (
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/admin" className="cursor-pointer">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Admin Panel</span>
+                    <Link href="/dashboard/" className="cursor-pointer">
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
-                )}
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer text-red-600 focus:text-red-600"
-                  onClick={() => {}}
-                  disabled={false}
-                >
-                  {false ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <LogOut className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/dashboard/user/profile"
+                      className="cursor-pointer"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Account Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders" className="cursor-pointer">
+                      <Package className="mr-2 h-4 w-4" />
+                      <span>My Orders</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  {false && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard/admin" className="cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    </DropdownMenuItem>
                   )}
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    onClick={() => {
+                      authClient.signOut({
+                        fetchOptions: {
+                          onSuccess: () => {
+                            router.push('/');
+                          },
+                        },
+                      });
+                    }}
+                    disabled={false}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" /> <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
             <Button
-              onClick={() => {}}
+              asChild
               className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
             >
-              <User className="w-4 h-4 mr-2" />
-              Login
+              <Link href="/sign-in">
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </Link>
             </Button>
-          </div>
+          )}
 
           {/* Mobile Menu */}
           <div className="md:hidden">
@@ -450,10 +448,12 @@ export default function HeroBannerV2({ cartItemCount = 0 }: HeroBannerV2Props) {
               <div className="w-[500px] h-[500px] bg-white/10 backdrop-blur-sm rounded-full border border-white/20 flex items-center justify-center relative overflow-hidden">
                 {/* Product Image from Unsplash - Made bigger and better styled */}
                 <div className="w-[450px] h-[450px] rounded-full overflow-hidden shadow-2xl relative border-4 border-white/30">
-                  <img
+                  <Image
                     src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&h=800&fit=crop&crop=center"
                     alt="Natural Skincare Product"
-                    className="w-full h-full object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                    fill
+                    className="object-cover scale-110 hover:scale-125 transition-transform duration-700"
+                    sizes="450px"
                   />
                   {/* Enhanced overlay for better product presentation */}
                   <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#228B22]/20"></div>

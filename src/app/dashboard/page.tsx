@@ -78,10 +78,7 @@ export default async function DashboardPage() {
             <div className="text-2xl font-bold">
               $
               {products
-                .reduce(
-                  (sum, product) => sum + parseFloat(product.price.toString()),
-                  0
-                )
+                .reduce((sum, product) => sum + product.price, 0)
                 .toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -183,7 +180,7 @@ export default async function DashboardPage() {
                     >
                       <span>{product.name}</span>
                       <span className="text-muted-foreground">
-                        ${product.price.toString()}
+                        ${product.price}
                       </span>
                     </div>
                   ))}

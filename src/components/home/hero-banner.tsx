@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight, Star, Shield, Sparkles, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -118,11 +119,13 @@ export default function HeroBanner() {
             <div className="relative">
               {/* Main Product Showcase */}
               <div className="relative bg-gradient-to-br from-white via-white to-gray-50/50 rounded-3xl p-10 shadow-2xl border border-white/50">
-                <div className="w-80 h-80 bg-gradient-to-br from-[#ffd469]/15 via-[#fff2d4]/10 to-[#233f1c]/10 rounded-2xl overflow-hidden shadow-inner border border-[#ffd469]/20">
-                  <img
+                <div className="w-80 h-80 bg-gradient-to-br from-[#ffd469]/15 via-[#fff2d4]/10 to-[#233f1c]/10 rounded-2xl overflow-hidden shadow-inner border border-[#ffd469]/20 relative">
+                  <Image
                     src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&h=500&fit=crop&crop=center"
                     alt="Premium Skincare Product"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="320px"
                   />
                 </div>
 
@@ -142,11 +145,13 @@ export default function HeroBanner() {
 
               {/* Floating Product Cards */}
               <div className="absolute -bottom-8 -right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/50">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#233f1c]/10 to-[#ffd469]/10 rounded-xl overflow-hidden border border-[#233f1c]/10">
-                  <img
+                <div className="w-24 h-24 bg-gradient-to-br from-[#233f1c]/10 to-[#ffd469]/10 rounded-xl overflow-hidden border border-[#233f1c]/10 relative">
+                  <Image
                     src="https://images.unsplash.com/photo-1570554886111-e80fcca6a029?w=300&h=300&fit=crop&crop=center"
                     alt="Vitamin C Serum"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="96px"
                   />
                 </div>
                 <div className="mt-3 text-center">
@@ -158,11 +163,13 @@ export default function HeroBanner() {
               </div>
 
               <div className="absolute -top-8 -left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/50">
-                <div className="w-24 h-24 bg-gradient-to-br from-[#ffd469]/15 to-[#233f1c]/10 rounded-xl overflow-hidden border border-[#ffd469]/20">
-                  <img
+                <div className="w-24 h-24 bg-gradient-to-br from-[#ffd469]/15 to-[#233f1c]/10 rounded-xl overflow-hidden border border-[#ffd469]/20 relative">
+                  <Image
                     src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=300&fit=crop&crop=center"
                     alt="Moisturizer"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="96px"
                   />
                 </div>
                 <div className="mt-3 text-center">

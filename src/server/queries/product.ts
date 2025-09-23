@@ -1,7 +1,12 @@
 import prisma from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+// import { Prisma } from '@prisma/client'; // Unused import
+import {
+  serializeProduct,
+  serializeProducts,
+  SerializedProductWithCategory,
+} from '@/lib/serializers';
 
-export async function getProducts() {
+export async function getProducts(): Promise<SerializedProductWithCategory[]> {
   try {
     const products = await prisma.product.findMany({
       orderBy: {
@@ -12,14 +17,16 @@ export async function getProducts() {
       },
     });
 
-    return products;
+    return serializeProducts(products);
   } catch (error) {
     console.error('Failed to fetch products:', error);
     throw new Error('Failed to fetch products');
   }
 }
 
-export async function getProductById(id: string) {
+export async function getProductById(
+  id: string
+): Promise<SerializedProductWithCategory | null> {
   try {
     const product = await prisma.product.findUnique({
       where: { id },
@@ -28,14 +35,20 @@ export async function getProductById(id: string) {
       },
     });
 
-    return product;
+    if (!product) {
+      return null;
+    }
+
+    return serializeProduct(product);
   } catch (error) {
     console.error('Failed to fetch product:', error);
     throw new Error('Failed to fetch product');
   }
 }
 
-export async function getProductBySlug(slug: string) {
+export async function getProductBySlug(
+  slug: string
+): Promise<SerializedProductWithCategory | null> {
   try {
     const product = await prisma.product.findUnique({
       where: { slug },
@@ -44,14 +57,16 @@ export async function getProductBySlug(slug: string) {
       },
     });
 
-    return product;
+    return product ? serializeProduct(product) : null;
   } catch (error) {
     console.error('Failed to fetch product by slug:', error);
     throw new Error('Failed to fetch product by slug');
   }
 }
 
-export async function getProductsByCategory(categoryId: string) {
+export async function getProductsByCategory(
+  categoryId: string
+): Promise<SerializedProductWithCategory[]> {
   try {
     const products = await prisma.product.findMany({
       where: { categoryId },
@@ -63,7 +78,7 @@ export async function getProductsByCategory(categoryId: string) {
       },
     });
 
-    return products;
+    return serializeProducts(products);
   } catch (error) {
     console.error('Failed to fetch products by category:', error);
     throw new Error('Failed to fetch products by category');
@@ -105,9 +120,5 @@ export async function checkProductSlugExists(slug: string, excludeId?: string) {
   }
 }
 
-// Type exports for use in components
-export type ProductWithCategory = Prisma.ProductGetPayload<{
-  include: {
-    category: true;
-  };
-}>;
+// Re-export types from serializers for convenience
+export type { SerializedProductWithCategory } from '@/lib/serializers';

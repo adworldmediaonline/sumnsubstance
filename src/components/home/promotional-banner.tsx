@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 export default function PromotionalBanner() {
@@ -33,11 +34,13 @@ export default function PromotionalBanner() {
               <div className="flex items-center justify-center space-x-4">
                 {/* Product 1 */}
                 <div className="relative transform hover:scale-110 transition-all duration-300">
-                  <div className="w-32 h-40 bg-gradient-to-br from-[#ffd469]/30 to-[#ffd469]/50 rounded-2xl overflow-hidden shadow-lg">
-                    <img
+                  <div className="w-32 h-40 bg-gradient-to-br from-[#ffd469]/30 to-[#ffd469]/50 rounded-2xl overflow-hidden shadow-lg relative">
+                    <Image
                       src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=500&fit=crop&crop=center"
                       alt="Night Repair Serum"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="128px"
                     />
                   </div>
                   <div className="absolute -top-2 -right-2 bg-[#233f1c] text-white text-xs px-2 py-1 rounded-full font-bold">
@@ -47,11 +50,13 @@ export default function PromotionalBanner() {
 
                 {/* Product 2 */}
                 <div className="relative transform hover:scale-110 transition-all duration-300">
-                  <div className="w-28 h-36 bg-gradient-to-br from-[#233f1c]/20 to-[#233f1c]/30 rounded-2xl overflow-hidden shadow-lg">
-                    <img
+                  <div className="w-28 h-36 bg-gradient-to-br from-[#233f1c]/20 to-[#233f1c]/30 rounded-2xl overflow-hidden shadow-lg relative">
+                    <Image
                       src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=300&h=400&fit=crop&crop=center"
                       alt="Night Cream"
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="112px"
                     />
                   </div>
                 </div>

@@ -24,10 +24,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
-import { createProduct, createProductSchema } from '@/app/actions/product';
+import { createProduct } from '@/app/actions/product';
 import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { CategoryWithCount } from '@/server/queries/category';
+import { createProductSchema } from '@/lib/validations/product';
+import { RichTextEditor } from '../../../../components/rich-text-editor';
+import { ImageUpload } from '@/components/ui/image-upload';
 
 type FormData = z.infer<typeof createProductSchema>;
 
@@ -43,8 +46,12 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: '',
+      excerpt: '',
+      description: '',
       price: 0,
       categoryId: '',
+      mainImage: undefined,
+      additionalImages: undefined,
     },
   });
 
@@ -66,6 +73,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
         toast.error(result.error);
       }
     } catch (error) {
+      console.error('Error creating product:', error);
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
@@ -97,6 +105,49 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
                     </code>
                   </span>
                 )}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="excerpt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Excerpt</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter a short description (optional)"
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Brief description for product cards and listings (max 300
+                characters)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Description</FormLabel>
+              <FormControl>
+                <RichTextEditor
+                  {...field}
+                  placeholder="Write your blog content here..."
+                  size="lg"
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the description of the product
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -157,6 +208,55 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
               </Select>
               <FormDescription>
                 Choose the category this product belongs to
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Main Image Upload */}
+        <FormField
+          control={form.control}
+          name="mainImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Main Image</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  variant="single"
+                  value={field.value}
+                  onChange={field.onChange}
+                  maxFileSize={5 * 1024 * 1024} // 5MB
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Upload the primary image for this product (max 5MB)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Additional Images Upload */}
+        <FormField
+          control={form.control}
+          name="additionalImages"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Additional Images</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  variant="multiple"
+                  limit={10}
+                  value={field.value || []}
+                  onChange={field.onChange}
+                  maxFileSize={5 * 1024 * 1024} // 5MB
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Upload additional product images (max 10 images, 5MB each)
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -24,16 +24,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
-import { updateProduct, updateProductSchema } from '@/app/actions/product';
+import { updateProduct } from '@/app/actions/product';
+import { updateProductSchema } from '@/lib/validations/product';
 import { toast } from 'sonner';
 import slugify from 'slugify';
-import type { ProductWithCategory } from '@/server/queries/product';
+import type { SerializedProductWithCategory } from '@/server/queries/product';
 import type { CategoryWithCount } from '@/server/queries/category';
-
+import { RichTextEditor } from '../../../../../components/rich-text-editor';
+import { ImageUpload } from '@/components/ui/image-upload';
 type FormData = z.infer<typeof updateProductSchema>;
 
 interface EditProductFormProps {
-  product: ProductWithCategory;
+  product: SerializedProductWithCategory;
   categories: CategoryWithCount[];
 }
 
@@ -46,8 +48,12 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     defaultValues: {
       id: product.id,
       name: product.name,
-      price: parseFloat(product.price.toString()),
+      price: product.price,
       categoryId: product.categoryId,
+      excerpt: product.excerpt || '',
+      description: product.description || '',
+      mainImage: product.mainImage,
+      additionalImages: product.additionalImages,
     },
   });
 
@@ -69,7 +75,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
       } else {
         toast.error(result.error);
       }
-    } catch (error) {
+    } catch {
       toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
@@ -93,22 +99,65 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                 />
               </FormControl>
               <FormDescription>
-                <div className="space-y-1">
-                  <div>
+                <span className="block space-y-1">
+                  <span className="block">
                     Current slug:{' '}
                     <code className="bg-muted px-1 py-0.5 rounded text-xs">
                       /{product.slug}
                     </code>
-                  </div>
+                  </span>
                   {hasNameChanged && previewSlug && (
-                    <div>
+                    <span className="block">
                       New slug will be:{' '}
                       <code className="bg-muted px-1 py-0.5 rounded text-xs">
                         /{previewSlug}
                       </code>
-                    </div>
+                    </span>
                   )}
-                </div>
+                </span>
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="excerpt"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Excerpt</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter a short description (optional)"
+                  {...field}
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Brief description for product cards and listings (max 300
+                characters)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Product Description</FormLabel>
+              <FormControl>
+                <RichTextEditor
+                  {...field}
+                  placeholder="Write your blog content here..."
+                  size="lg"
+                />
+              </FormControl>
+              <FormDescription>
+                Enter the description of the product
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -169,6 +218,55 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
               </Select>
               <FormDescription>
                 Choose the category this product belongs to
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Main Image Upload */}
+        <FormField
+          control={form.control}
+          name="mainImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Main Image</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  variant="single"
+                  value={field.value}
+                  onChange={field.onChange}
+                  maxFileSize={5 * 1024 * 1024} // 5MB
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Upload the primary image for this product (max 5MB)
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Additional Images Upload */}
+        <FormField
+          control={form.control}
+          name="additionalImages"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Additional Images</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  variant="multiple"
+                  limit={10}
+                  value={field.value || []}
+                  onChange={field.onChange}
+                  maxFileSize={5 * 1024 * 1024} // 5MB
+                  disabled={isSubmitting}
+                />
+              </FormControl>
+              <FormDescription>
+                Upload additional product images (max 10 images, 5MB each)
               </FormDescription>
               <FormMessage />
             </FormItem>

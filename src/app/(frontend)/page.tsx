@@ -6,35 +6,25 @@ import {
   NewsletterSection,
 } from '../../components/home';
 import Footer from '../../components/layout/footer';
+import { getProducts } from '@/server/queries/product';
 
-export default function Home() {
+export default async function Home() {
+  // Fetch real products from database
+  const allProducts = await getProducts();
+
+  // Take first 4 products for featured section
+  const featuredProducts = allProducts.slice(0, 4).map(product => ({
+    ...product,
+    isWishlisted: false, // Default values for frontend-only fields
+    inStock: true,
+    featured: true,
+  }));
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Banner with integrated header functionality */}
-      <HeroBannerV2 cartItemCount={0} />
+      <HeroBannerV2 />
 
-      {/* Luxury Showcase Design */}
-      <FeaturedProductsV3 />
-
-      {/* Original Design for Comparison */}
-      {/* <div className="bg-gray-100 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Original Design (For Comparison)
-          </h2>
-          <p className="text-gray-600">Current featured products section</p>
-        </div>
-        <FeaturedProducts user={user} />
-      </div> */}
-
-      {/* <BestSellersGrid /> */}
-
-      {/* Deal sections commented out - uncomment when deals are back */}
-      {/* <PromotionalBanner /> */}
-
-      {/* <CategoriesSection /> */}
-
-      {/* <DealsSection /> */}
+      <FeaturedProductsV3 products={featuredProducts} />
 
       {/* <TestimonialsSection /> */}
 

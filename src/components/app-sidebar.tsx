@@ -9,16 +9,15 @@ import {
   IconFileAi,
   IconFileDescription,
   IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
   IconUsers,
   IconPackage,
   IconCategory,
+  IconShoppingCart,
 } from '@tabler/icons-react';
 
 import { NavDocuments } from '@/components/nav-documents';
@@ -34,6 +33,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import Link from 'next/link';
 
 const data = {
   user: {
@@ -56,6 +56,11 @@ const data = {
       title: 'Products',
       url: '/dashboard/products',
       icon: IconPackage,
+    },
+    {
+      title: 'Orders',
+      url: '/dashboard/orders',
+      icon: IconShoppingCart,
     },
     {
       title: 'Analytics',
@@ -162,10 +167,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link href="/">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+                <span className="text-base font-semibold">Visit Website.</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

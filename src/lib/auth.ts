@@ -5,6 +5,7 @@ import { emailOTP } from 'better-auth/plugins';
 import { getInitials } from './get-initials';
 import { sendOTP } from '../components/email/email';
 import { PrismaClient } from '@prisma/client';
+import { nextCookies } from 'better-auth/next-js';
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({
@@ -81,12 +82,13 @@ export const auth = betterAuth({
         }
         await sendOTP({
           otp,
-          appName: 'BETTER-AUTH',
+          appName: 'SUMNSUBSTANCE',
           subject,
           email,
         });
       },
     }),
+    nextCookies(),
   ],
 
   socialProviders: {

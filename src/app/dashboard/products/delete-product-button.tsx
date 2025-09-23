@@ -41,7 +41,7 @@ export function DeleteProductButton({
       } else {
         toast.error(result.error);
       }
-    } catch (error) {
+    } catch {
       toast.error('An unexpected error occurred');
     } finally {
       setIsDeleting(false);

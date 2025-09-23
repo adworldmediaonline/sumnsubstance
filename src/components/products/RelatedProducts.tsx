@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ShoppingCart, Star } from 'lucide-react';
 import { Autoplay, Navigation } from 'swiper/modules';
@@ -68,18 +69,19 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
               <div className="group bg-white rounded-2xl lg:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 h-full flex flex-col">
                 {/* Product Image */}
                 <div className="relative aspect-square bg-gradient-to-br from-[#ffd469]/30 to-[#ffd469]/50 flex items-center justify-center overflow-hidden">
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                    loading="lazy"
+                    fill
+                    className="object-cover transition-transform group-hover:scale-110"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                   />
 
                   {/* Hover overlay - Hidden on mobile */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#233f1c]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden lg:block"></div>
 
                   {/* Quick view button - Hidden on mobile */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden lg:block">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden lg:flex items-center justify-center">
                     <Button className="bg-white/90 text-[#233f1c] hover:bg-white hover:text-[#233f1c] backdrop-blur-sm">
                       Quick View
                     </Button>

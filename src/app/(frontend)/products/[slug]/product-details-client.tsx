@@ -29,6 +29,7 @@ import {
   Star,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 // Import Swiper core and required modules
@@ -65,7 +66,7 @@ export default function ProductDetailsClient() {
   // Handle image loading
   useEffect(() => {
     setIsImageLoading(true);
-    const img = new Image();
+    const img = new window.Image();
     img.onload = () => setIsImageLoading(false);
     img.src = mockProduct.images[selectedImageIndex]?.url || '';
   }, [selectedImageIndex]);
@@ -116,15 +117,17 @@ export default function ProductDetailsClient() {
                 }`}
                 onClick={() => setShowImageZoom(!showImageZoom)}
               >
-                <img
-                  src={mockProduct.images[selectedImageIndex]?.url}
+                <Image
+                  src={mockProduct.images[selectedImageIndex]?.url || ''}
                   alt={mockProduct.name}
-                  className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  fill
+                  className={`object-cover transition-opacity duration-300 ${
                     isImageLoading ? 'opacity-0' : 'opacity-100'
                   }`}
                   onLoad={() => setIsImageLoading(false)}
                   onError={() => setIsImageLoading(false)}
-                  loading="eager"
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
 
@@ -204,11 +207,12 @@ export default function ProductDetailsClient() {
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <img
+                      <Image
                         src={image.url}
                         alt={`${mockProduct.name} - Image ${index + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
+                        fill
+                        className="object-cover"
+                        sizes="56px"
                       />
                       {/* Selected indicator */}
                       {selectedImageIndex === index && (
@@ -260,16 +264,18 @@ export default function ProductDetailsClient() {
                   <SwiperSlide key={index} className="!w-20 !h-20">
                     <button
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`w-full h-full rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`w-full h-full rounded-lg overflow-hidden border-2 transition-all relative ${
                         selectedImageIndex === index
                           ? 'border-[#233f1c] shadow-sm'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
-                      <img
+                      <Image
                         src={image.url}
                         alt={`${mockProduct.name} - Image ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="80px"
                       />
                     </button>
                   </SwiperSlide>
@@ -616,11 +622,13 @@ export default function ProductDetailsClient() {
         <div className="px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Product Image */}
-            <div className="flex-shrink-0">
-              <img
-                src={mockProduct.images[0]?.url}
+            <div className="flex-shrink-0 relative w-12 h-12">
+              <Image
+                src={mockProduct.images[0]?.url || ''}
                 alt={mockProduct.name}
-                className="w-12 h-12 object-cover rounded-lg shadow-sm"
+                fill
+                className="object-cover rounded-lg shadow-sm"
+                sizes="48px"
               />
             </div>
 
