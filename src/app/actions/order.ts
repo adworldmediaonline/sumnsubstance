@@ -381,6 +381,14 @@ export async function addOrderNotes(data: z.infer<typeof addOrderNotesSchema>) {
   }
 }
 
+// Export functions for use in components
+export {
+  updateOrderStatus,
+  updatePaymentStatus,
+  sendOrderEmail,
+  addOrderNotes,
+};
+
 // Export types for use in components
 export type UpdateOrderStatusData = z.infer<typeof updateOrderStatusSchema>;
 export type UpdatePaymentStatusData = z.infer<typeof updatePaymentStatusSchema>;
