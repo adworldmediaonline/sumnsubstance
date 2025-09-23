@@ -6,6 +6,9 @@ import { z } from 'zod';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { sendOrderConfirmationEmail } from '@/lib/email/order-emails';
 
+// Force dynamic rendering to avoid static generation issues with email components
+export const dynamic = 'force-dynamic';
+
 // Helper function to serialize order data for client components
 function serializeOrderData(order: {
   id: string;

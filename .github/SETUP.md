@@ -77,6 +77,27 @@ GOOGLE_CLIENT_SECRET: 'dummy-google-client-secret'
 
 **Don't modify these files** - they're working correctly!
 
+## Technical Fix Applied
+
+### **Next.js Static Generation Issue**
+
+- **Problem**: Next.js was trying to statically generate API routes that use email components
+- **Error**: `<Html> should not be imported outside of pages/_document`
+- **Solution**: Added `export const dynamic = 'force-dynamic'` to API routes that use email components
+
+### **What This Does**
+
+- Prevents Next.js from trying to statically generate API routes during build
+- Allows email components to work properly in server-side contexts
+- Fixes the build error while preserving functionality
+
+### **Routes Updated**
+
+- `/api/payments/verify` - Uses email confirmation
+- `/api/orders/create` - Potential email usage
+- `/api/orders/[id]` - Safe to include
+- `/api/upload` - Safe to include
+
 ## Next Steps (Optional Improvements)
 
 Once builds are working, we can improve this by:
@@ -108,5 +129,6 @@ That's it! Your builds should work now without breaking your email system. 🎉
 
 ✅ **Added dummy environment variables** to all CI/CD jobs to prevent build errors
 ✅ **Preserved your existing email setup** - No changes to working Resend configuration
+✅ **Added `export const dynamic = 'force-dynamic'`** to API routes to prevent static generation issues
 ✅ **Used your existing GitHub secrets** - DATABASE_URL, VERCEL_TOKEN, etc.
 ✅ **Minimal viable solution** - Gets builds working first
