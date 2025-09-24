@@ -423,12 +423,12 @@ const ImageUpload = React.forwardRef<HTMLDivElement, ImageUploadProps>(
               )}
             </div>
 
-            {variant === 'single' ? (
+            {variant === 'single' && currentImages[0] ? (
               <SortableImageItem
                 image={currentImages[0]}
-                onDelete={() => handleDelete(currentImages[0])}
+                onDelete={() => handleDelete(currentImages[0]!)}
                 onUpdateAlt={altText =>
-                  handleUpdateAlt(currentImages[0].publicId, altText)
+                  handleUpdateAlt(currentImages[0]!.publicId, altText)
                 }
                 disabled={disabled}
               />

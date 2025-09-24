@@ -192,6 +192,7 @@ export async function sendAdminOrderNotification(order: {
   } catch (error) {
     console.error('Admin order notification error:', error);
     // Don't throw error for admin notifications
+    return null;
   }
 }
 

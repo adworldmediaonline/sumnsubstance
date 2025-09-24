@@ -316,8 +316,7 @@ export function ShippedOrderTemplate({
   orderNumber,
   trackingNumber,
   estimatedDelivery,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  shippingAddress,
+  shippingAddress: _shippingAddress,
 }: {
   customerName: string;
   orderNumber: string;
@@ -412,8 +411,7 @@ export function DeliveredOrderTemplate({
   customerName,
   orderNumber,
   deliveryDate,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  orderItems,
+  orderItems: _orderItems,
 }: {
   customerName: string;
   orderNumber: string;

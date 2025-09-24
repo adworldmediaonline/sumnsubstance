@@ -24,7 +24,10 @@ export const useCartStore = create<CartStore>()(
 
             if (existingItemIndex >= 0) {
               // Update existing item quantity
-              state.items[existingItemIndex].quantity += quantity;
+              const existingItem = state.items[existingItemIndex];
+              if (existingItem) {
+                existingItem.quantity += quantity;
+              }
             } else {
               // Add new item
               state.items.push({
@@ -58,7 +61,10 @@ export const useCartStore = create<CartStore>()(
             );
 
             if (itemIndex >= 0) {
-              state.items[itemIndex].quantity = quantity;
+              const item = state.items[itemIndex];
+              if (item) {
+                item.quantity = quantity;
+              }
             }
           });
         },
