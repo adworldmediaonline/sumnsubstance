@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,17 +32,30 @@ import {
   User,
   UserIcon,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
-import { useState } from 'react';
-import { authClient } from '../../lib/auth-client';
-import { useRouter } from 'next/navigation';
+import { AuthDialog } from '@/components/auth/auth-dialog';
 import { CartDropdown } from '@/components/cart/cart-dropdown';
+import { DialogTrigger } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { authClient } from '../../lib/auth-client';
 
 export default function HeroBannerV2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#8FBC8F] via-[#9ACD32] to-[#7CB342] overflow-hidden">
       {/* Background decorative elements */}
@@ -59,13 +71,23 @@ export default function HeroBannerV2() {
       </div>
 
       {/* Enhanced Navigation Header */}
-      <nav className="relative z-20 flex items-center justify-between px-6 lg:px-12 py-6">
+      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 lg:px-12 transition-all duration-300 ease-in-out ${
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg py-3'
+          : 'bg-transparent py-6'
+      }`}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-            <Leaf className="w-6 h-6 text-[#228B22]" />
+          <div className={`bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+            isScrolled ? 'w-10 h-10' : 'w-12 h-12'
+          }`}>
+            <Leaf className={`text-[#228B22] transition-all duration-300 ${
+              isScrolled ? 'w-5 h-5' : 'w-6 h-6'
+            }`} />
           </div>
-          <span className="text-white font-bold text-xl">SumNSubstance</span>
+          <span className={`font-bold text-xl transition-colors duration-300 ${
+            isScrolled ? 'text-[#228B22]' : 'text-white'
+          }`}>SumNSubstance</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -76,7 +98,11 @@ export default function HeroBannerV2() {
                 <NavigationMenuLink asChild>
                   <Link
                     href="/"
-                    className={`${navigationMenuTriggerStyle()} text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10 font-medium`}
+                    className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
+                        : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10'
+                    }`}
                   >
                     Home
                   </Link>
@@ -86,7 +112,11 @@ export default function HeroBannerV2() {
                 <NavigationMenuLink asChild>
                   <Link
                     href="/products"
-                    className={`${navigationMenuTriggerStyle()} text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10 font-medium`}
+                    className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
+                        : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10'
+                    }`}
                   >
                     Products
                   </Link>
@@ -96,7 +126,11 @@ export default function HeroBannerV2() {
                 <NavigationMenuLink asChild>
                   <Link
                     href="/categories"
-                    className={`${navigationMenuTriggerStyle()} text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10 font-medium`}
+                    className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
+                        : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10'
+                    }`}
                   >
                     Categories
                   </Link>
@@ -106,7 +140,11 @@ export default function HeroBannerV2() {
                 <NavigationMenuLink asChild>
                   <Link
                     href="/about"
-                    className={`${navigationMenuTriggerStyle()} text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10 font-medium`}
+                    className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
+                        : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10'
+                    }`}
                   >
                     About
                   </Link>
@@ -116,7 +154,11 @@ export default function HeroBannerV2() {
                 <NavigationMenuLink asChild>
                   <Link
                     href="/contact"
-                    className={`${navigationMenuTriggerStyle()} text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10 font-medium`}
+                    className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${
+                      isScrolled
+                        ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
+                        : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10'
+                    }`}
                   >
                     Contact
                   </Link>
@@ -132,13 +174,17 @@ export default function HeroBannerV2() {
           <Button
             variant="ghost"
             size="sm"
-            className="p-2 hover:bg-white/10 text-white hover:text-[#FFD700] hidden sm:flex"
+            className={`p-2 transition-colors duration-300 hidden sm:flex ${
+              isScrolled
+                ? 'text-gray-700 hover:text-[#228B22] hover:bg-gray-100'
+                : 'text-white hover:text-[#FFD700] hover:bg-white/10'
+            }`}
           >
             <Search className="h-5 w-5" />
           </Button>
 
           {/* Cart */}
-          <CartDropdown />
+          <CartDropdown isScrolled={isScrolled} />
 
           {/* User Account - Desktop */}
           {!isPending && session ? (
@@ -232,15 +278,22 @@ export default function HeroBannerV2() {
               </DropdownMenu>
             </div>
           ) : (
-            <Button
-              asChild
-              className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-medium"
-            >
-              <Link href="/sign-in">
-                <User className="w-4 h-4 mr-2" />
-                Login
-              </Link>
-            </Button>
+            <AuthDialog
+              trigger={
+                <DialogTrigger asChild>
+                  <Button
+                    className={`transition-all duration-300 font-medium ${
+                      isScrolled
+                        ? 'bg-[#228B22] text-white hover:bg-[#1e7a1e]'
+                        : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
+                    }`}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Login
+                  </Button>
+                </DialogTrigger>
+              }
+            />
           )}
 
           {/* Mobile Menu */}
@@ -250,7 +303,11 @@ export default function HeroBannerV2() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="p-2 hover:bg-white/10 text-white"
+                  className={`p-2 transition-colors duration-300 ${
+                    isScrolled
+                      ? 'text-gray-700 hover:text-[#228B22] hover:bg-gray-100'
+                      : 'text-white hover:bg-white/10'
+                  }`}
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
@@ -294,13 +351,16 @@ export default function HeroBannerV2() {
                   </div>
 
                   <div className="mb-6">
-                    <Button
-                      onClick={() => {}}
-                      className="w-full bg-[#228B22] hover:bg-[#1e7a1e] text-white"
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      Login / Sign Up
-                    </Button>
+                    <AuthDialog
+                      trigger={
+                        <DialogTrigger asChild>
+                          <Button className="w-full bg-[#228B22] hover:bg-[#1e7a1e] text-white">
+                            <User className="w-4 h-4 mr-2" />
+                            Login / Sign Up
+                          </Button>
+                        </DialogTrigger>
+                      }
+                    />
                   </div>
 
                   {/* Mobile Navigation */}
@@ -404,7 +464,7 @@ export default function HeroBannerV2() {
       </nav>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pt-24">
         <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[calc(100vh-120px)]">
           {/* Left Content */}
           <div className="space-y-8">

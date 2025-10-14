@@ -1,18 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -20,22 +20,31 @@ import { signupSchema } from '@/lib/validations/signup.schema';
 import { toast } from 'sonner';
 
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
-import { authClient } from '../../lib/auth-client';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { authClient } from '../../lib/auth-client';
 import { GoogleSignIn } from './google-signin';
+
+interface SignUpFormProps extends React.ComponentProps<'div'> {
+  onSuccess?: () => void;
+  onSwitchToSignIn?: () => void;
+  inDialog?: boolean;
+}
 
 export function SignUpForm({
   className,
+  onSuccess,
+  onSwitchToSignIn,
+  inDialog = false,
   ...props
-}: React.ComponentProps<'div'>) {
+}: SignUpFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
@@ -63,6 +72,10 @@ export function SignUpForm({
         onSuccess: () => {
           setIsLoading(false);
           toast.success('Sign up successful');
+          if (onSuccess) {
+            onSuccess();
+          }
+          // Always redirect to verify email page for email verification
           router.push(
             `/verify-email?email=${encodeURIComponent(values.email)}`
           );
@@ -78,13 +91,8 @@ export function SignUpForm({
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Sign up with your Google account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
+      {inDialog ? (
+        <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
@@ -172,7 +180,11 @@ export function SignUpForm({
                       )}
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#228B22] hover:bg-[#1e7a1e] text-white transition-all duration-300"
+                    disabled={isLoading}
+                  >
                     {isLoading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
@@ -180,23 +192,141 @@ export function SignUpForm({
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{' '}
-                  <Link
-                    href="/sign-in"
-                    className="underline underline-offset-4"
-                  >
-                    Sign in
-                  </Link>
+                  Already have an account?{' '}
+                  {inDialog && onSwitchToSignIn ? (
+                    <button
+                      type="button"
+                      onClick={onSwitchToSignIn}
+                      className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                    >
+                      Sign in
+                    </button>
+                  ) : (
+                    <Link
+                      href="/sign-in"
+                      className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                    >
+                      Sign in
+                    </Link>
+                  )}
                 </div>
               </div>
             </form>
           </Form>
-        </CardContent>
-      </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
-        and <a href="#">Privacy Policy</a>.
-      </div>
+        ) : (
+          <Card>
+            <CardHeader className="text-center">
+              <CardTitle className="text-xl">Welcome back</CardTitle>
+              <CardDescription>Sign up with your Google account</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <div className="grid gap-6">
+                    <div className="flex flex-col gap-4">
+                      <GoogleSignIn text="Sign up with Google" />
+                    </div>
+                    <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                      <span className="bg-card text-muted-foreground relative z-10 px-2">
+                        Or continue with
+                      </span>
+                    </div>
+
+                    <div className="grid gap-3">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex items-center">
+                              <FormLabel>Name</FormLabel>
+                            </div>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                id="name"
+                                type="text"
+                                placeholder="John Doe"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid gap-6">
+                      <div className="grid gap-3">
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  id="email"
+                                  type="email"
+                                  placeholder="m@example.com"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid gap-3">
+                        <FormField
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <div className="flex items-center">
+                                <FormLabel>Password</FormLabel>
+                              </div>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  id="password"
+                                  type="password"
+                                  placeholder="********"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {isLoading ? 'Signing up...' : 'Sign up'}
+                      </Button>
+                    </div>
+                    <div className="text-center text-sm">
+                      Already have an account?{' '}
+                      <Link
+                        href="/sign-in"
+                        className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                      >
+                        Sign in
+                      </Link>
+                    </div>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        )}
+      {!inDialog && (
+        <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+          By clicking continue, you agree to our <a href="#">Terms of Service</a>{' '}
+          and <a href="#">Privacy Policy</a>.
+        </div>
+      )}
     </div>
   );
 }

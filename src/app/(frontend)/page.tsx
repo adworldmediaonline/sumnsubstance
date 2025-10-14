@@ -1,12 +1,12 @@
+import { getProducts } from '@/server/queries/product';
 import {
-  HeroBannerV2,
   FeaturedProductsV3,
+  HeroBannerV2,
+  NewsletterSection,
   // TestimonialsSection,
   TrustBadges,
-  NewsletterSection,
 } from '../../components/home';
 import Footer from '../../components/layout/footer';
-import { getProducts } from '@/server/queries/product';
 
 export default async function Home() {
   // Fetch real products from database

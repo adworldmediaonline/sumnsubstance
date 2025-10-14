@@ -1,34 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import {
-  ShoppingCart,
-  Plus,
-  Minus,
-  X,
-  ShoppingBag,
-  Trash2,
-} from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
-import {
-  useCartItems,
-  useCartItemCount,
-  useCartTotalPrice,
-  useUpdateQuantity,
-  useRemoveItem,
-  useClearCart,
+    useCartItemCount,
+    useCartItems,
+    useCartTotalPrice,
+    useClearCart,
+    useRemoveItem,
+    useUpdateQuantity,
 } from '@/store/cart-store';
 import type { CartItem } from '@/types/cart';
+import {
+    Minus,
+    Plus,
+    ShoppingBag,
+    ShoppingCart,
+    Trash2,
+    X,
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // Individual cart item component
 function CartItemComponent({
@@ -118,7 +118,7 @@ function CartItemComponent({
 }
 
 // Main cart dropdown component
-export function CartDropdown({ className }: { className?: string }) {
+export function CartDropdown({ className, isScrolled }: { className?: string; isScrolled?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -153,7 +153,11 @@ export function CartDropdown({ className }: { className?: string }) {
         <Button
           variant="ghost"
           size="sm"
-          className={`relative p-2 hover:bg-white/10 text-white hover:text-[#FFD700] ${className}`}
+          className={`relative p-2 transition-colors duration-300 ${
+            isScrolled
+              ? 'text-gray-700 hover:text-[#228B22] hover:bg-gray-100'
+              : 'text-white hover:text-[#FFD700] hover:bg-white/10'
+          } ${className}`}
         >
           <ShoppingCart className="h-5 w-5" />
           {isHydrated && itemCount > 0 && (
