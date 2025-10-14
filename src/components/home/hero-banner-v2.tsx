@@ -26,7 +26,6 @@ import {
   LogOut,
   Menu,
   Package,
-  Search,
   Settings,
   Shield,
   User,
@@ -45,10 +44,12 @@ import { authClient } from '../../lib/auth-client';
 export default function HeroBannerV2() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { data: session, isPending } = authClient.useSession();
   const router = useRouter();
 
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -170,25 +171,12 @@ export default function HeroBannerV2() {
 
         {/* Right Side Icons */}
         <div className="flex items-center space-x-2 sm:space-x-3">
-          {/* Search */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`p-2 transition-colors duration-300 hidden sm:flex ${
-              isScrolled
-                ? 'text-gray-700 hover:text-[#228B22] hover:bg-gray-100'
-                : 'text-white hover:text-[#FFD700] hover:bg-white/10'
-            }`}
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-
           {/* Cart */}
           <CartDropdown isScrolled={isScrolled} />
 
           {/* User Account - Desktop */}
           {!isPending && session ? (
-            <div className="hidden md:block">
+            <div className="hidden md:block">{isMounted && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -276,28 +264,38 @@ export default function HeroBannerV2() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
+            )}</div>
           ) : (
-            <AuthDialog
-              trigger={
-                <DialogTrigger asChild>
-                  <Button
-                    className={`transition-all duration-300 font-medium ${
-                      isScrolled
-                        ? 'bg-[#228B22] text-white hover:bg-[#1e7a1e]'
-                        : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
-                    }`}
-                  >
-                    <User className="w-4 h-4 mr-2" />
-                    Login
-                  </Button>
-                </DialogTrigger>
-              }
-            />
+            isMounted && (
+              <AuthDialog
+                trigger={
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`relative p-2 rounded-full transition-all duration-300 ${
+                        isScrolled
+                          ? 'hover:bg-gray-100'
+                          : 'hover:bg-white/10'
+                      }`}
+                    >
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                        isScrolled
+                          ? 'bg-[#228B22] text-white'
+                          : 'bg-white text-[#228B22]'
+                      }`}>
+                        <User className="w-5 h-5" />
+                      </div>
+                    </Button>
+                  </DialogTrigger>
+                }
+              />
+            )
           )}
 
           {/* Mobile Menu */}
           <div className="md:hidden">
+            {isMounted && (
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
@@ -351,6 +349,7 @@ export default function HeroBannerV2() {
                   </div>
 
                   <div className="mb-6">
+                    {isMounted && (
                     <AuthDialog
                       trigger={
                         <DialogTrigger asChild>
@@ -361,6 +360,7 @@ export default function HeroBannerV2() {
                         </DialogTrigger>
                       }
                     />
+                    )}
                   </div>
 
                   {/* Mobile Navigation */}
@@ -459,6 +459,7 @@ export default function HeroBannerV2() {
                 </div>
               </SheetContent>
             </Sheet>
+            )}
           </div>
         </div>
       </nav>

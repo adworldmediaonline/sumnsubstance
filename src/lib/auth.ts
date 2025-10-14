@@ -1,11 +1,11 @@
 // import { PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { emailOTP } from 'better-auth/plugins';
-import { getInitials } from './get-initials';
-import { sendOTP } from '../components/email/email';
-import { PrismaClient } from '@prisma/client';
 import { nextCookies } from 'better-auth/next-js';
+import { emailOTP } from 'better-auth/plugins';
+import { sendOTP } from '../components/email/email';
+import { getInitials } from './get-initials';
 
 const prisma = new PrismaClient();
 export const auth = betterAuth({

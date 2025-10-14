@@ -32,12 +32,12 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {trigger}
-      <DialogContent className="sm:max-w-[480px] max-h-[90vh] overflow-y-auto p-0 gap-0 bg-gradient-to-br from-white to-gray-50">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b">
-          <DialogTitle className="text-2xl font-bold text-center bg-gradient-to-r from-[#228B22] to-[#9ACD32] bg-clip-text text-transparent">
+      <DialogContent className="sm:max-w-[480px] w-[calc(100vw-2rem)] max-h-[90vh] overflow-x-hidden overflow-y-auto p-0 gap-0 bg-gradient-to-br from-white to-gray-50">
+        <DialogHeader className="px-4 sm:px-6 pt-6 pb-4 border-b">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-[#228B22] to-[#9ACD32] bg-clip-text text-transparent">
             {activeTab === 'signin' ? 'Welcome Back' : 'Create Account'}
           </DialogTitle>
-          <DialogDescription className="text-center text-muted-foreground">
+          <DialogDescription className="text-center text-muted-foreground text-sm">
             {activeTab === 'signin'
               ? 'Sign in to your account to continue'
               : 'Join us and start your natural beauty journey'}
@@ -47,24 +47,26 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
-          className="w-full"
+          className="w-full overflow-hidden"
         >
-          <TabsList className="grid w-full grid-cols-2 mx-6 mb-4 mt-4 h-11 bg-gray-100 p-1">
-            <TabsTrigger
-              value="signin"
-              className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md"
-            >
-              Sign In
-            </TabsTrigger>
-            <TabsTrigger
-              value="signup"
-              className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md"
-            >
-              Sign Up
-            </TabsTrigger>
-          </TabsList>
+          <div className="px-4 sm:px-6">
+            <TabsList className="grid w-full grid-cols-2 mb-4 mt-4 h-11 bg-gray-100 p-1">
+              <TabsTrigger
+                value="signin"
+                className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
+              >
+                Sign In
+              </TabsTrigger>
+              <TabsTrigger
+                value="signup"
+                className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
+              >
+                Sign Up
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          <div className="px-6 pb-4">
+          <div className="px-4 sm:px-6 pb-4">
             <TabsContent value="signin" className="mt-0">
               <SignInForm
                 onSuccess={handleSuccess}
@@ -82,8 +84,8 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
             </TabsContent>
           </div>
 
-          <div className="px-6 pb-6 pt-2 border-t bg-gray-50/50">
-            <p className="text-xs text-center text-muted-foreground">
+          <div className="px-4 sm:px-6 pb-6 pt-2 border-t bg-gray-50/50">
+            <p className="text-xs text-center text-muted-foreground break-words">
               By continuing, you agree to our{' '}
               <a href="#" className="underline hover:text-[#228B22] transition-colors">
                 Terms of Service
