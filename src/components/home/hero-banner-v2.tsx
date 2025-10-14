@@ -22,14 +22,13 @@ import {
   ArrowRight,
   Heart,
   Leaf,
-  Loader2,
   LogOut,
   Menu,
   Package,
   Settings,
   Shield,
   User,
-  UserIcon,
+  UserIcon
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -312,150 +311,163 @@ export default function HeroBannerV2() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-80 bg-white/95 backdrop-blur-sm"
+                className="w-[85vw] sm:w-80 bg-gradient-to-br from-white to-gray-50 p-0"
               >
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-[#228B22] rounded-full flex items-center justify-center">
-                        <Leaf className="w-4 h-4 text-white" />
+                  {/* Header with Gradient Background */}
+                  <div className="bg-gradient-to-r from-[#228B22] to-[#9ACD32] px-6 py-6 text-white">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <Leaf className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-[#228B22] font-bold text-lg">
+                      <span className="text-white font-bold text-xl">
                         SumNSubstance
                       </span>
                     </div>
-                  </div>
 
-                  {/* Mobile User Section */}
-
-                  <div className="bg-[#228B22] text-white p-4 rounded-lg mb-6">
-                    <div className="flex items-center space-x-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={''} alt={''} />
-                        <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                          {''}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{''}</p>
-                        <p className="text-xs text-green-300 truncate">{''}</p>
-                        {false && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1">
-                            Admin
-                          </span>
+                    {/* User Section or Login Button */}
+                    {!isPending && session ? (
+                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mt-2">
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="h-12 w-12 ring-2 ring-white/30">
+                            <AvatarImage src={session.user.image ?? ''} alt={session.user.name ?? ''} />
+                            <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                              {session.user.initials ?? ''}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold truncate text-white">
+                              {session.user.name}
+                            </p>
+                            <p className="text-xs truncate text-white/80">
+                              {session.user.email}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-2">
+                        {isMounted && (
+                          <AuthDialog
+                            trigger={
+                              <DialogTrigger asChild>
+                                <Button className="w-full bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-0 h-12 font-medium shadow-lg">
+                                  <User className="w-5 h-5 mr-2" />
+                                  Login / Sign Up
+                                </Button>
+                              </DialogTrigger>
+                            }
+                          />
                         )}
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    {isMounted && (
-                    <AuthDialog
-                      trigger={
-                        <DialogTrigger asChild>
-                          <Button className="w-full bg-[#228B22] hover:bg-[#1e7a1e] text-white">
-                            <User className="w-4 h-4 mr-2" />
-                            Login / Sign Up
-                          </Button>
-                        </DialogTrigger>
-                      }
-                    />
                     )}
                   </div>
 
-                  {/* Mobile Navigation */}
-                  <nav className="flex-1 space-y-2">
-                    <Link
-                      href="/"
-                      className="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Home
-                    </Link>
-                    <Link
-                      href="/products"
-                      className="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Products
-                    </Link>
-                    <Link
-                      href="/categories"
-                      className="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Categories
-                    </Link>
-                    <Link
-                      href="/about"
-                      className="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      About
-                    </Link>
-                    <Link
-                      href="/contact"
-                      className="block px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Contact
-                    </Link>
+                  {/* Main Navigation */}
+                  <nav className="flex-1 px-4 py-6 overflow-y-auto">
+                    <div className="space-y-1">
+                      <Link
+                        href="/"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#228B22] hover:text-white rounded-xl transition-all duration-200 font-medium group"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#228B22] group-hover:bg-white mr-3 transition-colors"></span>
+                        Home
+                      </Link>
+                      <Link
+                        href="/products"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#228B22] hover:text-white rounded-xl transition-all duration-200 font-medium group"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#228B22] group-hover:bg-white mr-3 transition-colors"></span>
+                        Products
+                      </Link>
+                      <Link
+                        href="/categories"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#228B22] hover:text-white rounded-xl transition-all duration-200 font-medium group"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#228B22] group-hover:bg-white mr-3 transition-colors"></span>
+                        Categories
+                      </Link>
+                      <Link
+                        href="/about"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#228B22] hover:text-white rounded-xl transition-all duration-200 font-medium group"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#228B22] group-hover:bg-white mr-3 transition-colors"></span>
+                        About
+                      </Link>
+                      <Link
+                        href="/contact"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-[#228B22] hover:text-white rounded-xl transition-all duration-200 font-medium group"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#228B22] group-hover:bg-white mr-3 transition-colors"></span>
+                        Contact
+                      </Link>
+                    </div>
 
-                    <>
-                      <div className="border-t my-4"></div>
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <UserIcon className="w-4 h-4 mr-3" />
-                        Dashboard
-                      </Link>
-                      <Link
-                        href="/dashboard/user/profile"
-                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4 mr-3" />
-                        Account Settings
-                      </Link>
-                      <Link
-                        href="/orders"
-                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <Package className="w-4 h-4 mr-3" />
-                        My Orders
-                      </Link>
-
-                      <Link
-                        href="/dashboard/admin"
-                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4 mr-3" />
-                        Admin Panel
-                      </Link>
-                    </>
+                    {/* Account Section - Only show when logged in */}
+                    {!isPending && session && (
+                      <>
+                        <div className="my-6 border-t border-gray-200"></div>
+                        <div className="space-y-1">
+                          <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+                            Account
+                          </p>
+                          <Link
+                            href="/dashboard"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <UserIcon className="w-5 h-5 mr-3 text-gray-400 group-hover:text-[#228B22] transition-colors" />
+                            Dashboard
+                          </Link>
+                          <Link
+                            href="/dashboard/user/profile"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <Settings className="w-5 h-5 mr-3 text-gray-400 group-hover:text-[#228B22] transition-colors" />
+                            Account Settings
+                          </Link>
+                          <Link
+                            href="/orders"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            <Package className="w-5 h-5 mr-3 text-gray-400 group-hover:text-[#228B22] transition-colors" />
+                            My Orders
+                          </Link>
+                        </div>
+                      </>
+                    )}
                   </nav>
 
-                  {/* Mobile Logout */}
-
-                  <div className="border-t pt-4">
-                    <Button
-                      onClick={() => {}}
-                      disabled={false}
-                      variant="outline"
-                      className="w-full text-red-600 border-red-600 hover:bg-red-50"
-                    >
-                      {false ? (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <LogOut className="w-4 h-4 mr-2" />
-                      )}
-                      Log out
-                    </Button>
-                  </div>
+                  {/* Logout Section - Only show when logged in */}
+                  {!isPending && session && (
+                    <div className="border-t border-gray-200 p-4 bg-white">
+                      <Button
+                        onClick={() => {
+                          authClient.signOut({
+                            fetchOptions: {
+                              onSuccess: () => {
+                                setIsMobileMenuOpen(false);
+                                router.push('/');
+                              },
+                            },
+                          });
+                        }}
+                        disabled={false}
+                        variant="outline"
+                        className="w-full text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 h-12 font-medium"
+                      >
+                        <LogOut className="w-5 h-5 mr-2" />
+                        Log out
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
