@@ -26,6 +26,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   orders        Order[]
+  reviews       Review[]
 
   @@unique([email])
   @@map("user")
@@ -116,6 +117,7 @@ model Product {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   orderItems       OrderItem[]
+  reviews          Review[]
 
   @@map("product")
 }
@@ -210,4 +212,49 @@ enum PaymentStatus {
   FAILED
   CANCELLED
   REFUNDED
+}
+
+// Review System
+model Review {
+  id          String   @id @default(cuid())
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId      String?  // Optional for guest reviews (if allowed)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Review Content
+  rating      Int      // 1-5 stars
+  title       String?  // Optional review title
+  comment     String   @db.Text
+
+  // Verification
+  isVerifiedPurchase Boolean @default(false)
+  orderId     String?  // Link to order for verification
+
+  // Moderation
+  status      ReviewStatus @default(PENDING)
+  moderatedBy String?  // Admin who approved/rejected
+  moderatedAt DateTime?
+
+  // Helpful votes
+  helpfulCount   Int @default(0)
+  unhelpfulCount Int @default(0)
+
+  // Media
+  images      Json?    // Array of review images
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("review")
+  @@index([productId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
 }
