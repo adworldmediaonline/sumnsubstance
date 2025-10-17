@@ -9,6 +9,9 @@ import {
   mockReviews,
 } from '@/constants/product-mock-data';
 import type { SerializedProductWithCategory } from '@/server/queries/product';
+import { useAddItem } from '@/store/cart-store';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import {
   CheckCircle,
@@ -52,6 +55,30 @@ export default function ProductDetailsClient({
   const [showStickyCart, setShowStickyCart] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [showImageZoom, setShowImageZoom] = useState(false);
+
+  // Cart functionality
+  const addItem = useAddItem();
+  const router = useRouter();
+
+  const handleAddToCart = () => {
+    const cartProduct = {
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      excerpt: product.excerpt || undefined,
+      mainImage: product.mainImage,
+      category: product.category,
+    };
+
+    addItem(cartProduct, quantity);
+    toast.success(`${product.name} added to cart!`);
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    router.push('/checkout');
+  };
 
   // Add scroll listener for sticky cart
   useEffect(() => {
@@ -387,6 +414,7 @@ export default function ProductDetailsClient({
               <div className="space-y-2 lg:space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-3">
                   <Button
+                    onClick={handleAddToCart}
                     size="lg"
                     className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl group transition-all duration-300 hover:shadow-lg hover:shadow-[#233f1c]/20 touch-manipulation order-2 sm:order-1"
                   >
@@ -394,6 +422,7 @@ export default function ProductDetailsClient({
                     Add to Cart
                   </Button>
                   <Button
+                    onClick={handleBuyNow}
                     size="lg"
                     className="bg-[#ffd469] hover:bg-[#ffca28] text-[#233f1c] py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl group transition-all duration-300 hover:shadow-lg hover:shadow-[#ffd469]/20 touch-manipulation order-1 sm:order-2"
                   >
@@ -616,6 +645,7 @@ export default function ProductDetailsClient({
 
             {/* Add to Cart Button */}
             <Button
+              onClick={handleAddToCart}
               size="sm"
               className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white px-4 py-2 rounded-xl font-bold shadow-lg transition-all duration-300 touch-manipulation"
             >

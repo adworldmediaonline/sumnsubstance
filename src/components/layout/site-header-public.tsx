@@ -189,7 +189,7 @@ export default function SiteHeaderPublic() {
       {/* Right Side Icons */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Cart */}
-        <CartDropdown isScrolled={isScrolled} />
+        {isMounted && <CartDropdown isScrolled={isScrolled} />}
 
         {/* User Account - Desktop */}
         {!isPending && session ? (
