@@ -48,6 +48,14 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
       name: '',
       excerpt: '',
       description: '',
+      tagline: '',
+      whyLoveIt: '',
+      whatsInside: '',
+      howToUse: '',
+      ingredients: '',
+      metaTitle: '',
+      metaDescription: '',
+      metaKeywords: '',
       price: 0,
       categoryId: '',
       mainImage: undefined,
@@ -153,6 +161,119 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
             </FormItem>
           )}
         />
+
+        {/* Content Fields Section */}
+        <div className="space-y-6">
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">Content Fields</h3>
+
+            <FormField
+              control={form.control}
+              name="tagline"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Short Tagline</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter a catchy tagline..."
+                      {...field}
+                      maxLength={100}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Brief, compelling tagline (max 100 characters) - {field.value?.length || 0}/100
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="whyLoveIt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Why You'll Love It</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      {...field}
+                      placeholder="Describe why customers will love this product..."
+                      size="lg"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Highlight the key benefits and features that make this product special
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="whatsInside"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>What's Inside</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      {...field}
+                      placeholder="Describe what's included in the product..."
+                      size="lg"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Detail what customers will receive with their purchase
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="howToUse"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>How to Use</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      {...field}
+                      placeholder="Provide usage instructions and tips..."
+                      size="lg"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Step-by-step instructions on how to use the product effectively
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="ingredients"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ingredients</FormLabel>
+                  <FormControl>
+                    <RichTextEditor
+                      {...field}
+                      placeholder="List the ingredients and their benefits..."
+                      size="lg"
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    List ingredients and explain their benefits (for beauty/health products)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
         <FormField
           control={form.control}
@@ -262,6 +383,78 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
             </FormItem>
           )}
         />
+
+        {/* SEO Fields Section */}
+        <div className="space-y-6">
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">SEO Fields</h3>
+
+            <FormField
+              control={form.control}
+              name="metaTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="SEO title for search engines"
+                      {...field}
+                      maxLength={60}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Recommended: 50-60 characters ({field.value?.length || 0}/60)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="metaDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="SEO description for search engines"
+                      {...field}
+                      maxLength={160}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Recommended: 150-160 characters ({field.value?.length || 0}/160)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="metaKeywords"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Meta Keywords</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="keyword1, keyword2, keyword3"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Comma-separated keywords for SEO (optional)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
         <div className="flex items-center gap-4">
           <Button type="submit" disabled={isSubmitting}>

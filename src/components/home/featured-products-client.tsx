@@ -213,9 +213,8 @@ export function FeaturedProductsClient({
                     </div>
 
                     <p className="text-gray-600 leading-relaxed mb-4">
-                      {product.excerpt ||
-                        product.description ||
-                        'Premium quality product with excellent results.'}
+                      {product?.excerpt ?? ''
+                         }
                     </p>
                   </div>
 

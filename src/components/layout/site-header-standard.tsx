@@ -118,7 +118,7 @@ export default function SiteHeaderStandard() {
       {/* Right Side Icons */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Cart */}
-        <CartDropdown isScrolled={true} />
+        {isMounted && <CartDropdown isScrolled={true} />}
 
         {/* User Account - Desktop */}
         {!isPending && session ? (

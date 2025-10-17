@@ -19,6 +19,19 @@ export const createProductSchema = z.object({
     .max(300, 'Excerpt must be less than 300 characters')
     .optional(),
   description: z.string().optional(),
+  
+  // New Content Fields
+  tagline: z.string().max(100, 'Tagline must be less than 100 characters').optional(),
+  whyLoveIt: z.string().optional(),
+  whatsInside: z.string().optional(),
+  howToUse: z.string().optional(),
+  ingredients: z.string().optional(),
+  
+  // SEO Fields
+  metaTitle: z.string().max(60, 'Meta title must be less than 60 characters').optional(),
+  metaDescription: z.string().max(160, 'Meta description must be less than 160 characters').optional(),
+  metaKeywords: z.string().optional(),
+  
   price: z
     .number()
     .min(0.01, 'Price must be greater than 0')
@@ -40,6 +53,19 @@ export const updateProductSchema = z.object({
     .max(300, 'Excerpt must be less than 300 characters')
     .optional(),
   description: z.string().optional(),
+  
+  // New Content Fields
+  tagline: z.string().max(100, 'Tagline must be less than 100 characters').optional(),
+  whyLoveIt: z.string().optional(),
+  whatsInside: z.string().optional(),
+  howToUse: z.string().optional(),
+  ingredients: z.string().optional(),
+  
+  // SEO Fields
+  metaTitle: z.string().max(60, 'Meta title must be less than 60 characters').optional(),
+  metaDescription: z.string().max(160, 'Meta description must be less than 160 characters').optional(),
+  metaKeywords: z.string().optional(),
+  
   price: z
     .number()
     .min(0.01, 'Price must be greater than 0')
