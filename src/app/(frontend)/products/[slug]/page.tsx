@@ -1,4 +1,7 @@
 import { getProductBySlug } from '@/server/queries/product';
+import { getReviewsByProduct, getReviewAggregates, getUserReview } from '@/server/queries/review';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import ProductDetailsClient from './product-details-client';
 
@@ -14,5 +17,31 @@ export default async function ProductDetailsPage({
     notFound();
   }
 
-  return <ProductDetailsClient product={product} />;
+  // Get user session
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // Fetch reviews and aggregates
+  const [reviewsData, aggregates] = await Promise.all([
+    getReviewsByProduct(product.id, { page: 1, limit: 20, sortBy: 'recent' }),
+    getReviewAggregates(product.id),
+  ]);
+
+  // Check if user already reviewed this product
+  let canWriteReview = true;
+  if (session?.user) {
+    const userReview = await getUserReview(product.id, session.user.id);
+    canWriteReview = !userReview;
+  }
+
+  return (
+    <ProductDetailsClient
+      product={product}
+      reviews={reviewsData.reviews}
+      reviewAggregates={aggregates}
+      canWriteReview={canWriteReview}
+      isAuthenticated={!!session?.user}
+    />
+  );
 }

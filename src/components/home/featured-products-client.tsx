@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Heart, Star, ShoppingBag, Minus, Plus, Share2 } from 'lucide-react';
 import type { SerializedProductWithCategory } from '@/lib/serializers';
+import type { ReviewAggregates } from '@/types/review';
 import { useAddItem } from '@/store/cart-store';
 import { toast } from 'sonner';
 
@@ -15,6 +16,8 @@ interface FeaturedProduct extends SerializedProductWithCategory {
   // Fields to be added later
   originalPrice?: number;
   benefits?: string[];
+  // Review statistics
+  reviewStats?: ReviewAggregates;
 }
 
 interface FeaturedProductsClientProps {
@@ -84,7 +87,8 @@ export function FeaturedProductsClient({
     <div className="space-y-12">
       {products.map((product, index) => {
         const isReversed = index % 2 === 1;
-        const rating = 4.5 + index * 0.1;
+        const rating = product.reviewStats?.averageRating || 0;
+        const reviewCount = product.reviewStats?.totalReviews || 0;
         const quantity = getQuantity(product.id);
 
         return (
@@ -194,23 +198,25 @@ export function FeaturedProductsClient({
                       </h3>
                     </Link>
 
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-5 h-5 transition-all duration-300 ${
-                              i < Math.floor(rating)
-                                ? 'fill-[#ffd469] text-[#ffd469]'
-                                : 'text-gray-200'
-                            }`}
-                          />
-                        ))}
+                    {reviewCount > 0 && (
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-5 h-5 transition-all duration-300 ${
+                                i < Math.round(rating)
+                                  ? 'fill-[#ffd469] text-[#ffd469]'
+                                  : 'text-gray-200'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-gray-600 font-medium">
+                          {rating.toFixed(1)} ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
+                        </span>
                       </div>
-                      <span className="text-gray-600 font-medium">
-                        {rating.toFixed(1)} (150+ reviews)
-                      </span>
-                    </div>
+                    )}
 
                     <p className="text-gray-600 leading-relaxed mb-4">
                       {product?.excerpt ?? ''
