@@ -31,22 +31,17 @@ export const createReviewSchema = z.object({
 });
 
 // Update review status schema (admin only)
+const reviewStatusValues = ['PENDING', 'APPROVED', 'REJECTED', 'FLAGGED'] as const;
 export const updateReviewStatusSchema = z.object({
   id: z.string().min(1, 'Review ID is required'),
-  status: z.enum(['PENDING', 'APPROVED', 'REJECTED', 'FLAGGED'], {
-    required_error: 'Status is required',
-    invalid_type_error: 'Invalid status value',
-  }),
+  status: z.enum(reviewStatusValues),
   moderatedBy: z.string().optional(),
 });
 
 // Mark review as helpful/unhelpful
 export const markHelpfulSchema = z.object({
   reviewId: z.string().min(1, 'Review ID is required'),
-  helpful: z.boolean({
-    required_error: 'Helpful value is required',
-    invalid_type_error: 'Helpful must be true or false',
-  }),
+  helpful: z.boolean(),
 });
 
 // Delete review schema

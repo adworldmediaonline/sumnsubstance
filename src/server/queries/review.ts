@@ -44,7 +44,7 @@ function serializeReview(review: {
     title: review.title || undefined,
     comment: review.comment,
     isVerifiedPurchase: review.isVerifiedPurchase,
-    status: review.status,
+    status: review.status as 'PENDING' | 'APPROVED' | 'REJECTED' | 'FLAGGED',
     helpfulCount: review.helpfulCount,
     unhelpfulCount: review.unhelpfulCount,
     images: parseReviewImages(review.images),
