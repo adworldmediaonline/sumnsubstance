@@ -1,8 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { User, MapPin, Check } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  User,
+  MapPin,
+  Check,
+  Mail,
+  Phone,
+  Home,
+  Building,
+  CheckCircle2,
+  AlertCircle,
+  FileText
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -14,32 +26,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
 import { useCartItems, useClearCart } from '@/store/cart-store';
 import { toast } from 'sonner';
-
-// Define form data type
-interface CheckoutFormData {
-  customerInfo: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-  };
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-    isDefault: boolean;
-  };
-  shippingMethod: string;
-  paymentMethod: string;
-  orderNotes: string;
-}
+import { checkoutFormSchema } from '@/lib/validations/order';
+import { cn } from '@/lib/utils';
 
 interface CheckoutFormProps {
   isProcessing: boolean;
@@ -60,7 +52,8 @@ export function CheckoutForm({
   const clearCart = useClearCart();
 
   const form = useForm({
-    mode: 'onChange',
+    resolver: zodResolver(checkoutFormSchema),
+    mode: 'onTouched',
     defaultValues: {
       customerInfo: {
         email: user?.email || '',
@@ -70,6 +63,7 @@ export function CheckoutForm({
       },
       shippingAddress: {
         fullName: user?.name || '',
+        email: user?.email || '',
         phone: '',
         addressLine1: '',
         addressLine2: '',
@@ -85,11 +79,10 @@ export function CheckoutForm({
     },
   });
 
-  const onSubmit = async (data: CheckoutFormData) => {
+
+  const onSubmit = async (data: any) => {
     try {
       onProcessingChange(true);
-
-      // Process the order directly - all fields are validated by the form schema
       await processOrder(data);
     } catch (error) {
       console.error('Checkout error:', error);
@@ -99,7 +92,7 @@ export function CheckoutForm({
     }
   };
 
-  const processOrder = async (data: CheckoutFormData) => {
+  const processOrder = async (data: any) => {
     try {
       // Create order payload
       const orderPayload = {
@@ -109,15 +102,9 @@ export function CheckoutForm({
           price: item.product.price,
         })),
         customerInfo: data.customerInfo,
-        shippingAddress: {
-          ...data.shippingAddress,
-          email: data.customerInfo.email, // Use customer email for shipping
-        },
-        billingAddress: {
-          ...data.shippingAddress,
-          email: data.customerInfo.email, // Use customer email for billing
-        },
-        paymentMethod: 'razorpay', // Default to Razorpay since it handles all payment methods
+        shippingAddress: data.shippingAddress,
+        billingAddress: data.shippingAddress, // Same as shipping for now
+        paymentMethod: data.paymentMethod,
         shippingMethod: data.shippingMethod,
         orderNotes: data.orderNotes,
         userId: user?.id,
@@ -137,9 +124,9 @@ export function CheckoutForm({
       }
 
       const orderResult = await orderResponse.json();
-      const order = orderResult.data; // Extract order data from response
+      const order = orderResult.data;
 
-      // Process payment with Razorpay (handles all payment methods)
+      // Process payment with Razorpay
       await processRazorpayPayment(order);
     } catch (error) {
       console.error('Order processing error:', error);
@@ -163,7 +150,7 @@ export function CheckoutForm({
       script.onload = () => {
         const options = {
           key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: Math.round(order.total * 100), // Convert to paise
+          amount: Math.round(order.total * 100),
           currency: 'INR',
           name: 'SumnSubstance',
           description: `Order #${order.orderNumber}`,
@@ -174,7 +161,6 @@ export function CheckoutForm({
             razorpay_signature: string;
           }) => {
             try {
-              // Verify payment
               const verificationResponse = await fetch('/api/payments/verify', {
                 method: 'POST',
                 headers: {
@@ -190,28 +176,24 @@ export function CheckoutForm({
 
               if (verificationResponse.ok) {
                 clearCart();
+                toast.success('Order placed successfully!');
                 window.location.href = `/checkout/success?orderId=${order.id}`;
               } else {
                 throw new Error('Payment verification failed');
               }
             } catch (error) {
               console.error('Payment verification error:', error);
-              toast.error(
-                'Payment verification failed. Please contact support.'
-              );
+              toast.error('Payment verification failed. Please contact support.');
               window.location.href = `/checkout/failure?orderId=${order.id}`;
             }
           },
           prefill: {
-            name:
-              form.getValues('customerInfo.firstName') +
-              ' ' +
-              form.getValues('customerInfo.lastName'),
+            name: `${form.getValues('customerInfo.firstName')} ${form.getValues('customerInfo.lastName')}`,
             email: form.getValues('customerInfo.email'),
             contact: form.getValues('customerInfo.phone'),
           },
           theme: {
-            color: '#3B82F6',
+            color: '#228B22',
           },
           modal: {
             ondismiss: () => {
@@ -239,249 +221,434 @@ export function CheckoutForm({
     }
   };
 
-  const getAllFormContent = () => {
-    return (
-      <div className="space-y-6">
-        {/* Customer Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              Customer Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="customerInfo.firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your first name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="customerInfo.lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your last name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="customerInfo.email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address *</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="customerInfo.phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number *</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="tel"
-                        placeholder="Enter your phone number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Shipping Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              Shipping Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <FormField
-                control={form.control}
-                name="shippingAddress.fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="shippingAddress.addressLine1"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 1 *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter street address" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="shippingAddress.addressLine2"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address Line 2</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Apartment, suite, etc. (optional)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.city"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>City *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter city" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>State *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter state" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="shippingAddress.postalCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Postal Code *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter postal code" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="shippingAddress.phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number *</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="tel"
-                        placeholder="Enter phone number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  };
-
   const onError = (errors: Record<string, unknown>) => {
     console.log('Form validation errors:', errors);
     toast.error('Please fill in all required fields correctly');
     onProcessingChange(false);
   };
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit, onError)}
-        className="space-y-6"
-      >
-        {getAllFormContent()}
+  // Field validation helper
+  const isFieldValid = (fieldName: string) => {
+    const fieldState = form.getFieldState(fieldName as any);
+    return !fieldState.error && fieldState.isDirty;
+  };
 
-        {/* Submit Button */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-center">
-              <Button
-                type="submit"
-                disabled={isProcessing}
-                className="min-w-[200px]"
-                size="lg"
-              >
-                {isProcessing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                    Processing Order...
-                  </>
-                ) : (
-                  <>
-                    Complete Order
-                    <Check className="ml-2 h-4 w-4" />
-                  </>
+
+  return (
+    <div className="space-y-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
+          {/* Customer Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Customer Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="customerInfo.firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        First Name *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder="Enter your first name"
+                            {...field}
+                            className={cn(
+                              isFieldValid('customerInfo.firstName') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('customerInfo.firstName') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="customerInfo.lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        Last Name *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder="Enter your last name"
+                            {...field}
+                            className={cn(
+                              isFieldValid('customerInfo.lastName') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('customerInfo.lastName') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="customerInfo.email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Mail className="h-4 w-4" />
+                        Email Address *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type="email"
+                            placeholder="Enter your email"
+                            {...field}
+                            className={cn(
+                              isFieldValid('customerInfo.email') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('customerInfo.email') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="customerInfo.phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Phone className="h-4 w-4" />
+                        Phone Number *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type="tel"
+                            placeholder="Enter your phone number"
+                            {...field}
+                            className={cn(
+                              isFieldValid('customerInfo.phone') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('customerInfo.phone') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Shipping Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Shipping Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        Full Name *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder="Enter full name"
+                            {...field}
+                            className={cn(
+                              isFieldValid('shippingAddress.fullName') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('shippingAddress.fullName') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Mail className="h-4 w-4" />
+                        Email Address *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type="email"
+                            placeholder="Enter email address"
+                            {...field}
+                            className={cn(
+                              isFieldValid('shippingAddress.email') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('shippingAddress.email') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Phone className="h-4 w-4" />
+                        Phone Number *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type="tel"
+                            placeholder="Enter phone number"
+                            {...field}
+                            className={cn(
+                              isFieldValid('shippingAddress.phone') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('shippingAddress.phone') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.addressLine1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Home className="h-4 w-4" />
+                        Address Line 1 *
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            placeholder="Enter street address"
+                            {...field}
+                            className={cn(
+                              isFieldValid('shippingAddress.addressLine1') && 'border-green-500'
+                            )}
+                          />
+                          {isFieldValid('shippingAddress.addressLine1') && (
+                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="shippingAddress.addressLine2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center gap-2">
+                        <Building className="h-4 w-4" />
+                        Address Line 2
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Apartment, suite, etc. (optional)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="shippingAddress.city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>City *</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              placeholder="Enter city"
+                              {...field}
+                              className={cn(
+                                isFieldValid('shippingAddress.city') && 'border-green-500'
+                              )}
+                            />
+                            {isFieldValid('shippingAddress.city') && (
+                              <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="shippingAddress.state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>State *</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              placeholder="Enter state"
+                              {...field}
+                              className={cn(
+                                isFieldValid('shippingAddress.state') && 'border-green-500'
+                              )}
+                            />
+                            {isFieldValid('shippingAddress.state') && (
+                              <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="shippingAddress.postalCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Postal Code *</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              placeholder="Enter postal code"
+                              {...field}
+                              className={cn(
+                                isFieldValid('shippingAddress.postalCode') && 'border-green-500'
+                              )}
+                            />
+                            {isFieldValid('shippingAddress.postalCode') && (
+                              <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+
+          {/* Order Notes */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Order Notes (Optional)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="orderNotes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative">
+                        <Textarea
+                          placeholder="Any special instructions for your order?"
+                          className="min-h-[100px] resize-none"
+                          maxLength={500}
+                          {...field}
+                        />
+                        <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
+                          {field.value?.length || 0}/500
+                        </div>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </form>
-    </Form>
+              />
+            </CardContent>
+          </Card>
+
+          <Separator />
+
+          {/* Submit Button */}
+          <div className="flex flex-col items-center gap-3 pt-4">
+            <Button
+              type="submit"
+              disabled={isProcessing}
+              className="w-full max-w-md h-12 text-lg font-semibold"
+              size="lg"
+            >
+              {isProcessing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                  Processing Order...
+                </>
+              ) : (
+                <>
+                  Complete Order
+                  <Check className="ml-2 h-5 w-5" />
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

@@ -1,12 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import {
-  ArrowLeft,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { CheckoutForm } from '@/components/checkout/checkout-form';
 import { CheckoutSummary } from '@/components/checkout/checkout-summary';
 import { EmptyCartRedirect } from '@/components/checkout/empty-cart-redirect';
@@ -37,19 +31,6 @@ export function CheckoutPageContent() {
           user={session?.user}
         />
 
-        {/* Back to Cart */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-center">
-              <Link href="/cart">
-                <Button variant="outline" className="flex items-center gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Cart
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Order Summary Section */}

@@ -18,7 +18,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 import {
   Loader2,
@@ -347,10 +347,12 @@ export default function Header({
                       <Menu className="h-5 w-5 text-gray-600" />
                     </Button>
                   </SheetTrigger>
+
                   <SheetContent
                     side="right"
                     className="w-full max-w-sm p-0 overflow-y-auto"
                   >
+
                     <div className="flex flex-col h-full">
                       {/* User Section */}
                       <div className="p-4 sm:p-6 border-b">

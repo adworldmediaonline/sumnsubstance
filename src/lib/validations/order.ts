@@ -15,7 +15,7 @@ export const shippingAddressSchema = z.object({
     .string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number must be less than 15 digits')
-    .regex(/^[+]?[\d\s\-()]+$/, 'Please enter a valid phone number'),
+    .regex(/^(\+91|91)?[6-9]\d{9}$/, 'Please enter a valid Indian phone number'),
   addressLine1: z
     .string()
     .min(5, 'Address line 1 must be at least 5 characters')
@@ -34,9 +34,9 @@ export const shippingAddressSchema = z.object({
     .max(100, 'State must be less than 100 characters'),
   postalCode: z
     .string()
-    .min(5, 'Postal code must be at least 5 characters')
-    .max(10, 'Postal code must be less than 10 characters')
-    .regex(/^[\d\-\s]+$/, 'Please enter a valid postal code'),
+    .min(6, 'Postal code must be exactly 6 digits')
+    .max(6, 'Postal code must be exactly 6 digits')
+    .regex(/^[1-9][0-9]{5}$/, 'Please enter a valid Indian PIN code (6 digits)'),
   country: z
     .string()
     .min(2, 'Country must be at least 2 characters')
@@ -71,7 +71,7 @@ export const customerInfoSchema = z.object({
     .string()
     .min(10, 'Phone number must be at least 10 digits')
     .max(15, 'Phone number must be less than 15 digits')
-    .regex(/^[+]?[\d\s\-()]+$/, 'Please enter a valid phone number'),
+    .regex(/^(\+91|91)?[6-9]\d{9}$/, 'Please enter a valid Indian phone number'),
 });
 
 // Checkout Form Schema
