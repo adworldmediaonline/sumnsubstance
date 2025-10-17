@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
-import { sendOrderConfirmationEmail } from '@/lib/email/order-emails';
+import { sendOrderConfirmationEmail, sendOrderProcessingEmail, sendOrderShippedEmail, sendOrderDeliveredEmail, sendOrderCancelledEmail } from '@/lib/email/order-emails';
 
 // Helper function to serialize order data for client components
 function serializeOrderData(order: {
@@ -141,24 +141,52 @@ export async function updateOrderStatus(
       },
     });
 
-    // Send email notification if order is shipped
-    if (status === 'SHIPPED') {
-      try {
-        const customerEmail =
-          updatedOrder.user?.email || updatedOrder.guestEmail;
-        const customerName = updatedOrder.user?.name || updatedOrder.guestName;
+    // Send email notification based on status change
+    try {
+      const customerEmail = updatedOrder.user?.email || updatedOrder.guestEmail;
+      const customerName = updatedOrder.user?.name || updatedOrder.guestName;
 
-        if (customerEmail && customerName) {
-          // TODO: Implement sendOrderShippedEmail when template is available
-          console.log(
-            'Order shipped email would be sent for:',
-            updatedOrder.orderNumber
-          );
+      if (customerEmail && customerName) {
+        // Send appropriate email based on status
+        switch (status) {
+          case 'PROCESSING':
+            await sendOrderProcessingEmail({
+              order: serializeOrderData(updatedOrder),
+              customerEmail,
+              customerName,
+            });
+            break;
+
+          case 'SHIPPED':
+            await sendOrderShippedEmail({
+              order: serializeOrderData(updatedOrder),
+              customerEmail,
+              customerName,
+              trackingNumber: trackingNumber || undefined,
+            });
+            break;
+
+          case 'DELIVERED':
+            await sendOrderDeliveredEmail({
+              order: serializeOrderData(updatedOrder),
+              customerEmail,
+              customerName,
+            });
+            break;
+
+          case 'CANCELLED':
+            await sendOrderCancelledEmail({
+              order: serializeOrderData(updatedOrder),
+              customerEmail,
+              customerName,
+              // TODO: Add cancellation reason and refund amount when available
+            });
+            break;
         }
-      } catch (emailError) {
-        console.error('Failed to send shipped email:', emailError);
-        // Don't fail the entire operation if email fails
       }
+    } catch (emailError) {
+      console.error(`Failed to send ${status} email:`, emailError);
+      // Don't fail status update if email fails
     }
 
     revalidatePath('/dashboard/orders');

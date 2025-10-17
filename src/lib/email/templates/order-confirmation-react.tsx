@@ -114,17 +114,19 @@ export function OrderEmailTemplate({
               <Text style={summaryValue}>₹{subtotal.toLocaleString()}</Text>
             </div>
 
-            <div style={summaryRow}>
-              <Text style={summaryLabel}>Shipping:</Text>
-              <Text style={summaryValue}>
-                {shipping === 0 ? 'FREE' : `₹${shipping.toLocaleString()}`}
-              </Text>
-            </div>
+            {shipping > 0 && (
+              <div style={summaryRow}>
+                <Text style={summaryLabel}>Shipping:</Text>
+                <Text style={summaryValue}>₹{shipping.toLocaleString()}</Text>
+              </div>
+            )}
 
-            <div style={summaryRow}>
-              <Text style={summaryLabel}>Tax (GST):</Text>
-              <Text style={summaryValue}>₹{tax.toLocaleString()}</Text>
-            </div>
+            {tax > 0 && (
+              <div style={summaryRow}>
+                <Text style={summaryLabel}>Tax (GST):</Text>
+                <Text style={summaryValue}>₹{tax.toLocaleString()}</Text>
+              </div>
+            )}
 
             <Hr style={totalSeparator} />
 

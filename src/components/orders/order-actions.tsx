@@ -85,7 +85,7 @@ export function OrderActions({ order }: OrderActionsProps) {
         const result = await updateOrderStatus(data);
 
         if (result.success) {
-          toast.success(result.message);
+          toast.success(`${result.message} & email sent to customer`);
           setShowStatusDialog(false);
           setTrackingNumber('');
         } else {

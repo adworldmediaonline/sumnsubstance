@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface OrderEmailTemplateProps {
+interface OrderProcessingEmailTemplateProps {
   customerName: string;
   orderNumber: string;
   orderDate: string;
@@ -29,7 +29,7 @@ interface OrderEmailTemplateProps {
   estimatedDelivery: string;
 }
 
-export function OrderEmailTemplate({
+export function OrderProcessingEmailTemplate({
   customerName,
   orderNumber,
   orderDate,
@@ -40,7 +40,7 @@ export function OrderEmailTemplate({
   total,
   shippingAddress,
   estimatedDelivery,
-}: OrderEmailTemplateProps) {
+}: OrderProcessingEmailTemplateProps) {
   return (
     <div
       style={{
@@ -52,7 +52,7 @@ export function OrderEmailTemplate({
       {/* Header */}
       <div
         style={{
-          backgroundColor: '#233f1c',
+          backgroundColor: '#228B22',
           padding: '32px',
           textAlign: 'center',
         }}
@@ -65,10 +65,10 @@ export function OrderEmailTemplate({
             fontWeight: 'bold',
           }}
         >
-          Order Confirmed!
+          Your Order is Being Prepared!
         </h1>
-        <p style={{ color: '#ffd469', margin: '8px 0 0', fontSize: '16px' }}>
-          Thank you for your order, {customerName}
+        <p style={{ color: '#FFD700', margin: '8px 0 0', fontSize: '16px' }}>
+          Hi {customerName}, we're getting your order ready
         </p>
       </div>
 
@@ -82,7 +82,7 @@ export function OrderEmailTemplate({
             borderRadius: '8px',
           }}
         >
-          <h2 style={{ margin: '0 0 8px', fontSize: '20px', color: '#233f1c' }}>
+          <h2 style={{ margin: '0 0 8px', fontSize: '20px', color: '#228B22' }}>
             Order #{orderNumber}
           </h2>
           <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>
@@ -99,12 +99,31 @@ export function OrderEmailTemplate({
           </p>
         </div>
 
+        {/* Processing Status */}
+        <div
+          style={{
+            marginBottom: '24px',
+            padding: '20px',
+            backgroundColor: '#e8f5e8',
+            border: '2px solid #228B22',
+            borderRadius: '8px',
+            textAlign: 'center',
+          }}
+        >
+          <h3 style={{ margin: '0 0 8px', fontSize: '18px', color: '#228B22' }}>
+            🚀 Processing Status
+          </h3>
+          <p style={{ margin: '0', color: '#333', fontSize: '16px' }}>
+            Our team is carefully preparing your order for shipment. This usually takes 1-2 business days.
+          </p>
+        </div>
+
         {/* Order Items */}
         <div style={{ marginBottom: '24px' }}>
           <h3
-            style={{ margin: '0 0 16px', fontSize: '18px', color: '#233f1c' }}
+            style={{ margin: '0 0 16px', fontSize: '18px', color: '#228B22' }}
           >
-            Order Items
+            What You Ordered
           </h3>
 
           {orderItems.map((item, index) => (
@@ -169,7 +188,7 @@ export function OrderEmailTemplate({
           }}
         >
           <h3
-            style={{ margin: '0 0 16px', fontSize: '18px', color: '#233f1c' }}
+            style={{ margin: '0 0 16px', fontSize: '18px', color: '#228B22' }}
           >
             Order Summary
           </h3>
@@ -215,7 +234,7 @@ export function OrderEmailTemplate({
             style={{
               margin: '16px 0',
               border: 'none',
-              borderTop: '2px solid #233f1c',
+              borderTop: '2px solid #228B22',
             }}
           />
 
@@ -228,16 +247,41 @@ export function OrderEmailTemplate({
             }}
           >
             <span>Total:</span>
-            <span style={{ color: '#233f1c' }}>₹{total.toLocaleString()}</span>
+            <span style={{ color: '#228B22' }}>₹{total.toLocaleString()}</span>
+          </div>
+        </div>
+
+        {/* What Happens Next */}
+        <div style={{ marginBottom: '24px' }}>
+          <h3
+            style={{ margin: '0 0 16px', fontSize: '18px', color: '#228B22' }}
+          >
+            What Happens Next?
+          </h3>
+          <div style={{ padding: '16px', backgroundColor: '#f0f8f0', borderRadius: '8px' }}>
+            <ol style={{ margin: '0', paddingLeft: '20px', color: '#333' }}>
+              <li style={{ marginBottom: '8px' }}>
+                <strong>Processing:</strong> We're preparing your items with care
+              </li>
+              <li style={{ marginBottom: '8px' }}>
+                <strong>Quality Check:</strong> Each item is inspected before packaging
+              </li>
+              <li style={{ marginBottom: '8px' }}>
+                <strong>Packaging:</strong> Your order is securely packaged for shipping
+              </li>
+              <li>
+                <strong>Shipping:</strong> You'll receive a tracking number when shipped
+              </li>
+            </ol>
           </div>
         </div>
 
         {/* Shipping Address */}
         <div style={{ marginBottom: '24px' }}>
           <h3
-            style={{ margin: '0 0 16px', fontSize: '18px', color: '#233f1c' }}
+            style={{ margin: '0 0 16px', fontSize: '18px', color: '#228B22' }}
           >
-            Shipping Address
+            Delivery Address
           </h3>
           <div
             style={{
@@ -272,7 +316,7 @@ export function OrderEmailTemplate({
             href={`${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderNumber}`}
             style={{
               display: 'inline-block',
-              backgroundColor: '#233f1c',
+              backgroundColor: '#228B22',
               color: 'white',
               padding: '12px 24px',
               textDecoration: 'none',
@@ -297,204 +341,14 @@ export function OrderEmailTemplate({
             Questions about your order? Contact us at{' '}
             <a
               href={`mailto:${process.env.EMAIL_FROM}`}
-              style={{ color: '#233f1c' }}
+              style={{ color: '#228B22' }}
             >
               {process.env.EMAIL_FROM}
             </a>
           </p>
           <p style={{ margin: '0', color: '#666', fontSize: '12px' }}>
-            This email was sent from SumnSubstance. If you have any questions,
-            please don't hesitate to contact us.
+            This email was sent from SumnSubstance. We'll keep you updated on your order status.
           </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Simple templates for other email types
-export function ShippedOrderTemplate({
-  customerName,
-  orderNumber,
-  trackingNumber,
-  estimatedDelivery,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  shippingAddress,
-}: {
-  customerName: string;
-  orderNumber: string;
-  trackingNumber?: string;
-  estimatedDelivery: string;
-  shippingAddress: {
-    fullName: string;
-    addressLine1: string;
-    addressLine2?: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-    phone: string;
-  };
-}) {
-  return (
-    <div
-      style={{
-        fontFamily: 'Arial, sans-serif',
-        maxWidth: '600px',
-        margin: '0 auto',
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: '#233f1c',
-          padding: '32px',
-          textAlign: 'center',
-        }}
-      >
-        <h1
-          style={{
-            color: 'white',
-            margin: '0',
-            fontSize: '28px',
-            fontWeight: 'bold',
-          }}
-        >
-          Your Order is on the Way!
-        </h1>
-        <p style={{ color: '#ffd469', margin: '8px 0 0', fontSize: '16px' }}>
-          Hi {customerName}, your order has been shipped
-        </p>
-      </div>
-
-      <div style={{ padding: '32px', backgroundColor: 'white' }}>
-        <div
-          style={{
-            marginBottom: '24px',
-            padding: '16px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px',
-          }}
-        >
-          <h2 style={{ margin: '0 0 8px', fontSize: '20px', color: '#233f1c' }}>
-            Order #{orderNumber}
-          </h2>
-          {trackingNumber && (
-            <p style={{ margin: '0 0 8px', color: '#666', fontSize: '14px' }}>
-              Tracking Number: <strong>{trackingNumber}</strong>
-            </p>
-          )}
-          <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>
-            Estimated Delivery: {estimatedDelivery}
-          </p>
-        </div>
-
-        <div style={{ textAlign: 'center' }}>
-          <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/track-order?tracking=${trackingNumber}`}
-            style={{
-              display: 'inline-block',
-              backgroundColor: '#233f1c',
-              color: 'white',
-              padding: '12px 24px',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: '600',
-              fontSize: '16px',
-            }}
-          >
-            Track Your Package
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function DeliveredOrderTemplate({
-  customerName,
-  orderNumber,
-  deliveryDate,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  orderItems,
-}: {
-  customerName: string;
-  orderNumber: string;
-  deliveryDate: string;
-  orderItems: Array<{
-    name: string;
-    quantity: number;
-    price: number;
-    total: number;
-  }>;
-}) {
-  return (
-    <div
-      style={{
-        fontFamily: 'Arial, sans-serif',
-        maxWidth: '600px',
-        margin: '0 auto',
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: '#28a745',
-          padding: '32px',
-          textAlign: 'center',
-        }}
-      >
-        <h1
-          style={{
-            color: 'white',
-            margin: '0',
-            fontSize: '28px',
-            fontWeight: 'bold',
-          }}
-        >
-          Order Delivered!
-        </h1>
-        <p style={{ color: 'white', margin: '8px 0 0', fontSize: '16px' }}>
-          Hi {customerName}, your order has been successfully delivered
-        </p>
-      </div>
-
-      <div style={{ padding: '32px', backgroundColor: 'white' }}>
-        <div
-          style={{
-            marginBottom: '24px',
-            padding: '16px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px',
-          }}
-        >
-          <h2 style={{ margin: '0 0 8px', fontSize: '20px', color: '#233f1c' }}>
-            Order #{orderNumber}
-          </h2>
-          <p style={{ margin: '0', color: '#666', fontSize: '14px' }}>
-            Delivered on: {new Date(deliveryDate).toLocaleDateString('en-IN')}
-          </p>
-        </div>
-
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <p style={{ margin: '0 0 16px', fontSize: '16px' }}>
-            We hope you love your new products! Please consider leaving a
-            review.
-          </p>
-
-          <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/orders/${orderNumber}/review`}
-            style={{
-              display: 'inline-block',
-              backgroundColor: '#233f1c',
-              color: 'white',
-              padding: '12px 24px',
-              textDecoration: 'none',
-              borderRadius: '8px',
-              fontWeight: '600',
-              fontSize: '16px',
-            }}
-          >
-            Leave a Review
-          </a>
         </div>
       </div>
     </div>

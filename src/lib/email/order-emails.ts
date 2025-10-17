@@ -1,6 +1,11 @@
 import { Resend } from 'resend';
 import { render } from '@react-email/render';
 import { OrderEmailTemplate } from './templates/order-confirmation-react';
+import { OrderProcessingEmailTemplate } from './templates/order-processing';
+import { OrderShippedEmailTemplate } from './templates/order-shipped';
+import { OrderDeliveredEmailTemplate } from './templates/order-delivered';
+import { OrderCancelledEmailTemplate } from './templates/order-cancelled';
+import { retryEmail, validateEmailConfig, logEmailAttempt, formatEmailSubject } from './email-utils';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -98,36 +103,279 @@ export async function sendOrderConfirmationEmail({
 }
 
 /**
- * Send order shipped email
- * TODO: Implement when ShippedOrderTemplate is created
+ * Send order processing email
  */
-/*
+export async function sendOrderProcessingEmail({
+  order,
+  customerEmail,
+  customerName,
+}: OrderEmailData) {
+  try {
+    // Validate email configuration
+    const configValidation = validateEmailConfig();
+    if (!configValidation.isValid) {
+      console.error('Email configuration invalid:', configValidation.errors);
+      throw new Error('Email configuration is invalid');
+    }
+
+    const emailHtml = await render(
+      OrderProcessingEmailTemplate({
+        customerName,
+        orderNumber: order.orderNumber,
+        orderDate: order.createdAt.toISOString(),
+        orderItems: order.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: toNumber(item.price),
+          total: toNumber(item.total),
+          image: item.productSnapshot?.mainImage?.url,
+        })),
+        subtotal: toNumber(order.subtotal),
+        shipping: toNumber(order.shipping),
+        tax: toNumber(order.tax),
+        total: toNumber(order.total),
+        shippingAddress:
+          typeof order.shippingAddress === 'string'
+            ? JSON.parse(order.shippingAddress)
+            : order.shippingAddress,
+        estimatedDelivery: calculateEstimatedDelivery(order.createdAt),
+      })
+    );
+
+    const sendEmail = async () => {
+      const { data, error } = await resend.emails.send({
+        from: `SumnSubstance <${process.env.EMAIL_FROM}>`,
+        to: [customerEmail],
+        subject: formatEmailSubject('processing', order.orderNumber),
+        html: emailHtml,
+      });
+
+      if (error) {
+        console.error('Email sending error:', error);
+        throw new Error('Failed to send processing email');
+      }
+
+      return data;
+    };
+
+    const result = await retryEmail(sendEmail);
+    logEmailAttempt('processing', customerEmail, order.orderNumber, true);
+    console.log('Order processing email sent:', result?.id);
+    return result;
+  } catch (error) {
+    logEmailAttempt('processing', customerEmail, order.orderNumber, false, error as Error);
+    console.error('Order processing email error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Send order shipped email
+ */
 export async function sendOrderShippedEmail({
   order,
   customerEmail,
   customerName,
+  trackingNumber,
 }: OrderEmailData & { trackingNumber?: string }) {
-  // Implementation will be added when template is available
-  console.log('Order shipped email would be sent for:', order.orderNumber);
-  return null;
+  try {
+    // Validate email configuration
+    const configValidation = validateEmailConfig();
+    if (!configValidation.isValid) {
+      console.error('Email configuration invalid:', configValidation.errors);
+      throw new Error('Email configuration is invalid');
+    }
+
+    const emailHtml = await render(
+      OrderShippedEmailTemplate({
+        customerName,
+        orderNumber: order.orderNumber,
+        orderDate: order.createdAt.toISOString(),
+        orderItems: order.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: toNumber(item.price),
+          total: toNumber(item.total),
+          image: item.productSnapshot?.mainImage?.url,
+        })),
+        subtotal: toNumber(order.subtotal),
+        shipping: toNumber(order.shipping),
+        tax: toNumber(order.tax),
+        total: toNumber(order.total),
+        shippingAddress:
+          typeof order.shippingAddress === 'string'
+            ? JSON.parse(order.shippingAddress)
+            : order.shippingAddress,
+        estimatedDelivery: calculateEstimatedDelivery(order.createdAt, 'shipped'),
+        trackingNumber,
+      })
+    );
+
+    const sendEmail = async () => {
+      const { data, error } = await resend.emails.send({
+        from: `SumnSubstance <${process.env.EMAIL_FROM}>`,
+        to: [customerEmail],
+        subject: formatEmailSubject('shipped', order.orderNumber),
+        html: emailHtml,
+      });
+
+      if (error) {
+        console.error('Email sending error:', error);
+        throw new Error('Failed to send shipped email');
+      }
+
+      return data;
+    };
+
+    const result = await retryEmail(sendEmail);
+    logEmailAttempt('shipped', customerEmail, order.orderNumber, true);
+    console.log('Order shipped email sent:', result?.id);
+    return result;
+  } catch (error) {
+    logEmailAttempt('shipped', customerEmail, order.orderNumber, false, error as Error);
+    console.error('Order shipped email error:', error);
+    throw error;
+  }
 }
-*/
 
 /**
  * Send order delivered email
- * TODO: Implement when DeliveredOrderTemplate is created
  */
-/*
 export async function sendOrderDeliveredEmail({
   order,
   customerEmail,
   customerName,
 }: OrderEmailData) {
-  // Implementation will be added when template is available
-  console.log('Order delivered email would be sent for:', order.orderNumber);
-  return null;
+  try {
+    // Validate email configuration
+    const configValidation = validateEmailConfig();
+    if (!configValidation.isValid) {
+      console.error('Email configuration invalid:', configValidation.errors);
+      throw new Error('Email configuration is invalid');
+    }
+
+    const emailHtml = await render(
+      OrderDeliveredEmailTemplate({
+        customerName,
+        orderNumber: order.orderNumber,
+        orderDate: order.createdAt.toISOString(),
+        orderItems: order.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: toNumber(item.price),
+          total: toNumber(item.total),
+          image: item.productSnapshot?.mainImage?.url,
+        })),
+        subtotal: toNumber(order.subtotal),
+        shipping: toNumber(order.shipping),
+        tax: toNumber(order.tax),
+        total: toNumber(order.total),
+        shippingAddress:
+          typeof order.shippingAddress === 'string'
+            ? JSON.parse(order.shippingAddress)
+            : order.shippingAddress,
+        estimatedDelivery: calculateEstimatedDelivery(order.createdAt, 'shipped'),
+        deliveryDate: new Date().toISOString(),
+      })
+    );
+
+    const sendEmail = async () => {
+      const { data, error } = await resend.emails.send({
+        from: `SumnSubstance <${process.env.EMAIL_FROM}>`,
+        to: [customerEmail],
+        subject: formatEmailSubject('delivered', order.orderNumber),
+        html: emailHtml,
+      });
+
+      if (error) {
+        console.error('Email sending error:', error);
+        throw new Error('Failed to send delivered email');
+      }
+
+      return data;
+    };
+
+    const result = await retryEmail(sendEmail);
+    logEmailAttempt('delivered', customerEmail, order.orderNumber, true);
+    console.log('Order delivered email sent:', result?.id);
+    return result;
+  } catch (error) {
+    logEmailAttempt('delivered', customerEmail, order.orderNumber, false, error as Error);
+    console.error('Order delivered email error:', error);
+    throw error;
+  }
 }
-*/
+
+/**
+ * Send order cancelled email
+ */
+export async function sendOrderCancelledEmail({
+  order,
+  customerEmail,
+  customerName,
+  cancellationReason,
+  refundAmount,
+}: OrderEmailData & { cancellationReason?: string; refundAmount?: number }) {
+  try {
+    // Validate email configuration
+    const configValidation = validateEmailConfig();
+    if (!configValidation.isValid) {
+      console.error('Email configuration invalid:', configValidation.errors);
+      throw new Error('Email configuration is invalid');
+    }
+
+    const emailHtml = await render(
+      OrderCancelledEmailTemplate({
+        customerName,
+        orderNumber: order.orderNumber,
+        orderDate: order.createdAt.toISOString(),
+        orderItems: order.items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: toNumber(item.price),
+          total: toNumber(item.total),
+          image: item.productSnapshot?.mainImage?.url,
+        })),
+        subtotal: toNumber(order.subtotal),
+        shipping: toNumber(order.shipping),
+        tax: toNumber(order.tax),
+        total: toNumber(order.total),
+        shippingAddress:
+          typeof order.shippingAddress === 'string'
+            ? JSON.parse(order.shippingAddress)
+            : order.shippingAddress,
+        estimatedDelivery: calculateEstimatedDelivery(order.createdAt),
+        cancellationReason,
+        refundAmount,
+      })
+    );
+
+    const sendEmail = async () => {
+      const { data, error } = await resend.emails.send({
+        from: `SumnSubstance <${process.env.EMAIL_FROM}>`,
+        to: [customerEmail],
+        subject: formatEmailSubject('cancelled', order.orderNumber),
+        html: emailHtml,
+      });
+
+      if (error) {
+        console.error('Email sending error:', error);
+        throw new Error('Failed to send cancelled email');
+      }
+
+      return data;
+    };
+
+    const result = await retryEmail(sendEmail);
+    logEmailAttempt('cancelled', customerEmail, order.orderNumber, true);
+    console.log('Order cancelled email sent:', result?.id);
+    return result;
+  } catch (error) {
+    logEmailAttempt('cancelled', customerEmail, order.orderNumber, false, error as Error);
+    console.error('Order cancelled email error:', error);
+    throw error;
+  }
+}
 
 /**
  * Send admin order notification
