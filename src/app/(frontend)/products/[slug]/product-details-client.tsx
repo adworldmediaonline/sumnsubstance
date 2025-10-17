@@ -1,14 +1,12 @@
 'use client';
 
-import ProductReviews from '@/components/products/ProductReviews';
+import ProductReviews from '@/components/products/product-reviews';
 import RelatedProducts from '@/components/products/RelatedProducts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  mockRelatedProducts,
-  mockReviews,
-} from '@/constants/product-mock-data';
+import { mockRelatedProducts } from '@/constants/product-mock-data';
 import type { SerializedProductWithCategory } from '@/server/queries/product';
+import type { ReviewData, ReviewAggregates } from '@/types/review';
 import { useAddItem } from '@/store/cart-store';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -39,8 +37,16 @@ import 'swiper/css/navigation';
 
 export default function ProductDetailsClient({
   product,
+  reviews,
+  reviewAggregates,
+  canWriteReview,
+  isAuthenticated,
 }: {
   product: SerializedProductWithCategory;
+  reviews: ReviewData[];
+  reviewAggregates: ReviewAggregates;
+  canWriteReview: boolean;
+  isAuthenticated: boolean;
 }) {
   // Transform images into array format for gallery display (memoized to prevent re-renders)
   const allImages = useMemo(
@@ -319,11 +325,17 @@ export default function ProductDetailsClient({
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-4 h-4 text-yellow-500 fill-current"
+                      className={`w-4 h-4 ${
+                        i < Math.round(reviewAggregates.averageRating)
+                          ? 'text-yellow-500 fill-current'
+                          : 'text-gray-300'
+                      }`}
                     />
                   ))}
                   <span className="text-gray-600 ml-2 text-sm">
-                    (1,847 reviews)
+                    {reviewAggregates.averageRating > 0
+                      ? `${reviewAggregates.averageRating.toFixed(1)} (${reviewAggregates.totalReviews} reviews)`
+                      : 'No reviews yet'}
                   </span>
                 </div>
                 <Badge
@@ -455,7 +467,7 @@ export default function ProductDetailsClient({
                 { id: 'description', label: 'Description' },
                 { id: 'usage', label: 'How to Use' },
                 { id: 'ingredients', label: 'Ingredients' },
-                { id: 'reviews', label: 'Reviews (1,847)' },
+                { id: 'reviews', label: `Reviews (${reviewAggregates.totalReviews})` },
                 { id: 'faq', label: 'FAQ' },
               ].map(tab => (
                 <button
@@ -549,7 +561,14 @@ export default function ProductDetailsClient({
             )}
 
             {activeTab === 'reviews' && (
-              <ProductReviews reviews={mockReviews} />
+              <ProductReviews
+                productId={product.id}
+                productName={product.name}
+                reviews={reviews}
+                aggregates={reviewAggregates}
+                canWriteReview={canWriteReview}
+                isAuthenticated={isAuthenticated}
+              />
             )}
 
             {activeTab === 'faq' && (
