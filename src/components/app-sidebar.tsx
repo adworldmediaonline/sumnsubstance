@@ -18,6 +18,7 @@ import {
   IconPackage,
   IconCategory,
   IconShoppingCart,
+  IconStar,
 } from '@tabler/icons-react';
 
 import { NavDocuments } from '@/components/nav-documents';
@@ -61,6 +62,11 @@ const data = {
       title: 'Orders',
       url: '/dashboard/orders',
       icon: IconShoppingCart,
+    },
+    {
+      title: 'Reviews',
+      url: '/dashboard/reviews',
+      icon: IconStar,
     },
     {
       title: 'Analytics',

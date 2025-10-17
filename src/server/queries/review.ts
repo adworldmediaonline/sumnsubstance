@@ -340,6 +340,145 @@ export async function getReviewById(id: string): Promise<ReviewData | null> {
   }
 }
 
+// Get all reviews for admin (all statuses) with filtering and pagination
+export async function getAllReviewsForAdmin(options: {
+  page?: number;
+  limit?: number;
+  status?: string[];
+  rating?: number[];
+  isVerifiedPurchase?: boolean;
+  search?: string;
+}) {
+  try {
+    const page = options.page || 1;
+    const limit = options.limit || 20;
+    const skip = (page - 1) * limit;
+
+    // Build where clause
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {};
+
+    if (options.status && options.status.length > 0) {
+      where.status = { in: options.status };
+    }
+
+    if (options.rating && options.rating.length > 0) {
+      where.rating = { in: options.rating };
+    }
+
+    if (options.isVerifiedPurchase !== undefined) {
+      where.isVerifiedPurchase = options.isVerifiedPurchase;
+    }
+
+    if (options.search) {
+      where.OR = [
+        { comment: { contains: options.search, mode: 'insensitive' } },
+        { title: { contains: options.search, mode: 'insensitive' } },
+        { user: { name: { contains: options.search, mode: 'insensitive' } } },
+        { product: { name: { contains: options.search, mode: 'insensitive' } } },
+      ];
+    }
+
+    const [reviews, totalCount] = await Promise.all([
+      prisma.review.findMany({
+        where,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              initials: true,
+              email: true,
+            },
+          },
+          product: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              mainImageUrl: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.review.count({ where }),
+    ]);
+
+    return {
+      reviews: reviews.map(review => ({
+        ...serializeReview(review),
+        userEmail: review.user?.email || undefined,
+        productName: review.product?.name || 'Unknown Product',
+        productSlug: review.product?.slug || undefined,
+        productImage: review.product?.mainImageUrl || undefined,
+      })),
+      totalCount,
+      totalPages: Math.ceil(totalCount / limit),
+    };
+  } catch (error) {
+    console.error('Failed to fetch admin reviews:', error);
+    throw new Error('Failed to fetch admin reviews');
+  }
+}
+
+// Get review statistics for admin dashboard
+export async function getReviewStats() {
+  try {
+    const [
+      totalCount,
+      pendingCount,
+      approvedCount,
+      rejectedCount,
+      flaggedCount,
+      avgRatingResult,
+      thisWeekCount,
+      thisMonthCount,
+    ] = await Promise.all([
+      prisma.review.count(),
+      prisma.review.count({ where: { status: 'PENDING' } }),
+      prisma.review.count({ where: { status: 'APPROVED' } }),
+      prisma.review.count({ where: { status: 'REJECTED' } }),
+      prisma.review.count({ where: { status: 'FLAGGED' } }),
+      prisma.review.aggregate({
+        _avg: { rating: true },
+        where: { status: 'APPROVED' },
+      }),
+      prisma.review.count({
+        where: {
+          createdAt: {
+            gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          },
+        },
+      }),
+      prisma.review.count({
+        where: {
+          createdAt: {
+            gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          },
+        },
+      }),
+    ]);
+
+    return {
+      total: totalCount,
+      pending: pendingCount,
+      approved: approvedCount,
+      rejected: rejectedCount,
+      flagged: flaggedCount,
+      averageRating: avgRatingResult._avg.rating || 0,
+      thisWeek: thisWeekCount,
+      thisMonth: thisMonthCount,
+    };
+  } catch (error) {
+    console.error('Failed to fetch review stats:', error);
+    throw new Error('Failed to fetch review stats');
+  }
+}
+
 // Export types for convenience
 export type { ReviewData, ReviewAggregates } from '@/types/review';
 

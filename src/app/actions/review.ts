@@ -326,3 +326,152 @@ export async function deleteReview(data: z.infer<typeof deleteReviewSchema>) {
   }
 }
 
+// Admin: Bulk update review status
+export async function bulkUpdateReviewStatus(data: {
+  reviewIds: string[];
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'FLAGGED';
+}) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user || session.user.role !== 'admin') {
+      return {
+        success: false,
+        error: 'Unauthorized - Admin access required',
+      };
+    }
+
+    const { reviewIds, status } = data;
+
+    if (!reviewIds || reviewIds.length === 0) {
+      return {
+        success: false,
+        error: 'No reviews selected',
+      };
+    }
+
+    // Update all reviews
+    const result = await prisma.review.updateMany({
+      where: {
+        id: { in: reviewIds },
+      },
+      data: {
+        status,
+        moderatedBy: session.user.id,
+        moderatedAt: new Date(),
+      },
+    });
+
+    // Revalidate dashboard
+    revalidatePath('/dashboard/reviews');
+
+    return {
+      success: true,
+      message: `Successfully updated ${result.count} review(s) to ${status}`,
+      count: result.count,
+    };
+  } catch (error) {
+    console.error('Failed to bulk update reviews:', error);
+    return {
+      success: false,
+      error: 'Failed to update reviews. Please try again.',
+    };
+  }
+}
+
+// Admin: Delete review (bypass ownership check)
+export async function deleteReviewAdmin(reviewId: string) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user || session.user.role !== 'admin') {
+      return {
+        success: false,
+        error: 'Unauthorized - Admin access required',
+      };
+    }
+
+    // Find review to get product slug for revalidation
+    const review = await prisma.review.findUnique({
+      where: { id: reviewId },
+      include: { product: true },
+    });
+
+    if (!review) {
+      return {
+        success: false,
+        error: 'Review not found',
+      };
+    }
+
+    // Delete review
+    await prisma.review.delete({
+      where: { id: reviewId },
+    });
+
+    // Revalidate paths
+    revalidatePath(`/products/${review.product.slug}`);
+    revalidatePath('/dashboard/reviews');
+
+    return {
+      success: true,
+      message: 'Review deleted successfully',
+    };
+  } catch (error) {
+    console.error('Failed to delete review (admin):', error);
+    return {
+      success: false,
+      error: 'Failed to delete review. Please try again.',
+    };
+  }
+}
+
+// Admin: Bulk delete reviews
+export async function bulkDeleteReviews(reviewIds: string[]) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user || session.user.role !== 'admin') {
+      return {
+        success: false,
+        error: 'Unauthorized - Admin access required',
+      };
+    }
+
+    if (!reviewIds || reviewIds.length === 0) {
+      return {
+        success: false,
+        error: 'No reviews selected',
+      };
+    }
+
+    // Delete all reviews
+    const result = await prisma.review.deleteMany({
+      where: {
+        id: { in: reviewIds },
+      },
+    });
+
+    // Revalidate dashboard
+    revalidatePath('/dashboard/reviews');
+
+    return {
+      success: true,
+      message: `Successfully deleted ${result.count} review(s)`,
+      count: result.count,
+    };
+  } catch (error) {
+    console.error('Failed to bulk delete reviews:', error);
+    return {
+      success: false,
+      error: 'Failed to delete reviews. Please try again.',
+    };
+  }
+}
+
