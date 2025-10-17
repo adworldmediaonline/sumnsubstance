@@ -33,11 +33,9 @@ export function CartSummary() {
   const subtotal = useCartTotalPrice();
   const loading = useCartLoading();
 
-  // Calculate additional costs
-  const shipping = subtotal > 500 ? 0 : 50; // Free shipping over ₹500
-  const tax = Math.round(subtotal * 0.18); // 18% GST
+  // Calculate total (GST and shipping managed from dashboard)
   const discount = promoApplied ? Math.round(subtotal * 0.1) : 0; // 10% discount if promo applied
-  const total = subtotal + shipping + tax - discount;
+  const total = subtotal - discount;
 
   const handleApplyPromo = async () => {
     if (!promoCode.trim()) {
@@ -90,22 +88,6 @@ export function CartSummary() {
             <span>₹{subtotal.toLocaleString()}</span>
           </div>
 
-          <div className="flex justify-between text-sm">
-            <span className="flex items-center gap-1">
-              Shipping
-              {shipping === 0 && (
-                <Badge variant="secondary" className="text-xs ml-1">
-                  FREE
-                </Badge>
-              )}
-            </span>
-            <span>₹{shipping.toLocaleString()}</span>
-          </div>
-
-          <div className="flex justify-between text-sm">
-            <span>Tax (GST 18%)</span>
-            <span>₹{tax.toLocaleString()}</span>
-          </div>
 
           {promoApplied && (
             <div className="flex justify-between text-sm text-green-600">
@@ -208,7 +190,7 @@ export function CartSummary() {
 
             <div className="flex items-center gap-3 text-sm">
               <Truck className="h-4 w-4 text-blue-600 flex-shrink-0" />
-              <span>Free shipping on orders over ₹500</span>
+              <span>Fast & reliable shipping</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm">
@@ -218,21 +200,6 @@ export function CartSummary() {
           </div>
         </div>
 
-        {/* Shipping Info */}
-        {shipping === 0 ? (
-          <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-sm text-green-700 font-medium">
-              🎉 You qualify for FREE shipping!
-            </p>
-          </div>
-        ) : (
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-700">
-              Add ₹{(500 - subtotal).toLocaleString()} more to get{' '}
-              <strong>FREE shipping</strong>
-            </p>
-          </div>
-        )}
       </CardContent>
     </Card>
   );

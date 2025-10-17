@@ -44,21 +44,13 @@ export function calculateOrderTotals(
     0
   );
 
-  // Shipping costs
-  const shippingCost =
-    shippingMethod === 'express' ? 150 : subtotal > 500 ? 0 : 50;
-
-  // Tax calculation (18% GST)
-  const taxRate = parseFloat(process.env.NEXT_PUBLIC_GST_RATE || '0.18');
-  const tax = Math.round(subtotal * taxRate);
-
-  // Total
-  const total = subtotal + shippingCost + tax;
+  // Total is just subtotal (GST and shipping managed from dashboard)
+  const total = subtotal;
 
   return {
     subtotal,
-    shipping: shippingCost,
-    tax,
+    shipping: 0,
+    tax: 0,
     total,
     itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
   };

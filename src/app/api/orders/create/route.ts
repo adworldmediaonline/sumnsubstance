@@ -74,11 +74,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Calculate additional costs
-    const shippingCost =
-      shippingMethod === 'express' ? 150 : subtotal > 500 ? 0 : 50;
-    const taxAmount = Math.round(subtotal * 0.18); // 18% GST
-    const totalAmount = subtotal + shippingCost + taxAmount;
+    // Total is just subtotal (GST and shipping managed from dashboard)
+    const shippingCost = 0;
+    const taxAmount = 0;
+    const totalAmount = subtotal;
 
     // Generate unique order number
     const orderNumber = await generateOrderNumber();

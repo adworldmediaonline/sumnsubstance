@@ -20,10 +20,8 @@ export function CheckoutSummary({}: CheckoutSummaryProps) {
   const count = useCartItemCount();
   const subtotal = useCartTotalPrice();
 
-  // Calculate costs
-  const shipping = subtotal > 500 ? 0 : 50; // Free shipping over ₹500
-  const tax = Math.round(subtotal * 0.18); // 18% GST
-  const total = subtotal + shipping + tax;
+  // Total is just the subtotal (GST and shipping managed from dashboard)
+  const total = subtotal;
 
   return (
     <Card className="sticky top-8">
@@ -96,25 +94,8 @@ export function CheckoutSummary({}: CheckoutSummaryProps) {
         {/* Order Totals */}
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span>Subtotal</span>
+            <span>Subtotal ({count} {count === 1 ? 'item' : 'items'})</span>
             <span>₹{subtotal.toLocaleString()}</span>
-          </div>
-
-          <div className="flex justify-between text-sm">
-            <span className="flex items-center gap-1">
-              Shipping
-              {shipping === 0 && (
-                <Badge variant="secondary" className="text-xs ml-1">
-                  FREE
-                </Badge>
-              )}
-            </span>
-            <span>₹{shipping.toLocaleString()}</span>
-          </div>
-
-          <div className="flex justify-between text-sm">
-            <span>Tax (GST 18%)</span>
-            <span>₹{tax.toLocaleString()}</span>
           </div>
 
           <Separator />
