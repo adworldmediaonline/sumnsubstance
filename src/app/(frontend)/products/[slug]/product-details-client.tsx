@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 // Import Swiper core and required modules
 import { Navigation } from 'swiper/modules';
@@ -42,18 +42,17 @@ export default function ProductDetailsClient({
 }: {
   product: SerializedProductWithCategory;
 }) {
-  // Transform images into array format for gallery display
-  const allImages = [
-    product.mainImage,
-    ...(product.additionalImages || []),
-  ].filter(Boolean);
+  // Transform images into array format for gallery display (memoized to prevent re-renders)
+  const allImages = useMemo(
+    () => [product.mainImage, ...(product.additionalImages || [])].filter(Boolean),
+    [product.mainImage, product.additionalImages]
+  );
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [showStickyCart, setShowStickyCart] = useState(false);
-  const [isImageLoading, setIsImageLoading] = useState(true);
   const [showImageZoom, setShowImageZoom] = useState(false);
 
   // Cart functionality
@@ -94,14 +93,6 @@ export default function ProductDetailsClient({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle image loading
-  useEffect(() => {
-    setIsImageLoading(true);
-    const img = new window.Image();
-    img.onload = () => setIsImageLoading(false);
-    img.src = allImages[selectedImageIndex]?.url || '';
-  }, [selectedImageIndex, allImages]);
-
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
 
@@ -136,11 +127,6 @@ export default function ProductDetailsClient({
           <div className="space-y-3 lg:space-y-4 lg:sticky lg:top-4 lg:self-start">
             {/* Main Image */}
             <div className="relative w-full aspect-square bg-gray-50 rounded-2xl lg:rounded-3xl overflow-hidden group">
-              {/* Loading skeleton */}
-              {isImageLoading && (
-                <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-pulse rounded-2xl lg:rounded-3xl z-10"></div>
-              )}
-
               <div
                 className={`relative w-full h-full transition-transform duration-300 ${
                   showImageZoom ? 'scale-150' : 'group-hover:scale-105'
@@ -151,13 +137,10 @@ export default function ProductDetailsClient({
                   src={allImages[selectedImageIndex]?.url || ''}
                   alt={allImages[selectedImageIndex]?.altText || product.name}
                   fill
-                  className={`object-cover transition-opacity duration-300 ${
-                    isImageLoading ? 'opacity-0' : 'opacity-100'
-                  }`}
-                  onLoad={() => setIsImageLoading(false)}
-                  onError={() => setIsImageLoading(false)}
+                  className="object-cover"
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={90}
                 />
               </div>
 
