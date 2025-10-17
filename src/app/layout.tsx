@@ -1,3 +1,4 @@
+import { FloatingCart } from '@/components/cart/floating-cart';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
@@ -40,6 +41,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <FloatingCart />
         <Toaster richColors />
       </body>
     </html>
