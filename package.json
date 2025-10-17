@@ -13,7 +13,8 @@
     "check:ci": "pnpm lint",
     "gen": "prisma generate --no-engine",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:migrate": "prisma migrate dev --name"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
 }
 
 model User {
@@ -100,6 +100,19 @@ model Product {
   mainImagePublicId String?
   mainImageAlt     String?
   additionalImages Json?    // Store array of image objects
+
+  // New Content Fields
+  tagline          String?  @db.Text // Short tagline
+  whyLoveIt        String?  @db.Text // Rich text content
+  whatsInside      String?  @db.Text // Rich text content
+  howToUse         String?  @db.Text // Rich text content
+  ingredients      String?  @db.Text // Rich text content
+
+  // SEO Fields
+  metaTitle        String?  // Max 60 chars
+  metaDescription  String?  @db.Text // Max 160 chars
+  metaKeywords     String?  @db.Text // Comma-separated keywords
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   orderItems       OrderItem[]

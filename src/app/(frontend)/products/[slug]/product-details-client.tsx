@@ -1,27 +1,23 @@
 'use client';
 
-import ProductFAQ from '@/components/products/ProductFAQ';
 import ProductReviews from '@/components/products/ProductReviews';
 import RelatedProducts from '@/components/products/RelatedProducts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
-  mockProduct,
   mockRelatedProducts,
   mockReviews,
 } from '@/constants/product-mock-data';
+import type { SerializedProductWithCategory } from '@/server/queries/product';
 
 import {
-  Award,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
   Heart,
-  Leaf,
   Minus,
   Plus,
   Share2,
-  Shield,
   ShoppingCart,
   Sparkles,
   Star,
@@ -38,7 +34,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-export default function ProductDetailsClient() {
+export default function ProductDetailsClient({
+  product,
+}: {
+  product: SerializedProductWithCategory;
+}) {
+  // Transform images into array format for gallery display
+  const allImages = [
+    product.mainImage,
+    ...(product.additionalImages || []),
+  ].filter(Boolean);
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -66,8 +72,8 @@ export default function ProductDetailsClient() {
     setIsImageLoading(true);
     const img = new window.Image();
     img.onload = () => setIsImageLoading(false);
-    img.src = mockProduct.images[selectedImageIndex]?.url || '';
-  }, [selectedImageIndex]);
+    img.src = allImages[selectedImageIndex]?.url || '';
+  }, [selectedImageIndex, allImages]);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
@@ -87,14 +93,14 @@ export default function ProductDetailsClient() {
           </Link>
           <span className="text-gray-400">/</span>
           <Link
-            href={`/categories/${mockProduct.category.name.toLowerCase()}`}
+            href={`/categories/${product.category.name.toLowerCase()}`}
             className="hover:text-[#233f1c] whitespace-nowrap"
           >
-            {mockProduct.category.name}
+            {product.category.name}
           </Link>
           <span className="text-gray-400">/</span>
           <span className="text-[#233f1c] font-medium truncate">
-            {mockProduct.name}
+            {product.name}
           </span>
         </nav>
 
@@ -115,8 +121,8 @@ export default function ProductDetailsClient() {
                 onClick={() => setShowImageZoom(!showImageZoom)}
               >
                 <Image
-                  src={mockProduct.images[selectedImageIndex]?.url || ''}
-                  alt={mockProduct.name}
+                  src={allImages[selectedImageIndex]?.url || ''}
+                  alt={allImages[selectedImageIndex]?.altText || product.name}
                   fill
                   className={`object-cover transition-opacity duration-300 ${
                     isImageLoading ? 'opacity-0' : 'opacity-100'
@@ -135,23 +141,12 @@ export default function ProductDetailsClient() {
 
               {/* Image counter */}
               <div className="absolute bottom-3 lg:bottom-4 left-3 lg:left-4 bg-black/60 text-white px-2 lg:px-3 py-1 rounded-full text-xs lg:text-sm font-medium z-20">
-                {selectedImageIndex + 1} / {mockProduct.images.length}
+                {selectedImageIndex + 1} / {allImages.length}
               </div>
 
-              {/* Badges */}
+              {/* Badges - Optional for future enhancement */}
               <div className="absolute top-3 lg:top-4 left-3 lg:left-4 flex flex-col gap-2 z-20">
-                {mockProduct.isBestSeller && (
-                  <Badge className="bg-[#ffd469] text-[#233f1c] font-bold text-xs lg:text-sm">
-                    <Award className="w-3 h-3 mr-1" />
-                    Best Seller
-                  </Badge>
-                )}
-                {mockProduct.isNewLaunch && (
-                  <Badge className="bg-[#233f1c] text-white font-bold text-xs lg:text-sm">
-                    <Sparkles className="w-3 h-3 mr-1" />
-                    New Launch
-                  </Badge>
-                )}
+                {/* Badges like "Best Seller" or "New Launch" can be added here based on product metadata */}
               </div>
 
               {/* Wishlist & Share - Mobile optimized */}
@@ -191,7 +186,7 @@ export default function ProductDetailsClient() {
                   },
                 }}
               >
-                {mockProduct.images.map((image, index) => (
+                {allImages.map((image, index) => (
                   <SwiperSlide
                     key={index}
                     className="!w-14 !h-14 sm:!w-16 sm:!h-16"
@@ -205,8 +200,8 @@ export default function ProductDetailsClient() {
                       }`}
                     >
                       <Image
-                        src={image.url}
-                        alt={`${mockProduct.name} - Image ${index + 1}`}
+                        src={image?.url || ''}
+                        alt={image?.altText || `${product.name} - Image ${index + 1}`}
                         fill
                         className="object-cover"
                         sizes="56px"
@@ -257,7 +252,7 @@ export default function ProductDetailsClient() {
                 }}
                 className="!pb-0"
               >
-                {mockProduct.images.map((image, index) => (
+                {allImages.map((image, index) => (
                   <SwiperSlide key={index} className="!w-20 !h-20">
                     <button
                       onClick={() => setSelectedImageIndex(index)}
@@ -268,8 +263,8 @@ export default function ProductDetailsClient() {
                       }`}
                     >
                       <Image
-                        src={image.url}
-                        alt={`${mockProduct.name} - Image ${index + 1}`}
+                        src={image?.url || ''}
+                        alt={image?.altText || `${product.name} - Image ${index + 1}`}
                         fill
                         className="object-cover"
                         sizes="80px"
@@ -302,8 +297,13 @@ export default function ProductDetailsClient() {
             {/* Product Title & Rating */}
             <div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#233f1c] mb-2 lg:mb-3 leading-tight">
-                {mockProduct.name}
+                {product.name}
               </h1>
+              {product.tagline && (
+                <p className="text-sm lg:text-base text-gray-600 italic mb-2">
+                  {product.tagline}
+                </p>
+              )}
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
@@ -324,39 +324,36 @@ export default function ProductDetailsClient() {
                   In Stock
                 </Badge>
               </div>
-              <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
-                {mockProduct.description}
-              </p>
+              {product.excerpt && (
+                <p className="text-gray-600 text-sm lg:text-base leading-relaxed">
+                  {product.excerpt}
+                </p>
+              )}
             </div>
 
             {/* Price - Mobile optimized */}
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl lg:text-3xl font-bold text-[#233f1c]">
-                  ₹{mockProduct.price}
+                  ₹{product.price}
                 </span>
               </div>
               <p className="text-xs text-gray-600">Inclusive of all taxes</p>
             </div>
 
-            {/* Key Benefits - Mobile optimized */}
-            <div className="bg-[#ffd469]/10 rounded-xl p-4">
-              <h3 className="font-bold text-[#233f1c] mb-2 flex items-center text-sm lg:text-base">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Key Benefits
-              </h3>
-              <div className="grid grid-cols-1 gap-1.5">
-                {mockProduct.benefits?.split(' • ').map((benefit, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start text-gray-700 text-sm"
-                  >
-                    <CheckCircle className="w-3.5 h-3.5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                    <span>{benefit}</span>
-                  </div>
-                ))}
+            {/* Key Benefits / Why You'll Love It - Mobile optimized */}
+            {product.whyLoveIt && (
+              <div className="bg-[#ffd469]/10 rounded-xl p-4">
+                <h3 className="font-bold text-[#233f1c] mb-2 flex items-center text-sm lg:text-base">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Why You'll Love It
+                </h3>
+                <div
+                  className="text-gray-700 text-sm prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: product.whyLoveIt }}
+                />
               </div>
-            </div>
+            )}
 
             {/* Quantity & Add to Cart - Mobile optimized */}
             <div className="space-y-3 lg:space-y-4" id="add-to-cart-section">
@@ -467,42 +464,41 @@ export default function ProductDetailsClient() {
           <div className="max-w-4xl">
             {activeTab === 'description' && (
               <div className="space-y-4 lg:space-y-6">
-                <div>
-                  <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
-                    Product Description
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed mb-4 lg:mb-6 text-sm lg:text-base">
-                    {mockProduct.description}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
-                    Key Benefits
-                  </h4>
-                  <div className="grid grid-cols-1 gap-3">
-                    {mockProduct.benefits
-                      ?.split(' • ')
-                      .map((benefit, index) => (
-                        <div
-                          key={index}
-                          className="flex items-start text-gray-700 text-sm lg:text-base"
-                        >
-                          <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                          <span>{benefit}</span>
-                        </div>
-                      ))}
+                {product.description && (
+                  <div>
+                    <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                      Product Description
+                    </h3>
+                    <div
+                      className="text-gray-700 leading-relaxed mb-4 lg:mb-6 text-sm lg:text-base prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    />
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
-                    Additional Information
-                  </h4>
-                  <p className="text-gray-700 leading-relaxed text-sm lg:text-base">
-                    {mockProduct.otherInformation}
-                  </p>
-                </div>
+                {product.whyLoveIt && (
+                  <div>
+                    <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
+                      Why You'll Love It
+                    </h4>
+                    <div
+                      className="text-gray-700 text-sm lg:text-base prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.whyLoveIt }}
+                    />
+                  </div>
+                )}
+
+                {product.whatsInside && (
+                  <div>
+                    <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
+                      What's Inside
+                    </h4>
+                    <div
+                      className="text-gray-700 leading-relaxed text-sm lg:text-base prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.whatsInside }}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -511,52 +507,16 @@ export default function ProductDetailsClient() {
                 <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
                   How to Use
                 </h3>
-                <div className="bg-[#ffd469]/10 rounded-xl lg:rounded-2xl p-4 lg:p-6">
-                  <p className="text-gray-700 leading-relaxed mb-4 lg:mb-6 text-sm lg:text-base">
-                    {mockProduct.usageInstructions}
-                  </p>
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mt-4 lg:mt-6">
-                    <div className="text-center">
-                      <div className="w-12 h-12 lg:w-16 lg:h-16 bg-[#233f1c] rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-white font-bold text-lg lg:text-xl">
-                          1
-                        </span>
-                      </div>
-                      <h4 className="font-semibold text-[#233f1c] mb-2 text-sm lg:text-base">
-                        Cleanse
-                      </h4>
-                      <p className="text-xs lg:text-sm text-gray-600">
-                        Start with a clean face and neck
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <div className="w-12 h-12 lg:w-16 lg:h-16 bg-[#233f1c] rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-white font-bold text-lg lg:text-xl">
-                          2
-                        </span>
-                      </div>
-                      <h4 className="font-semibold text-[#233f1c] mb-2 text-sm lg:text-base">
-                        Apply
-                      </h4>
-                      <p className="text-xs lg:text-sm text-gray-600">
-                        Use 2-3 drops and gently massage
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <div className="w-12 h-12 lg:w-16 lg:h-16 bg-[#233f1c] rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-white font-bold text-lg lg:text-xl">
-                          3
-                        </span>
-                      </div>
-                      <h4 className="font-semibold text-[#233f1c] mb-2 text-sm lg:text-base">
-                        Protect
-                      </h4>
-                      <p className="text-xs lg:text-sm text-gray-600">
-                        Follow with sunscreen during day
-                      </p>
-                    </div>
+                {product.howToUse ? (
+                  <div className="bg-[#ffd469]/10 rounded-xl lg:rounded-2xl p-4 lg:p-6">
+                    <div
+                      className="text-gray-700 leading-relaxed text-sm lg:text-base prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.howToUse }}
+                    />
                   </div>
-                </div>
+                ) : (
+                  <p className="text-gray-600 text-sm">Usage instructions will be available soon.</p>
+                )}
               </div>
             )}
 
@@ -565,34 +525,14 @@ export default function ProductDetailsClient() {
                 <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
                   Ingredients
                 </h3>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-                  <div className="bg-white border border-gray-200 rounded-xl lg:rounded-2xl p-4 lg:p-6">
-                    <h4 className="font-semibold text-[#233f1c] mb-3 flex items-center text-sm lg:text-base">
-                      <Leaf className="w-4 h-4 lg:w-5 lg:h-5 mr-2" />
-                      Key Ingredients
-                    </h4>
-                    <ul className="space-y-2 text-gray-700 text-sm lg:text-base">
-                      <li>• Hyaluronic Acid - 1.5%</li>
-                      <li>• Ceramides Complex - 5%</li>
-                      <li>• Glycerin - 8%</li>
-                      <li>• Niacinamide - 3%</li>
-                      <li>• Shea Butter - 10%</li>
-                    </ul>
-                  </div>
-                  <div className="bg-white border border-gray-200 rounded-xl lg:rounded-2xl p-4 lg:p-6">
-                    <h4 className="font-semibold text-[#233f1c] mb-3 flex items-center text-sm lg:text-base">
-                      <Shield className="w-4 h-4 lg:w-5 lg:h-5 mr-2" />
-                      Free From
-                    </h4>
-                    <ul className="space-y-2 text-gray-700 text-sm lg:text-base">
-                      <li>• Parabens</li>
-                      <li>• Sulfates</li>
-                      <li>• Artificial Fragrances</li>
-                      <li>• Mineral Oil</li>
-                      <li>• Animal Testing</li>
-                    </ul>
-                  </div>
-                </div>
+                {product.ingredients ? (
+                  <div
+                    className="text-gray-700 leading-relaxed text-sm lg:text-base prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: product.ingredients }}
+                  />
+                ) : (
+                  <p className="text-gray-600 text-sm">Ingredient information will be available soon.</p>
+                )}
               </div>
             )}
 
@@ -600,7 +540,14 @@ export default function ProductDetailsClient() {
               <ProductReviews reviews={mockReviews} />
             )}
 
-            {activeTab === 'faq' && <ProductFAQ faq={mockProduct.faq} />}
+            {activeTab === 'faq' && (
+              <div>
+                <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                  Frequently Asked Questions
+                </h3>
+                <p className="text-gray-600 text-sm">FAQ section will be available soon.</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -619,8 +566,8 @@ export default function ProductDetailsClient() {
             {/* Product Image */}
             <div className="flex-shrink-0 relative w-12 h-12">
               <Image
-                src={mockProduct.images[0]?.url || ''}
-                alt={mockProduct.name}
+                src={allImages[0]?.url || ''}
+                alt={allImages[0]?.altText || product.name}
                 fill
                 className="object-cover rounded-lg shadow-sm"
                 sizes="48px"
@@ -630,11 +577,11 @@ export default function ProductDetailsClient() {
             {/* Product Info */}
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-gray-900 truncate text-sm leading-tight">
-                {mockProduct.name}
+                {product.name}
               </h3>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-lg font-bold text-[#233f1c]">
-                  ₹{mockProduct.price}
+                  ₹{product.price}
                 </span>
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
