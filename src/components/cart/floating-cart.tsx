@@ -81,7 +81,7 @@ export function FloatingCart() {
           }`}
         >
           {/* Compact Layout Container */}
-          <div className="flex items-center gap-3 p-3">
+          <div className="flex items-center gap-3 px-3 py-6">
             {/* Cart Icon */}
             <div className="w-8 h-8 bg-gradient-to-r from-[#228B22] to-[#9ACD32] rounded-full flex items-center justify-center flex-shrink-0">
               <ShoppingBag className="w-4 h-4 text-white" />
@@ -89,7 +89,7 @@ export function FloatingCart() {
 
             {/* Horizontal Scrollable Items with Overlap */}
             <div className="flex-1 overflow-hidden">
-              <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pl-2">
+              <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pl-2 py-2">
                 {items.map((item, index) => (
                   <div
                     key={item.product.id}
