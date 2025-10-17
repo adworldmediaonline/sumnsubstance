@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -12,7 +12,6 @@ import {
   Home,
   Building,
   CheckCircle2,
-  AlertCircle,
   FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { useCartItems, useClearCart } from '@/store/cart-store';
 import { toast } from 'sonner';
-import { checkoutFormSchema } from '@/lib/validations/order';
+import { checkoutFormSchema, CheckoutFormData } from '@/lib/validations/order';
 import { cn } from '@/lib/utils';
 
 interface CheckoutFormProps {
@@ -80,7 +79,7 @@ export function CheckoutForm({
   });
 
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CheckoutFormData) => {
     try {
       onProcessingChange(true);
       await processOrder(data);
@@ -92,7 +91,7 @@ export function CheckoutForm({
     }
   };
 
-  const processOrder = async (data: any) => {
+  const processOrder = async (data: CheckoutFormData) => {
     try {
       // Create order payload
       const orderPayload = {
@@ -229,7 +228,7 @@ export function CheckoutForm({
 
   // Field validation helper
   const isFieldValid = (fieldName: string) => {
-    const fieldState = form.getFieldState(fieldName as any);
+    const fieldState = form.getFieldState(fieldName as keyof CheckoutFormData);
     return !fieldState.error && fieldState.isDirty;
   };
 

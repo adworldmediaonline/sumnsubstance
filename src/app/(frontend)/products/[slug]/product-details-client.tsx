@@ -1,7 +1,5 @@
 'use client';
 
-import Footer from '@/components/layout/footer';
-import Header from '@/components/layout/header';
 import ProductFAQ from '@/components/products/ProductFAQ';
 import ProductReviews from '@/components/products/ProductReviews';
 import RelatedProducts from '@/components/products/RelatedProducts';
@@ -73,9 +71,8 @@ export default function ProductDetailsClient() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
-      <Header cartItemCount={0} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8 relative overflow-visible">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24 pb-4 lg:pb-8 relative overflow-visible">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4 lg:mb-8 overflow-x-auto scrollbar-hide">
           <Link href="/" className="hover:text-[#233f1c] whitespace-nowrap">
@@ -610,8 +607,6 @@ export default function ProductDetailsClient() {
         {/* Related Products */}
         <RelatedProducts products={mockRelatedProducts} />
       </main>
-
-      <Footer />
 
       {/* Enhanced Sticky Mobile Add to Cart */}
       <div

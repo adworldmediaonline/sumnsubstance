@@ -122,7 +122,7 @@ export function shouldSendEmail(
  * Get email type based on order status
  */
 export function getEmailType(status: string): 'confirmation' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | null {
-  const statusToEmailType = {
+  const statusToEmailType: Record<string, 'confirmation' | 'processing' | 'shipped' | 'delivered' | 'cancelled'> = {
     'CONFIRMED': 'confirmation',
     'PROCESSING': 'processing',
     'SHIPPED': 'shipped',
@@ -130,5 +130,5 @@ export function getEmailType(status: string): 'confirmation' | 'processing' | 's
     'CANCELLED': 'cancelled',
   };
 
-  return statusToEmailType[status as keyof typeof statusToEmailType] || null;
+  return statusToEmailType[status] || null;
 }

@@ -6,9 +6,8 @@ import { useFloatingCart } from '@/hooks/use-floating-cart';
 import {
   useCartItems,
   useCartTotalPrice,
-  useRemoveItem,
 } from '@/store/cart-store';
-import { CheckCircle, ShoppingBag, X, Trash2 } from 'lucide-react';
+import { CheckCircle, ShoppingBag, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,7 +15,6 @@ export function FloatingCart() {
   const { isVisible, dismiss, itemCount } = useFloatingCart();
   const items = useCartItems();
   const totalPrice = useCartTotalPrice();
-  const removeItem = useRemoveItem();
   const [showSuccess, setShowSuccess] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [recentlyAdded, setRecentlyAdded] = useState<string | null>(null);
@@ -37,7 +35,7 @@ export function FloatingCart() {
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, items.length]);
+  }, [isVisible, items.length, items]);
 
   // Handle keyboard events
   useEffect(() => {

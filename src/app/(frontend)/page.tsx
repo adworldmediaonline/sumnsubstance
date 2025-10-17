@@ -1,12 +1,10 @@
 import { getProducts } from '@/server/queries/product';
 import {
   FeaturedProductsV3,
-  HeroBannerV2,
   NewsletterSection,
-  // TestimonialsSection,
   TrustBadges,
 } from '../../components/home';
-import Footer from '../../components/layout/footer';
+import HeroContent from '../../components/home/hero-content';
 
 export default async function Home() {
   // Fetch real products from database
@@ -21,18 +19,11 @@ export default async function Home() {
   }));
 
   return (
-    <div className="min-h-screen bg-white">
-      <HeroBannerV2 />
-
+    <>
+      <HeroContent />
       <FeaturedProductsV3 products={featuredProducts} />
-
-      {/* <TestimonialsSection /> */}
-
       <TrustBadges />
-
       <NewsletterSection />
-
-      <Footer />
-    </div>
+    </>
   );
 }

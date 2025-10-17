@@ -51,8 +51,6 @@ export function OrderDeliveredEmailTemplate({
   shipping,
   tax,
   total,
-  shippingAddress,
-  estimatedDelivery,
   deliveryDate,
 }: OrderDeliveredEmailTemplateProps) {
   return (

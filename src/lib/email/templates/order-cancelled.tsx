@@ -52,8 +52,6 @@ export function OrderCancelledEmailTemplate({
   shipping,
   tax,
   total,
-  shippingAddress,
-  estimatedDelivery,
   cancellationReason,
   refundAmount,
 }: OrderCancelledEmailTemplateProps) {

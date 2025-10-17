@@ -36,8 +36,7 @@ export async function generateOrderNumber(): Promise<string> {
  * Calculate order totals based on items and shipping method
  */
 export function calculateOrderTotals(
-  items: Array<{ price: number; quantity: number }>,
-  shippingMethod: 'standard' | 'express' = 'standard'
+  items: Array<{ price: number; quantity: number }>
 ) {
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,

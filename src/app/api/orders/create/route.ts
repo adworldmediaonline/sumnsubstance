@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
       shippingAddress,
       billingAddress,
       paymentMethod,
-      shippingMethod,
       orderNotes,
       userId,
     } = validatedData;
