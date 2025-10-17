@@ -241,6 +241,7 @@ export function OrderActions({ order }: OrderActionsProps) {
                 <SelectContent>
                   <SelectItem value="PENDING">Pending</SelectItem>
                   <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+                  <SelectItem value="DELAYED">Delayed</SelectItem>
                   <SelectItem value="PROCESSING">Processing</SelectItem>
                   <SelectItem value="SHIPPED">Shipped</SelectItem>
                   <SelectItem value="DELIVERED">Delivered</SelectItem>
