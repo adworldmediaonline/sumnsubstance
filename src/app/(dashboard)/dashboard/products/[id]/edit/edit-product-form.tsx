@@ -30,7 +30,7 @@ import { toast } from 'sonner';
 import slugify from 'slugify';
 import type { SerializedProductWithCategory } from '@/server/queries/product';
 import type { CategoryWithCount } from '@/server/queries/category';
-import { RichTextEditor } from '../../../../../components/rich-text-editor';
+import { RichTextEditor } from '@/components/rich-text-editor';
 import { ImageUpload } from '@/components/ui/image-upload';
 type FormData = z.infer<typeof updateProductSchema>;
 

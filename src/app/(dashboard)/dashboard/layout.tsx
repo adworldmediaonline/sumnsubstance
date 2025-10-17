@@ -2,7 +2,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
-import { auth } from '../../lib/auth';
+import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -36,7 +36,7 @@ export default async function DashboardLayout({
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col">
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 px-3">{children}</main>
           </div>
         </div>
       </SidebarInset>
