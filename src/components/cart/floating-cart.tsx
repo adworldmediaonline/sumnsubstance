@@ -55,15 +55,6 @@ export function FloatingCart() {
 
   return (
     <>
-      {/* Backdrop for mobile */}
-      <div
-        className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300 ${
-          isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={dismiss}
-        aria-hidden="true"
-      />
-
       {/* Floating Cart Card - Bottom Center */}
       <div
         className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90vw] max-w-md z-50 transition-all duration-500 ease-out ${
@@ -76,12 +67,12 @@ export function FloatingCart() {
         aria-live="polite"
       >
         <div
-          className={`bg-white/95 backdrop-blur-xl border border-gray-200 rounded-xl shadow-2xl overflow-hidden transition-transform duration-300 ${
+          className={`bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden transition-transform duration-300 ${
             isAnimating ? 'scale-[1.02]' : 'scale-100'
           }`}
         >
           {/* Compact Layout Container */}
-          <div className="flex items-center gap-3 px-3 py-6">
+          <div className="flex items-center gap-3 px-3 py-3">
             {/* Cart Icon */}
             <div className="w-8 h-8 bg-gradient-to-r from-[#228B22] to-[#9ACD32] rounded-full flex items-center justify-center flex-shrink-0">
               <ShoppingBag className="w-4 h-4 text-white" />
@@ -89,7 +80,7 @@ export function FloatingCart() {
 
             {/* Horizontal Scrollable Items with Overlap */}
             <div className="flex-1 overflow-hidden">
-              <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pl-2 py-2">
+              <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent pl-2 py-1">
                 {items.map((item, index) => (
                   <div
                     key={item.product.id}
