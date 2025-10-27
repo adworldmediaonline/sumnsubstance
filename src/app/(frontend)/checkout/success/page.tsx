@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function OrderSuccessPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50/50 pt-20">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Suspense fallback={<OrderSuccessSkeleton />}>
           <OrderSuccessContent />
