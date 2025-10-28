@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { getFilteredProducts } from '@/server/queries/product';
 import { getCategories } from '@/server/queries/category';
+import { getReviewAggregates } from '@/server/queries/review';
 import ProductsSkeleton from './products-skeleton';
 import ProductsContent from './products-content';
 
@@ -51,9 +52,20 @@ async function ProductsPageWrapper({
 
   const { products, totalCount, hasMore } = await getFilteredProducts(filters);
 
+  // Fetch review aggregates for each product
+  const productsWithReviews = await Promise.all(
+    products.map(async (product) => {
+      const reviewAggregates = await getReviewAggregates(product.id);
+      return {
+        ...product,
+        reviewStats: reviewAggregates,
+      };
+    })
+  );
+
   return (
     <ProductsContent
-      initialProducts={products}
+      initialProducts={productsWithReviews}
       categories={categoriesData}
       totalCount={totalCount}
       hasMore={hasMore}

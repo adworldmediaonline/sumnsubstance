@@ -70,14 +70,6 @@ export default function ProductCard({
     // Add share functionality here
   };
 
-  // Hardcoded values for demonstration - using product ID to ensure consistent values
-  const rating = 4.5;
-  // Generate deterministic review count based on product ID to avoid hydration mismatch
-  const hash = product.id.split('').reduce((a, b) => {
-    a = (a << 5) - a + b.charCodeAt(0);
-    return a & a;
-  }, 0);
-  const reviewCount = Math.abs(hash % 200) + 50;
   const displayImage = product.images[0]?.url || '/placeholder-product.jpg';
 
   // Horizontal variant - beautiful design with proper brand colors and spacing
@@ -107,11 +99,10 @@ export default function ProductCard({
                 aria-label="Add to wishlist"
               >
                 <Heart
-                  className={`w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 ${
-                    product.isWishlisted
-                      ? 'fill-red-500 text-red-500'
-                      : 'text-gray-600'
-                  }`}
+                  className={`w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 ${product.isWishlisted
+                    ? 'fill-red-500 text-red-500'
+                    : 'text-gray-600'
+                    }`}
                 />
               </button>
               <button
@@ -134,21 +125,22 @@ export default function ProductCard({
                     <span className="text-xs font-bold text-primary uppercase tracking-widest bg-secondary/20 px-2 py-1 rounded-md w-fit">
                       SumNSubstance
                     </span>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${
-                            i < Math.floor(rating)
+                    {product.rating && product.reviewCount && (
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${i < Math.floor(product.rating!)
                               ? 'fill-secondary text-secondary'
                               : 'text-gray-200'
-                          }`}
-                        />
-                      ))}
-                      <span className="text-xs text-muted-foreground ml-1">
-                        ({reviewCount})
-                      </span>
-                    </div>
+                              }`}
+                          />
+                        ))}
+                        <span className="text-xs text-muted-foreground ml-1">
+                          ({product.reviewCount})
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <Link
@@ -318,11 +310,10 @@ export default function ProductCard({
                 aria-label="Add to wishlist"
               >
                 <Heart
-                  className={`w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 ${
-                    product.isWishlisted
-                      ? 'fill-red-500 text-red-500'
-                      : 'text-gray-600'
-                  }`}
+                  className={`w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 ${product.isWishlisted
+                    ? 'fill-red-500 text-red-500'
+                    : 'text-gray-600'
+                    }`}
                 />
               </button>
             )}
@@ -471,11 +462,6 @@ export default function ProductCard({
   const isShowcase = variant === 'showcase';
 
   // Dynamic sizing and styling
-  const cardHeight = isCompact
-    ? 'min-h-[320px]'
-    : isShowcase
-    ? 'min-h-[400px]'
-    : 'min-h-[360px]';
   const imageHeight = isCompact ? 'h-40' : isShowcase ? 'h-56' : 'h-48';
   const padding = isCompact ? 'p-3' : 'p-4';
   const titleSize = isShowcase
@@ -489,10 +475,10 @@ export default function ProductCard({
 
   return (
     <div
-      className={`relative bg-white rounded-2xl overflow-hidden shadow-sm font-sans ${cardHeight} ${className}`}
+      className={`relative bg-white rounded-2xl overflow-hidden shadow-sm font-sans flex flex-col h-full ${className}`}
     >
       {/* Image Container */}
-      <div className={`relative ${imageHeight} overflow-hidden bg-gray-50`}>
+      <div className={`relative ${imageHeight} overflow-hidden bg-gray-50 flex-shrink-0`}>
         <Link href={`/products/${product.slug}`}>
           <Image
             src={displayImage}
@@ -532,11 +518,10 @@ export default function ProductCard({
                 aria-label="Add to wishlist"
               >
                 <Heart
-                  className={`w-4 h-4 ${
-                    product.isWishlisted
-                      ? 'fill-red-500 text-red-500'
-                      : 'text-gray-600'
-                  }`}
+                  className={`w-4 h-4 ${product.isWishlisted
+                    ? 'fill-red-500 text-red-500'
+                    : 'text-gray-600'
+                    }`}
                 />
               </button>
             )}
@@ -563,7 +548,7 @@ export default function ProductCard({
       </div>
 
       {/* Content Section */}
-      <div className={`${padding} flex flex-col flex-1`}>
+      <div className={`${padding} flex flex-col flex-1 h-full`}>
         {/* Product Name */}
         <Link href={`/products/${product.slug}`}>
           <h3
@@ -574,26 +559,27 @@ export default function ProductCard({
         </Link>
 
         {/* Rating & Reviews */}
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-3.5 h-3.5 ${
-                  i < Math.floor(rating)
+        {product.rating && product.reviewCount && (
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-3.5 h-3.5 ${i < Math.floor(product.rating!)
                     ? 'fill-yellow-400 text-yellow-400'
                     : 'text-gray-200'
-                }`}
-              />
-            ))}
+                    }`}
+                />
+              ))}
+            </div>
+            <span className="text-xs text-gray-500 font-medium">
+              ({product.reviewCount})
+            </span>
           </div>
-          <span className="text-xs text-gray-500 font-medium">
-            ({reviewCount})
-          </span>
-        </div>
+        )}
 
         {/* Price Section */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-3">
           <span className="text-lg font-bold text-gray-900">
             ₹{product.price.toLocaleString()}
           </span>
@@ -607,7 +593,7 @@ export default function ProductCard({
         </div>
 
         {/* Add to Cart Button */}
-        <div className="mt-auto">
+        <div className="mt-auto pt-3">
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}

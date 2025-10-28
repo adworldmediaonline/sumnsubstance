@@ -4,9 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import ProductCard from '@/components/products/product-card';
 import type { SerializedProductWithCategory } from '@/lib/serializers';
+import type { ReviewAggregates } from '@/types/review';
+
+interface ProductWithReviews extends SerializedProductWithCategory {
+  reviewStats?: ReviewAggregates;
+}
 
 interface ProductsGridProps {
-  products: SerializedProductWithCategory[];
+  products: ProductWithReviews[];
   totalCount: number;
   hasMore: boolean;
   loading: boolean;
@@ -27,23 +32,30 @@ export default function ProductsGrid({
         <p className="text-muted-foreground">{totalCount} products</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={{
-              id: product.id,
-              name: product.name,
-              slug: product.slug,
-              price: product.price,
-              images: product.mainImage
-                ? [{ url: product.mainImage.url, alt: product.mainImage.altText }]
-                : [],
-              category: product.category?.name,
-              inStock: true,
-            }}
-          />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+        {products.map((product) => {
+          const rating = product.reviewStats?.averageRating || 0;
+          const reviewCount = product.reviewStats?.totalReviews || 0;
+
+          return (
+            <ProductCard
+              key={product.id}
+              product={{
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                price: product.price,
+                images: product.mainImage
+                  ? [{ url: product.mainImage.url, alt: product.mainImage.altText }]
+                  : [],
+                category: product.category?.name,
+                inStock: true,
+                rating: rating > 0 ? rating : undefined,
+                reviewCount: reviewCount > 0 ? reviewCount : undefined,
+              }}
+            />
+          );
+        })}
       </div>
 
       {hasMore && (
