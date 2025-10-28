@@ -26,13 +26,30 @@ export default function ProductsGrid({
   onLoadMore,
 }: ProductsGridProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {loading && products.length === 0 && (
+        <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-10 rounded-lg">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="text-sm text-muted-foreground">Searching products...</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">All Products</h1>
         <p className="text-muted-foreground">{totalCount} products</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr relative">
+        {loading && products.length > 0 && (
+          <div className="absolute inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-10 rounded-lg">
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground">Updating results...</p>
+            </div>
+          </div>
+        )}
         {products.map((product) => {
           const rating = product.reviewStats?.averageRating || 0;
           const reviewCount = product.reviewStats?.totalReviews || 0;

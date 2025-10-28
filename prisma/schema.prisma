@@ -119,6 +119,12 @@ model Product {
   orderItems       OrderItem[]
   reviews          Review[]
 
+  // Optimized indexes for search
+  @@index([name])
+  @@index([description])
+  @@index([price])
+  @@index([categoryId])
+  @@index([createdAt])
   @@map("product")
 }
 

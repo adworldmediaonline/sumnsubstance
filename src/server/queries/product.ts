@@ -142,16 +142,19 @@ export async function getFilteredProducts(filters: ProductFilters) {
       OR: [
         { name: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
+        { tagline: { contains: search, mode: 'insensitive' } },
+        { excerpt: { contains: search, mode: 'insensitive' } },
+        { metaKeywords: { contains: search, mode: 'insensitive' } },
       ],
     }),
     ...(categoryIds?.length && { categoryId: { in: categoryIds } }),
     ...(minPrice !== undefined || maxPrice !== undefined
       ? {
-        price: {
-          ...(minPrice !== undefined && { gte: minPrice }),
-          ...(maxPrice !== undefined && { lte: maxPrice }),
-        },
-      }
+          price: {
+            ...(minPrice !== undefined && { gte: minPrice }),
+            ...(maxPrice !== undefined && { lte: maxPrice }),
+          },
+        }
       : {}),
   };
 
