@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { getFilteredProducts } from '@/server/queries/product';
 import { getCategories } from '@/server/queries/category';
-import ProductsContent from './products-content';
 import ProductsSkeleton from './products-skeleton';
+import ProductsContent from './products-content';
 
 export default async function ProductsPage({
   searchParams,

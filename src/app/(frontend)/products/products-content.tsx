@@ -72,8 +72,8 @@ export default function ProductsContent({
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-20">
-      <Breadcrumb className="mb-6">
+    <div className="container mx-auto px-4 py-6 sm:py-20">
+      <Breadcrumb className="mb-6 hidden sm:block">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
@@ -87,15 +87,15 @@ export default function ProductsContent({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <aside className="lg:col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <aside className="lg:col-span-3">
           <ProductsFilter
             categories={categories}
             filters={filters}
             setFilters={setFilters}
           />
         </aside>
-        <main className="lg:col-span-3">
+        <main className="lg:col-span-9">
           <ProductsGrid
             products={products}
             totalCount={totalCount}
