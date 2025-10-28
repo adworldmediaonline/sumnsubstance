@@ -36,10 +36,7 @@ export default function ProductsGrid({
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">All Products</h1>
-        <p className="text-muted-foreground">{totalCount} products</p>
-      </div>
+      {/* Header removed per request */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr relative">
         {loading && products.length > 0 && (
