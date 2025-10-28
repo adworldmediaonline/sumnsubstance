@@ -9,14 +9,7 @@ import {
   parseAsString,
   parseAsArrayOf,
 } from 'nuqs';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+
 import {
   Drawer,
   DrawerClose,
@@ -158,20 +151,8 @@ export default function ProductsContent({
   };
 
   return (
-    <div className="container mx-auto px-4 py-20">
-      <Breadcrumb className="mb-6 hidden sm:block">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Home</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Products</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+    <>
+
 
       {/* Filter Drawer for Mobile */}
       <div className="mb-6 lg:hidden">
@@ -265,6 +246,6 @@ export default function ProductsContent({
           />
         </main>
       </div>
-    </div>
+    </>
   );
 }

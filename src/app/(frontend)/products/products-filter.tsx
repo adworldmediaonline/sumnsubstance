@@ -33,7 +33,7 @@ export default function ProductsFilter({
 }: ProductsFilterProps) {
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setFilters({ search: value || null });
-  }, 500);
+  }, 200);
 
   const handlePriceChange = (values: number[]) => {
     setFilters({
