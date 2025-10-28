@@ -7,6 +7,7 @@ import {
 } from '@/lib/serializers';
 
 export async function getProducts(): Promise<SerializedProductWithCategory[]> {
+  'use cache';
   try {
     const products = await prisma.product.findMany({
       orderBy: {
@@ -27,6 +28,7 @@ export async function getProducts(): Promise<SerializedProductWithCategory[]> {
 export async function getProductById(
   id: string
 ): Promise<SerializedProductWithCategory | null> {
+  'use cache';
   try {
     const product = await prisma.product.findUnique({
       where: { id },
@@ -49,6 +51,7 @@ export async function getProductById(
 export async function getProductBySlug(
   slug: string
 ): Promise<SerializedProductWithCategory | null> {
+  'use cache';
   try {
     const product = await prisma.product.findUnique({
       where: { slug },
@@ -67,6 +70,7 @@ export async function getProductBySlug(
 export async function getProductsByCategory(
   categoryId: string
 ): Promise<SerializedProductWithCategory[]> {
+  'use cache';
   try {
     const products = await prisma.product.findMany({
       where: { categoryId },

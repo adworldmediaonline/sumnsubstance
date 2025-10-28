@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { FloatingCart } from '@/components/cart/floating-cart';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
@@ -41,7 +42,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
-        <FloatingCart />
+        <Suspense fallback={null}>
+          <FloatingCart />
+        </Suspense>
         <Toaster richColors />
       </body>
     </html>

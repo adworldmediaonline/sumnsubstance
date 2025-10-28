@@ -120,6 +120,7 @@ export async function getReviewsByProduct(
 export async function getReviewAggregates(
   productId: string
 ): Promise<ReviewAggregates> {
+  'use cache';
   try {
     const reviews = await prisma.review.findMany({
       where: {

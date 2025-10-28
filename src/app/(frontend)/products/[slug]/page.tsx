@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getProductBySlug } from '@/server/queries/product';
 import { getReviewsByProduct, getReviewAggregates, getUserReview } from '@/server/queries/review';
 import { auth } from '@/lib/auth';
@@ -5,12 +6,7 @@ import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import ProductDetailsClient from './product-details-client';
 
-export default async function ProductDetailsPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+async function ProductContent({ slug }: { slug: string }) {
   const product = await getProductBySlug(slug);
 
   if (!product) {
@@ -44,4 +40,21 @@ export default async function ProductDetailsPage({
       isAuthenticated={!!session?.user}
     />
   );
+}
+
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductDetailsWrapper params={params} />
+    </Suspense>
+  );
+}
+
+async function ProductDetailsWrapper({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <ProductContent slug={slug} />;
 }
