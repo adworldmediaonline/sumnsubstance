@@ -89,6 +89,7 @@ export default function ProductsGrid({
                 rating: rating > 0 ? rating : undefined,
                 reviewCount: reviewCount > 0 ? reviewCount : undefined,
               }}
+              onAddToCart={handleAddToCart}
             />
           );
         })}

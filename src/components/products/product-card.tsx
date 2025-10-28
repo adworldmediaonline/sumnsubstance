@@ -478,13 +478,13 @@ export default function ProductCard({
       className={`relative bg-white rounded-2xl overflow-hidden shadow-sm font-sans flex flex-col h-full ${className}`}
     >
       {/* Image Container */}
-      <div className={`relative ${imageHeight} overflow-hidden bg-gray-50 flex-shrink-0`}>
-        <Link href={`/products/${product.slug}`}>
+      <div className={`relative ${imageHeight} w-full overflow-hidden bg-gradient-to-br from-gray-50 to-white flex-shrink-0`}>
+        <Link href={`/products/${product.slug}`} className="block h-full">
           <Image
             src={displayImage}
             alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform hover:scale-105"
             sizes={
               isCompact
                 ? '(max-width: 768px) 50vw, 25vw'
@@ -508,32 +508,6 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Modern Quick Actions */}
-        {showQuickActions && (
-          <div className="absolute top-3 right-3 flex flex-col gap-2">
-            {showWishlist && (
-              <button
-                onClick={handleToggleWishlist}
-                className="w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg"
-                aria-label="Add to wishlist"
-              >
-                <Heart
-                  className={`w-4 h-4 ${product.isWishlisted
-                    ? 'fill-red-500 text-red-500'
-                    : 'text-gray-600'
-                    }`}
-                />
-              </button>
-            )}
-            <button
-              onClick={handleQuickView}
-              className="w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg"
-              aria-label="Quick view"
-            >
-              <Eye className="w-4 h-4 text-gray-600" />
-            </button>
-          </div>
-        )}
 
         {/* Stock Status */}
         {!product.inStock && (
