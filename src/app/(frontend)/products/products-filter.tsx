@@ -22,12 +22,14 @@ interface ProductsFilterProps {
     minPrice?: number | null;
     maxPrice?: number | null;
   }) => void;
+  isDrawerMode?: boolean;
 }
 
 export default function ProductsFilter({
   categories,
   filters,
   setFilters,
+  isDrawerMode = false,
 }: ProductsFilterProps) {
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setFilters({ search: value || null });
@@ -49,6 +51,14 @@ export default function ProductsFilter({
     });
   };
 
+  const handleSearchChange = (value: string) => {
+    if (isDrawerMode) {
+      setFilters({ search: value });
+    } else {
+      debouncedSearch(value);
+    }
+  };
+
   return (
     <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
       {/* Filter Header */}
@@ -67,8 +77,8 @@ export default function ProductsFilter({
         <Input
           type="search"
           placeholder="Search products..."
-          defaultValue={filters.search}
-          onChange={(e) => debouncedSearch(e.target.value)}
+          value={filters.search}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="w-full"
         />
       </div>
