@@ -1,10 +1,19 @@
 import prisma from '@/lib/prisma';
-// import { Prisma } from '@prisma/client'; // Unused import
+import { Prisma } from '@prisma/client';
 import {
   serializeProduct,
   serializeProducts,
   SerializedProductWithCategory,
 } from '@/lib/serializers';
+
+export interface ProductFilters {
+  search?: string;
+  categoryIds?: string[];
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+}
 
 export async function getProducts(): Promise<SerializedProductWithCategory[]> {
   'use cache';
@@ -122,6 +131,46 @@ export async function checkProductSlugExists(slug: string, excludeId?: string) {
     console.error('Failed to check product slug:', error);
     throw new Error('Failed to check product slug');
   }
+}
+
+export async function getFilteredProducts(filters: ProductFilters) {
+  'use cache';
+  const { search, categoryIds, minPrice, maxPrice, page = 1, limit = 12 } = filters;
+
+  const where: Prisma.ProductWhereInput = {
+    ...(search && {
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ],
+    }),
+    ...(categoryIds?.length && { categoryId: { in: categoryIds } }),
+    ...(minPrice !== undefined || maxPrice !== undefined
+      ? {
+        price: {
+          ...(minPrice !== undefined && { gte: minPrice }),
+          ...(maxPrice !== undefined && { lte: maxPrice }),
+        },
+      }
+      : {}),
+  };
+
+  const [products, totalCount] = await Promise.all([
+    prisma.product.findMany({
+      where,
+      include: { category: true },
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
+    prisma.product.count({ where }),
+  ]);
+
+  return {
+    products: serializeProducts(products),
+    totalCount,
+    hasMore: page * limit < totalCount,
+  };
 }
 
 // Re-export types from serializers for convenience

@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { FloatingCart } from '@/components/cart/floating-cart';
 import { Toaster } from '@/components/ui/sonner';
 import type { Metadata } from 'next';
@@ -41,11 +42,13 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
-        {children}
-        <Suspense fallback={null}>
-          <FloatingCart />
-        </Suspense>
-        <Toaster richColors />
+        <NuqsAdapter>
+          {children}
+          <Suspense fallback={null}>
+            <FloatingCart />
+          </Suspense>
+          <Toaster richColors />
+        </NuqsAdapter>
       </body>
     </html>
   );
