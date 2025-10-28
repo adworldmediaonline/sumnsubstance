@@ -4,6 +4,15 @@ import { getCategories } from '@/server/queries/category';
 import { getReviewAggregates } from '@/server/queries/review';
 import ProductsSkeleton from './products-skeleton';
 import ProductsContent from './products-content';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import Link from 'next/link';
 
 export default async function ProductsPage({
   searchParams,
@@ -17,9 +26,25 @@ export default async function ProductsPage({
   }>;
 }) {
   return (
-    <Suspense fallback={<ProductsSkeleton />}>
-      <ProductsPageWrapper searchParams={searchParams} />
-    </Suspense>
+
+    <div className="container mx-auto px-4 py-20">
+      <Breadcrumb className="mb-6 hidden sm:block">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Products</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <Suspense fallback={<ProductsSkeleton />}>
+        <ProductsPageWrapper searchParams={searchParams} />
+      </Suspense>
+    </div>
   );
 }
 
