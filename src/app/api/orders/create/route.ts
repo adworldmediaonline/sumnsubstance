@@ -62,10 +62,10 @@ export async function POST(request: NextRequest) {
           category: product.category,
           mainImage: product.mainImageUrl
             ? {
-                url: product.mainImageUrl,
-                publicId: product.mainImagePublicId,
-                altText: product.mainImageAlt,
-              }
+              url: product.mainImageUrl,
+              publicId: product.mainImagePublicId,
+              altText: product.mainImageAlt,
+            }
             : null,
           excerpt: product.excerpt,
           description: product.description,
@@ -102,9 +102,7 @@ export async function POST(request: NextRequest) {
         orderNumber,
         userId: userId || null,
         guestEmail: !userId ? customerInfo.email : null,
-        guestName: !userId
-          ? `${customerInfo.firstName} ${customerInfo.lastName}`
-          : null,
+        guestName: !userId ? customerInfo.fullName : null,
         status: 'PENDING',
         subtotal: new Decimal(subtotal),
         tax: new Decimal(taxAmount),

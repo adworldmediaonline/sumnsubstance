@@ -76,7 +76,6 @@ export const customerInfoSchema = z.object({
 
 // Checkout Form Schema
 export const checkoutFormSchema = z.object({
-  customerInfo: customerInfoSchema,
   shippingAddress: shippingAddressSchema,
   shippingMethod: z
     .enum(['standard', 'express'])
@@ -107,7 +106,11 @@ export const createOrderSchema = z.object({
       })
     )
     .min(1, 'At least one item is required'),
-  customerInfo: customerInfoSchema,
+  customerInfo: z.object({
+    fullName: z.string().min(2),
+    email: z.string().email(),
+    phone: z.string().min(10),
+  }),
   shippingAddress: shippingAddressSchema,
   billingAddress: billingAddressSchema.optional(),
   paymentMethod: z.string().min(1, 'Payment method is required'),

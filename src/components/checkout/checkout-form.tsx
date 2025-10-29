@@ -54,12 +54,6 @@ export function CheckoutForm({
     resolver: zodResolver(checkoutFormSchema),
     mode: 'onTouched',
     defaultValues: {
-      customerInfo: {
-        email: user?.email || '',
-        firstName: user?.name?.split(' ')[0] || '',
-        lastName: user?.name?.split(' ').slice(1).join(' ') || '',
-        phone: '',
-      },
       shippingAddress: {
         fullName: user?.name || '',
         email: user?.email || '',
@@ -100,7 +94,11 @@ export function CheckoutForm({
           quantity: item.quantity,
           price: item.product.price,
         })),
-        customerInfo: data.customerInfo,
+        customerInfo: {
+          fullName: data.shippingAddress.fullName,
+          email: data.shippingAddress.email,
+          phone: data.shippingAddress.phone,
+        },
         shippingAddress: data.shippingAddress,
         billingAddress: data.shippingAddress, // Same as shipping for now
         paymentMethod: data.paymentMethod,
@@ -187,9 +185,9 @@ export function CheckoutForm({
             }
           },
           prefill: {
-            name: `${form.getValues('customerInfo.firstName')} ${form.getValues('customerInfo.lastName')}`,
-            email: form.getValues('customerInfo.email'),
-            contact: form.getValues('customerInfo.phone'),
+            name: form.getValues('shippingAddress.fullName'),
+            email: form.getValues('shippingAddress.email'),
+            contact: form.getValues('shippingAddress.phone'),
           },
           theme: {
             color: '#228B22',
@@ -237,133 +235,6 @@ export function CheckoutForm({
     <div className="space-y-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
-          {/* Customer Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Customer Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="customerInfo.firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
-                        First Name *
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="Enter your first name"
-                            {...field}
-                            className={cn(
-                              isFieldValid('customerInfo.firstName') && 'border-green-500'
-                            )}
-                          />
-                          {isFieldValid('customerInfo.firstName') && (
-                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
-                        Last Name *
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="Enter your last name"
-                            {...field}
-                            className={cn(
-                              isFieldValid('customerInfo.lastName') && 'border-green-500'
-                            )}
-                          />
-                          {isFieldValid('customerInfo.lastName') && (
-                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Mail className="h-4 w-4" />
-                        Email Address *
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type="email"
-                            placeholder="Enter your email"
-                            {...field}
-                            className={cn(
-                              isFieldValid('customerInfo.email') && 'border-green-500'
-                            )}
-                          />
-                          {isFieldValid('customerInfo.email') && (
-                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="customerInfo.phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Phone className="h-4 w-4" />
-                        Phone Number *
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type="tel"
-                            placeholder="Enter your phone number"
-                            {...field}
-                            className={cn(
-                              isFieldValid('customerInfo.phone') && 'border-green-500'
-                            )}
-                          />
-                          {isFieldValid('customerInfo.phone') && (
-                            <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Shipping Information */}
           <Card>
             <CardHeader>
