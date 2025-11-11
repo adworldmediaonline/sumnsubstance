@@ -98,8 +98,6 @@ export default function Footer({ className = '' }: FooterProps) {
     { name: 'Contact Us', href: '/contact' },
     { name: 'Track Your Order', href: '/track-order' },
     { name: 'FAQs', href: '/faqs' },
-    { name: 'Blogs', href: '/blogs' },
-    { name: 'Careers', href: '/careers' },
   ];
 
   const socialLinks = [
@@ -140,45 +138,15 @@ export default function Footer({ className = '' }: FooterProps) {
       {/* Main Footer Content */}
       <div className="bg-primary py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            {/* Newsletter Signup */}
-            <div className="lg:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Brand & Social */}
+            <div>
               <div className="flex items-center mb-6">
                 <Link href="/" className="block">
                   <h2 className="text-xl font-bold text-white tracking-tight">
                     <span className="text-white font-bold">Sum</span>NSubstance
                   </h2>
                 </Link>
-              </div>
-
-              <div className="mb-6">
-                {/* Deal message commented out - uncomment when deals are back */}
-                {/* <h3 className="text-lg font-bold text-white mb-4">
-                  Sign up to get 10% off on your first order
-                </h3> */}
-                <h3 className="text-lg font-bold text-white mb-4">
-                  Stay updated with our latest skincare tips
-                </h3>
-
-                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                  <div className="relative">
-                    <Input
-                      type="email"
-                      placeholder="E-mail"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 text-white placeholder:text-white/60 rounded-lg px-4 py-3"
-                      disabled={isSubscribing}
-                    />
-                    <Button
-                      type="submit"
-                      disabled={isSubscribing}
-                      className="absolute right-1 top-1 bottom-1 bg-white hover:bg-white/90 text-primary font-semibold px-4 rounded-md"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </form>
               </div>
 
               {/* Social Links */}
@@ -198,25 +166,6 @@ export default function Footer({ className = '' }: FooterProps) {
               </div>
             </div>
 
-            {/* Top Categories */}
-            <div>
-              <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wide">
-                Top Categories
-              </h3>
-              <ul className="space-y-3">
-                {topCategories.map(category => (
-                  <li key={category.name}>
-                    <Link
-                      href={category.href}
-                      className="text-white/80 hover:text-white transition-colors text-sm"
-                    >
-                      {category.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
             {/* Policies */}
             <div>
               <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wide">
@@ -230,25 +179,6 @@ export default function Footer({ className = '' }: FooterProps) {
                       className="text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {policy.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Best Sellers */}
-            <div>
-              <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wide">
-                Best Sellers
-              </h3>
-              <ul className="space-y-3">
-                {bestSellers.map(product => (
-                  <li key={product.name}>
-                    <Link
-                      href={product.href}
-                      className="text-white/80 hover:text-white transition-colors text-sm"
-                    >
-                      {product.name}
                     </Link>
                   </li>
                 ))}
@@ -281,39 +211,8 @@ export default function Footer({ className = '' }: FooterProps) {
       <div className="bg-primary py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Copyright */}
-          <div className="text-center mb-6">
+          <div className="text-center">
             <p className="text-white/60 text-sm">© 2025, Rev Skin Store</p>
-          </div>
-
-          {/* Brand Description */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-white text-center">
-              Natural skin care Products
-            </h3>
-            <p className="text-white/80 text-sm leading-relaxed max-w-4xl mx-auto text-center">
-              There are lots of skincare brands online to get your hands on. But
-              when you are considering to buy natural skin care products online
-              then the Rev Skin store is your one-stop destination. The products
-              that come from our store are made of carefully hand-picked organic
-              ingredients. We have a wide range of skincare, hair care, and body
-              care products for you to choose from. Use our Brightening Serum if
-              you want flawless, shining skin. If you are looking for a product
-              to give your hair a nice glow and shine you can choose our Hair
-              Growth Oil. Check out our Under Eye Cream if you're seeking a
-              solution that will help treat your dark circles or cracked heels.
-            </p>
-
-            <h4 className="text-lg font-semibold text-white text-center mt-6">
-              Aspects In Natural Skin Care Products To Seek For
-            </h4>
-            <p className="text-white/80 text-sm leading-relaxed max-w-4xl mx-auto text-center">
-              When you are planning to invest in good organic beauty products
-              online, then it's important that you know what ingredients are
-              used. The products you get from the Rev Skin store online have no
-              artificial coloring or fragrance. If you are looking for one cult
-              product that treats most of your skin and hair problems, check out
-              our collection and start shopping today!
-            </p>
           </div>
         </div>
       </div>

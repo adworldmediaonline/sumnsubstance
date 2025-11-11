@@ -78,26 +78,6 @@ export default function SiteHeaderStandard() {
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <Link
-                  href="/products"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
-                >
-                  Products
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/categories"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
-                >
-                  Categories
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
                   href="/about"
                   className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
@@ -275,20 +255,6 @@ export default function SiteHeaderStandard() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <span className="font-medium">Home</span>
-                    </Link>
-                    <Link
-                      href="/products"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Products</span>
-                    </Link>
-                    <Link
-                      href="/categories"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Categories</span>
                     </Link>
                     <Link
                       href="/about"

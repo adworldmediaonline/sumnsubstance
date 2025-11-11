@@ -95,21 +95,19 @@ export function FeaturedProductsClient({
           <div key={product.id} className="group">
             <div className="bg-gradient-to-br from-white to-gray-50/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/50 hover:border-[#ffffff]/30 hover:-translate-y-2">
               <div
-                className={`flex flex-col lg:flex-row ${
-                  isReversed ? 'lg:flex-row-reverse' : ''
-                }`}
+                className={`flex flex-col lg:flex-row ${isReversed ? 'lg:flex-row-reverse' : ''
+                  }`}
               >
                 {/* Enhanced Product Image with Symmetrical Layout */}
                 <div
-                  className={`lg:w-1/2 bg-gradient-to-br ${
-                    index % 4 === 0
-                      ? 'from-[#ffffff]/15 via-[#ffffff]/10 to-white'
-                      : index % 4 === 1
-                        ? 'from-[hsl(var(--primary))]/10 via-white to-[#ffffff]/15'
-                        : index % 4 === 2
-                          ? 'from-white via-[#ffffff]/10 to-[hsl(var(--primary))]/10'
-                          : 'from-[hsl(var(--primary))]/15 via-[hsl(var(--primary))]/5 to-[#ffffff]/10'
-                  } flex items-center justify-center p-8 lg:p-12 relative`}
+                  className={`lg:w-1/2 bg-gradient-to-br ${index % 4 === 0
+                    ? 'from-[#ffffff]/15 via-[#ffffff]/10 to-white'
+                    : index % 4 === 1
+                      ? 'from-[hsl(var(--primary))]/10 via-white to-[#ffffff]/15'
+                      : index % 4 === 2
+                        ? 'from-white via-[#ffffff]/10 to-[hsl(var(--primary))]/10'
+                        : 'from-[hsl(var(--primary))]/15 via-[hsl(var(--primary))]/5 to-[#ffffff]/10'
+                    } flex items-center justify-center p-8 lg:p-12 relative`}
                 >
                   {/* Subtle floating elements */}
                   <div className="absolute inset-0 opacity-30">
@@ -126,10 +124,9 @@ export function FeaturedProductsClient({
                         <div
                           className="absolute inset-0 rounded-full bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm shadow-2xl border border-white/50 overflow-hidden group-hover:scale-105 transition-all duration-500"
                           style={{
-                            backgroundImage: `url(${
-                              product.mainImage?.url ||
+                            backgroundImage: `url(${product.mainImage?.url ||
                               '/placeholder-product.jpg'
-                            })`,
+                              })`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             backgroundBlendMode: 'overlay',
@@ -156,72 +153,18 @@ export function FeaturedProductsClient({
                       </div>
                     )} */}
 
-                    {/* Enhanced Category Badge */}
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-white/95 to-white/90 backdrop-blur-sm text-[hsl(var(--primary))] text-sm font-semibold px-4 py-2 rounded-full shadow-lg border border-[#ffffff]/20 z-20">
-                      {product.category.name}
-                    </div>
-
-                    {/* Enhanced Action Buttons - Wishlist & Share */}
-                    <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
-                      {/* Share Button */}
-                      <button
-                        onClick={() => handleShare(product)}
-                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffffff]/20 hover:to-[hsl(var(--primary))]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
-                      >
-                        <Share2 className="w-5 h-5 text-gray-600 hover:text-[hsl(var(--primary))]" />
-                      </button>
-
-                      {/* Wishlist Button */}
-                      <button
-                        onClick={() => handleToggleWishlist(product.id)}
-                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffffff]/20 hover:to-[hsl(var(--primary))]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
-                      >
-                        <Heart
-                          className={`w-5 h-5 transition-all duration-300 ${
-                            product.isWishlisted
-                              ? 'fill-red-500 text-red-500'
-                              : 'text-gray-400 hover:text-red-400'
-                          }`}
-                        />
-                      </button>
-                    </div>
                   </div>
                 </div>
 
                 {/* Enhanced Product Info */}
                 <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-                  {/* Product Name & Rating */}
+                  {/* Product Name */}
                   <div className="mb-6">
                     <Link href={`/products/${product.slug}`}>
                       <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-3 hover:text-primary/80 transition-all duration-300">
                         {product.name}
                       </h3>
                     </Link>
-
-                    {reviewCount > 0 && (
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-5 h-5 transition-all duration-300 ${
-                                i < Math.round(rating)
-                                  ? 'fill-[#ffffff] text-[#ffffff]'
-                                  : 'text-gray-200'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                        <span className="text-gray-600 font-medium">
-                          {rating.toFixed(1)} ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
-                        </span>
-                      </div>
-                    )}
-
-                    <p className="text-gray-600 leading-relaxed mb-4">
-                      {product?.excerpt ?? ''
-                         }
-                    </p>
                   </div>
 
                   {/* Enhanced Price with Gradient Accents */}
