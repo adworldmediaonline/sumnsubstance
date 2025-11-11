@@ -189,8 +189,8 @@ export async function updateOrderStatus(
       // Don't fail status update if email fails
     }
 
-    revalidatePath('/dashboard/orders');
-    revalidatePath(`/dashboard/orders/${id}`);
+    revalidatePath('/dashboard/admin/orders');
+    revalidatePath(`/dashboard/admin/orders/${id}`);
 
     return {
       success: true,
@@ -241,8 +241,8 @@ export async function updatePaymentStatus(
       },
     });
 
-    revalidatePath('/dashboard/orders');
-    revalidatePath(`/dashboard/orders/${id}`);
+    revalidatePath('/dashboard/admin/orders');
+    revalidatePath(`/dashboard/admin/orders/${id}`);
 
     return {
       success: true,
@@ -385,8 +385,8 @@ export async function addOrderNotes(data: z.infer<typeof addOrderNotesSchema>) {
       },
     });
 
-    revalidatePath('/dashboard/orders');
-    revalidatePath(`/dashboard/orders/${id}`);
+    revalidatePath('/dashboard/admin/orders');
+    revalidatePath(`/dashboard/admin/orders/${id}`);
 
     return {
       success: true,

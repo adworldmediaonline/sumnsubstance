@@ -44,7 +44,7 @@ export const orderColumns: ColumnDef<SerializedOrder>[] = [
       const order = row.original;
       return (
         <Link
-          href={`/dashboard/orders/${order.id}`}
+          href={`/dashboard/admin/orders/${order.id}`}
           className="font-medium hover:text-primary transition-colors"
         >
           #{order.orderNumber}

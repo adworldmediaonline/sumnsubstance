@@ -19,7 +19,7 @@ export default async function CategoriesPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/dashboard/categories/create">
+          <Link href="/dashboard/admin/categories/create">
             <Plus className="mr-2 h-4 w-4" />
             Add Category
           </Link>
@@ -35,7 +35,7 @@ export default async function CategoriesPage() {
               Get started by creating your first product category.
             </p>
             <Button asChild>
-              <Link href="/dashboard/categories/create">
+              <Link href="/dashboard/admin/categories/create">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Category
               </Link>

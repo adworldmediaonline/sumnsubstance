@@ -55,7 +55,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
 
       if (result.success) {
         toast.success('Category updated successfully!');
-        router.push('/dashboard/categories');
+        router.push('/dashboard/admin/categories');
       } else {
         toast.error(result.error);
       }
@@ -120,7 +120,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push('/dashboard/categories')}
+            onClick={() => router.push('/dashboard/admin/categories')}
             disabled={isSubmitting}
           >
             Cancel

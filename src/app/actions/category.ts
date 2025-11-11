@@ -55,7 +55,7 @@ export async function createCategory(
       },
     });
 
-    revalidatePath('/dashboard/categories');
+    revalidatePath('/dashboard/admin/categories');
 
     return {
       success: true,
@@ -147,8 +147,8 @@ export async function updateCategory(
       },
     });
 
-    revalidatePath('/dashboard/categories');
-    revalidatePath(`/dashboard/categories/${id}/edit`);
+    revalidatePath('/dashboard/admin/categories');
+    revalidatePath(`/dashboard/admin/categories/${id}/edit`);
 
     return {
       success: true,
@@ -210,7 +210,7 @@ export async function deleteCategory(
       where: { id },
     });
 
-    revalidatePath('/dashboard/categories');
+    revalidatePath('/dashboard/admin/categories');
 
     return {
       success: true,

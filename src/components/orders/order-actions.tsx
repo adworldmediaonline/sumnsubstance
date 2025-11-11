@@ -184,7 +184,7 @@ export function OrderActions({ order }: OrderActionsProps) {
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
-            <Link href={`/dashboard/orders/${order.id}`}>
+            <Link href={`/dashboard/admin/orders/${order.id}`}>
               <Eye className="mr-2 h-4 w-4" />
               View Details
             </Link>

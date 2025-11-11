@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebarAdmin } from '@/components/app-sidebar-admin';
 import { SiteHeader } from '@/components/site-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
@@ -37,7 +37,7 @@ export default async function DashboardLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebarAdmin variant="inset" />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">

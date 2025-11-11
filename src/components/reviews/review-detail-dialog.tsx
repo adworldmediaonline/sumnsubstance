@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
-import type { AdminReviewData } from '@/app/(dashboard)/dashboard/reviews/columns';
+import { AdminReviewData } from '@/app/(dashboard)/dashboard/admin/reviews/columns';
 
 interface ReviewDetailDialogProps {
   review: AdminReviewData;
@@ -134,11 +134,10 @@ export function ReviewDetailDialog({
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${
-                      i < review.rating
-                        ? 'text-yellow-500 fill-current'
-                        : 'text-gray-300'
-                    }`}
+                    className={`w-5 h-5 ${i < review.rating
+                      ? 'text-yellow-500 fill-current'
+                      : 'text-gray-300'
+                      }`}
                   />
                 ))}
                 <span className="font-semibold text-lg">{review.rating}/5</span>

@@ -19,6 +19,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { authClient } from '@/lib/auth-client';
 
 import {
   Loader2,
@@ -47,6 +48,7 @@ export default function Header({
 }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const { data: session } = authClient.useSession();
   // Theme variants
   const themes = {
     default: {
@@ -138,9 +140,8 @@ export default function Header({
                     <NavigationMenuLink asChild>
                       <Link
                         href="/"
-                        className={`${navigationMenuTriggerStyle()} ${
-                          currentTheme.navText
-                        } ${currentTheme.navHover} font-medium`}
+                        className={`${navigationMenuTriggerStyle()} ${currentTheme.navText
+                          } ${currentTheme.navHover} font-medium`}
                       >
                         Home
                       </Link>
@@ -150,9 +151,8 @@ export default function Header({
                     <NavigationMenuLink asChild>
                       <Link
                         href="/products"
-                        className={`${navigationMenuTriggerStyle()} ${
-                          currentTheme.navText
-                        } ${currentTheme.navHover} font-medium`}
+                        className={`${navigationMenuTriggerStyle()} ${currentTheme.navText
+                          } ${currentTheme.navHover} font-medium`}
                       >
                         Products
                       </Link>
@@ -162,9 +162,8 @@ export default function Header({
                     <NavigationMenuLink asChild>
                       <Link
                         href="/categories"
-                        className={`${navigationMenuTriggerStyle()} ${
-                          currentTheme.navText
-                        } ${currentTheme.navHover} font-medium`}
+                        className={`${navigationMenuTriggerStyle()} ${currentTheme.navText
+                          } ${currentTheme.navHover} font-medium`}
                       >
                         Categories
                       </Link>
@@ -174,9 +173,8 @@ export default function Header({
                     <NavigationMenuLink asChild>
                       <Link
                         href="/about"
-                        className={`${navigationMenuTriggerStyle()} ${
-                          currentTheme.navText
-                        } ${currentTheme.navHover} font-medium`}
+                        className={`${navigationMenuTriggerStyle()} ${currentTheme.navText
+                          } ${currentTheme.navHover} font-medium`}
                       >
                         About
                       </Link>
@@ -186,9 +184,8 @@ export default function Header({
                     <NavigationMenuLink asChild>
                       <Link
                         href="/contact"
-                        className={`${navigationMenuTriggerStyle()} ${
-                          currentTheme.navText
-                        } ${currentTheme.navHover} font-medium`}
+                        className={`${navigationMenuTriggerStyle()} ${currentTheme.navText
+                          } ${currentTheme.navHover} font-medium`}
                       >
                         Contact
                       </Link>
@@ -241,7 +238,7 @@ export default function Header({
                           </p>
                           {false && (
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1 w-fit">
-                              Admin
+                              {session?.user.role === 'admin' ? 'Admin' : 'User'}
                             </span>
                           )}
                         </div>
@@ -249,26 +246,26 @@ export default function Header({
                       <DropdownMenuSeparator />
 
                       <DropdownMenuItem asChild>
-                        <Link href="/dashboard" className="cursor-pointer">
+                        <Link href="/dashboard/admin" className="cursor-pointer">
                           <UserIcon className="mr-2 h-4 w-4" />
                           <span>Dashboard</span>
                         </Link>
                       </DropdownMenuItem>
 
-                      <DropdownMenuItem asChild>
+                      {/* <DropdownMenuItem asChild>
                         <Link
-                          href="/dashboard/user/profile"
+                          href="/dashboard/admin/user/profile"
                           className="cursor-pointer"
                         >
                           <Settings className="mr-2 h-4 w-4" />
                           <span>Account Settings</span>
                         </Link>
-                      </DropdownMenuItem>
+                      </DropdownMenuItem> */}
 
                       <DropdownMenuItem asChild>
-                        <Link href="/orders" className="cursor-pointer">
+                        <Link href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'} className="cursor-pointer">
                           <Package className="mr-2 h-4 w-4" />
-                          <span>My Orders</span>
+                          <span>Orders</span>
                         </Link>
                       </DropdownMenuItem>
 
@@ -277,11 +274,11 @@ export default function Header({
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
                             <Link
-                              href="/dashboard/admin"
+                              href={session?.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                               className="cursor-pointer"
                             >
                               <Settings className="mr-2 h-4 w-4" />
-                              <span>Admin Panel</span>
+                              <span>Dashboard</span>
                             </Link>
                           </DropdownMenuItem>
                         </>
@@ -289,7 +286,7 @@ export default function Header({
 
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        onClick={() => {}}
+                        onClick={() => { }}
                         disabled={false}
                         className="text-red-600 cursor-pointer focus:text-red-600 focus:bg-red-50"
                       >
@@ -307,7 +304,7 @@ export default function Header({
                     variant="ghost"
                     size="sm"
                     className="p-2 hover:bg-gray-50"
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     <User className="h-5 w-5 text-gray-600" />
                   </Button>
@@ -442,37 +439,37 @@ export default function Header({
                           <div className="border-t pt-4 mt-6">
                             <div className="space-y-2">
                               <Link
-                                href="/dashboard"
+                                href={session?.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                                 className="flex items-center space-x-3 text-lg font-medium py-2 hover:text-primary transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 <UserIcon className="w-5 h-5" />
                                 <span>Dashboard</span>
                               </Link>
-                              <Link
-                                href="/dashboard/user/profile"
+                              {/* <Link
+                                href="/dashboard/admin/user/profile"
                                 className="flex items-center space-x-3 text-lg font-medium py-2 hover:text-primary transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 <Settings className="w-5 h-5" />
                                 <span>Account Settings</span>
-                              </Link>
+                              </Link> */}
                               <Link
-                                href="/orders"
+                                href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'}
                                 className="flex items-center space-x-3 text-lg font-medium py-2 hover:text-primary transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                               >
                                 <Package className="w-5 h-5" />
-                                <span>My Orders</span>
+                                <span>Orders</span>
                               </Link>
                               {false && (
                                 <Link
-                                  href="/dashboard/admin"
+                                  href={session?.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                                   className="flex items-center space-x-3 text-lg font-medium py-2 hover:text-primary transition-colors"
                                   onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                   <Settings className="w-5 h-5" />
-                                  <span>Admin Panel</span>
+                                  <span>Dashboard</span>
                                 </Link>
                               )}
                             </div>

@@ -19,11 +19,9 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
-  Heart,
   LogOut,
   Menu,
   Package,
-  Settings,
   User,
   UserIcon
 } from 'lucide-react';
@@ -92,7 +90,6 @@ export default function SiteHeaderPublic() {
         />
       </Link>
 
-      {/* Desktop Navigation */}
       <div className="hidden lg:flex items-center">
         <NavigationMenu>
           <NavigationMenuList className="space-x-1">
@@ -215,26 +212,26 @@ export default function SiteHeaderPublic() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/" className="cursor-pointer">
+                  <Link href={session?.user.role === 'admin' ? '/dashboard/admin/' : '/dashboard/user/'} className="cursor-pointer">
                     <UserIcon className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link
-                    href="/dashboard/user/profile"
+                    href="/dashboard/admin/user/profile"
                     className="cursor-pointer"
                   >
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Account Settings</span>
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuItem asChild>
-                  <Link href="/orders" className="cursor-pointer">
+                  <Link href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'} className="cursor-pointer">
                     <Package className="mr-2 h-4 w-4" />
-                    <span>My Orders</span>
+                    <span>Orders</span>
                   </Link>
                 </DropdownMenuItem>
 
@@ -375,7 +372,7 @@ export default function SiteHeaderPublic() {
                     {session && (
                       <>
                         <Link
-                          href="/dashboard"
+                          href={session?.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
@@ -383,21 +380,14 @@ export default function SiteHeaderPublic() {
                           <span className="font-medium">Dashboard</span>
                         </Link>
                         <Link
-                          href="/orders"
+                          href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Package className="w-5 h-5" />
-                          <span className="font-medium">My Orders</span>
+                          <span className="font-medium">Orders</span>
                         </Link>
-                        <Link
-                          href="/wishlist"
-                          className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <Heart className="w-5 h-5" />
-                          <span className="font-medium">Wishlist</span>
-                        </Link>
+
                       </>
                     )}
                   </nav>

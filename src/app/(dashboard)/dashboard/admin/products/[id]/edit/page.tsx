@@ -1,3 +1,4 @@
+import { getProductById } from '@/server/queries/product';
 import { getCategories } from '@/server/queries/category';
 import {
   Card,
@@ -9,26 +10,39 @@ import {
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { CreateProductForm } from './create-product-form';
+import { EditProductForm } from './edit-product-form';
+import { notFound } from 'next/navigation';
 
-export default async function CreateProductPage() {
-  const categories = await getCategories();
+interface EditProductPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function EditProductPage({
+  params,
+}: EditProductPageProps) {
+  const { id } = await params;
+  const [product, categories] = await Promise.all([
+    getProductById(id),
+    getCategories(),
+  ]);
+
+  if (!product) {
+    notFound();
+  }
 
   if (categories.length === 0) {
     return (
       <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard/products">
+            <Link href="/dashboard/admin/products">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Products
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">
-              Create Product
-            </h1>
-            <p className="text-muted-foreground">Add a new product</p>
+            <h1 className="text-3xl font-bold tracking-tight">Edit Product</h1>
+            <p className="text-muted-foreground">Update product details</p>
           </div>
         </div>
 
@@ -38,10 +52,10 @@ export default async function CreateProductPage() {
               No categories available
             </h3>
             <p className="text-muted-foreground text-center mb-4">
-              You need to create at least one category before adding products.
+              You need at least one category to edit products.
             </p>
             <Button asChild>
-              <Link href="/dashboard/categories/create">
+              <Link href="/dashboard/admin/categories/create">
                 Create Category First
               </Link>
             </Button>
@@ -55,14 +69,14 @@ export default async function CreateProductPage() {
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
-          <Link href="/dashboard/products">
+          <Link href="/dashboard/admin/products">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Products
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Create Product</h1>
-          <p className="text-muted-foreground">Add a new product</p>
+          <h1 className="text-3xl font-bold tracking-tight">Edit Product</h1>
+          <p className="text-muted-foreground">Update product details</p>
         </div>
       </div>
 
@@ -71,12 +85,12 @@ export default async function CreateProductPage() {
           <CardHeader>
             <CardTitle>Product Details</CardTitle>
             <CardDescription>
-              Enter the details for your new product. The slug will be
-              automatically generated from the name.
+              Update the product information. The slug will be automatically
+              updated if you change the name.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <CreateProductForm categories={categories} />
+            <EditProductForm product={product} categories={categories} />
           </CardContent>
         </Card>
       </div>
