@@ -108,13 +108,13 @@ export default function ProductReviews({
   return (
     <div>
       <div className="flex items-center justify-between mb-4 lg:mb-6">
-        <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c]">
+        <h3 className="text-xl lg:text-2xl font-bold text-[hsl(var(--primary))]">
           Customer Reviews
         </h3>
         {isAuthenticated && canWriteReview && (
           <Button
             onClick={handleWriteReview}
-            className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white font-semibold"
+            className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white font-semibold"
           >
             Write a Review
           </Button>
@@ -123,7 +123,7 @@ export default function ProductReviews({
           <Button
             onClick={handleWriteReview}
             variant="outline"
-            className="border-[#233f1c] text-[#233f1c] hover:bg-[#233f1c] hover:text-white font-semibold"
+            className="border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] hover:text-white font-semibold"
           >
             Write a Review
           </Button>
@@ -134,7 +134,7 @@ export default function ProductReviews({
       <div className="bg-gradient-to-r from-gray-50 to-white rounded-2xl lg:rounded-3xl p-6 lg:p-8 mb-6 lg:mb-8 border border-gray-200">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="text-center lg:border-r lg:border-gray-200">
-            <div className="text-4xl lg:text-5xl font-black text-[#233f1c] mb-2 lg:mb-3">
+            <div className="text-4xl lg:text-5xl font-black text-[hsl(var(--primary))] mb-2 lg:mb-3">
               {aggregates.averageRating.toFixed(1)}
             </div>
             <div className="flex items-center justify-center gap-1 mb-2 lg:mb-3">
@@ -217,7 +217,7 @@ export default function ProductReviews({
                 {/* Avatar */}
                 <Avatar className="w-10 h-10 lg:w-12 lg:h-12">
                   <AvatarImage src={review.userImage} alt={review.userName} />
-                  <AvatarFallback className="bg-gradient-to-r from-[#233f1c] to-[#2b3e1a] text-white font-bold text-sm lg:text-lg">
+                  <AvatarFallback className="bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary))] text-white font-bold text-sm lg:text-lg">
                     {review.userInitials || review.userName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
@@ -337,7 +337,7 @@ export default function ProductReviews({
           {isAuthenticated && canWriteReview && (
             <Button
               onClick={handleWriteReview}
-              className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white"
+              className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white"
             >
               Write the First Review
             </Button>

@@ -34,7 +34,7 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
       {trigger}
       <DialogContent className="sm:max-w-[480px] w-[calc(100vw-2rem)] max-h-[90vh] overflow-x-hidden overflow-y-auto p-0 gap-0 bg-gradient-to-br from-white to-gray-50">
         <DialogHeader className="px-4 sm:px-6 pt-6 pb-4 border-b">
-          <DialogTitle className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-[#228B22] to-[#9ACD32] bg-clip-text text-transparent">
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary))] bg-clip-text text-transparent">
             {activeTab === 'signin' ? 'Welcome Back' : 'Create Account'}
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground text-sm">
@@ -53,13 +53,13 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
             <TabsList className="grid w-full grid-cols-2 mb-4 mt-4 h-11 bg-gray-100 p-1">
               <TabsTrigger
                 value="signin"
-                className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
+                className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
               >
                 Sign In
               </TabsTrigger>
               <TabsTrigger
                 value="signup"
-                className="data-[state=active]:bg-[#228B22] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
+                className="data-[state=active]:bg-[hsl(var(--primary))] data-[state=active]:text-white transition-all duration-300 rounded-md data-[state=active]:shadow-md text-sm sm:text-base"
               >
                 Sign Up
               </TabsTrigger>
@@ -87,11 +87,11 @@ export function AuthDialog({ trigger, defaultTab = 'signin' }: AuthDialogProps) 
           <div className="px-4 sm:px-6 pb-6 pt-2 border-t bg-gray-50/50">
             <p className="text-xs text-center text-muted-foreground break-words">
               By continuing, you agree to our{' '}
-              <a href="#" className="underline hover:text-[#228B22] transition-colors">
+              <a href="#" className="underline hover:text-[hsl(var(--primary))] transition-colors">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="#" className="underline hover:text-[#228B22] transition-colors">
+              <a href="#" className="underline hover:text-[hsl(var(--primary))] transition-colors">
                 Privacy Policy
               </a>
               .

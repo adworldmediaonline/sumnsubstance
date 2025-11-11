@@ -150,7 +150,7 @@ export default function FeaturedProducts() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#233f1c] mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-[hsl(var(--primary))] mb-4">
             Featured Products
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -175,7 +175,7 @@ export default function FeaturedProducts() {
 
         {/* Call to Action */}
         <div className="text-center mt-12">
-          <button className="inline-flex items-center gap-2 bg-[#233f1c] hover:bg-[#1a2e15] text-white font-medium px-8 py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#233f1c]/30 group">
+          <button className="inline-flex items-center gap-2 bg-[hsl(var(--primary))] hover:bg-[#1a2e15] text-white font-medium px-8 py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-[hsl(var(--primary))]/30 group">
             <span>Explore All Products</span>
             <svg
               className="w-4 h-4 transition-transform group-hover:translate-x-1"

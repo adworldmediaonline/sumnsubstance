@@ -295,7 +295,7 @@ export default function ProductCard({
           {/* Minimal Badge */}
           {product.featured && (
             <div className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-6 lg:left-6">
-              <div className="bg-[#233f1c] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium">
+              <div className="bg-[hsl(var(--primary))] text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs font-medium">
                 Sale
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function ProductCard({
                 <span className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">
                   Rs. {product.price.toFixed(2)}
                 </span>
-                <span className="bg-[#233f1c] text-white px-2 py-1 rounded text-xs font-medium">
+                <span className="bg-[hsl(var(--primary))] text-white px-2 py-1 rounded text-xs font-medium">
                   Sale
                 </span>
               </div>
@@ -384,10 +384,10 @@ export default function ProductCard({
           <div className="space-y-3">
             <div className="text-sm font-medium text-gray-900">Size</div>
             <div className="flex gap-3">
-              <button className="px-5 py-2.5 bg-[#233f1c] text-white rounded-xl text-sm font-medium">
+              <button className="px-5 py-2.5 bg-[hsl(var(--primary))] text-white rounded-xl text-sm font-medium">
                 50ML
               </button>
-              <button className="px-5 py-2.5 border border-[#233f1c] text-[#233f1c] rounded-xl text-sm font-medium hover:bg-[#233f1c] hover:text-white transition-colors">
+              <button className="px-5 py-2.5 border border-[hsl(var(--primary))] text-[hsl(var(--primary))] rounded-xl text-sm font-medium hover:bg-[hsl(var(--primary))] hover:text-white transition-colors">
                 100ML
               </button>
             </div>
@@ -397,13 +397,13 @@ export default function ProductCard({
           <div className="space-y-3">
             <div className="text-sm font-medium text-gray-900">Quantity</div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-[#233f1c] text-white rounded-lg flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">
+              <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-[hsl(var(--primary))] text-white rounded-lg flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">
                 -
               </button>
               <div className="w-12 h-8 sm:w-14 sm:h-9 lg:w-16 lg:h-10 border-2 border-gray-300 rounded-lg flex items-center justify-center bg-white">
                 <span className="text-sm font-medium">1</span>
               </div>
-              <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-[#233f1c] text-white rounded-lg flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">
+              <button className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-[hsl(var(--primary))] text-white rounded-lg flex items-center justify-center font-bold text-sm sm:text-base lg:text-lg">
                 +
               </button>
             </div>
@@ -414,13 +414,13 @@ export default function ProductCard({
             <button
               onClick={handleAddToCart}
               disabled={!product.inStock}
-              className="w-full bg-[#233f1c] hover:bg-[#1a2e15] disabled:bg-gray-300 text-white font-semibold py-3 sm:py-3.5 lg:py-4 rounded-xl transition-all duration-300 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[#233f1c]/30 text-sm sm:text-base"
+              className="w-full bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] disabled:bg-gray-300 text-white font-semibold py-3 sm:py-3.5 lg:py-4 rounded-xl transition-all duration-300 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-[hsl(var(--primary))]/30 text-sm sm:text-base"
             >
               Add to cart
             </button>
             <button
               onClick={handleAddToCart}
-              className="w-full border-2 border-[#233f1c] text-[#233f1c] hover:bg-[#233f1c] hover:text-white font-semibold py-3 sm:py-3.5 lg:py-4 rounded-xl transition-all duration-300 text-sm sm:text-base"
+              className="w-full border-2 border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] hover:text-white font-semibold py-3 sm:py-3.5 lg:py-4 rounded-xl transition-all duration-300 text-sm sm:text-base"
             >
               Shop now
             </button>
@@ -430,7 +430,7 @@ export default function ProductCard({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 pt-3 sm:pt-4 border-t border-gray-100">
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-[#233f1c] transition-colors py-2"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-[hsl(var(--primary))] transition-colors py-2"
             >
               <Share className="w-4 h-4" />
               Share
@@ -438,7 +438,7 @@ export default function ProductCard({
             <div className="flex items-center gap-3">
               <button
                 onClick={handleQuickView}
-                className="flex items-center gap-1 text-sm text-[#233f1c] hover:text-[#1a2e15] font-medium transition-colors py-2"
+                className="flex items-center gap-1 text-sm text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] font-medium transition-colors py-2"
               >
                 <Eye className="w-4 h-4" />
                 Quick View
@@ -446,7 +446,7 @@ export default function ProductCard({
               <span className="text-gray-300 hidden sm:inline">|</span>
               <Link
                 href={`/products/${product.slug}`}
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#233f1c] transition-colors py-2"
+                className="flex items-center gap-1 text-sm text-gray-600 hover:text-[hsl(var(--primary))] transition-colors py-2"
               >
                 Full Details
                 <span className="ml-1">→</span>
@@ -502,7 +502,7 @@ export default function ProductCard({
             FLAT {discount}% OFF
           </div> */}
           {product.featured && (
-            <div className="bg-gradient-to-r from-[#233f1c] to-[#1a2e15] text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-lg">
+            <div className="bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary))] text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-lg">
               ⭐ Featured
             </div>
           )}
@@ -571,7 +571,7 @@ export default function ProductCard({
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="w-full bg-[#233f1c] disabled:bg-gray-200 disabled:text-gray-500 text-white font-semibold py-2.5 rounded-xl disabled:cursor-not-allowed"
+            className="w-full bg-[hsl(var(--primary))] disabled:bg-gray-200 disabled:text-gray-500 text-white font-semibold py-2.5 rounded-xl disabled:cursor-not-allowed"
           >
             <div className="flex items-center justify-center gap-2">
               <ShoppingCart className="w-4 h-4" />
@@ -585,7 +585,7 @@ export default function ProductCard({
       <div className="absolute inset-0 rounded-2xl ring-1 ring-gray-200 pointer-events-none"></div>
 
       {/* Focus Ring for Accessibility */}
-      <div className="absolute inset-0 rounded-2xl ring-2 ring-[#233f1c] ring-offset-2 ring-offset-white opacity-0 focus-within:opacity-100 pointer-events-none"></div>
+      <div className="absolute inset-0 rounded-2xl ring-2 ring-[hsl(var(--primary))] ring-offset-2 ring-offset-white opacity-0 focus-within:opacity-100 pointer-events-none"></div>
     </div>
   );
 }

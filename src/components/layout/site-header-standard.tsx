@@ -69,7 +69,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Home
                 </Link>
@@ -79,7 +79,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/products"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Products
                 </Link>
@@ -89,7 +89,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/categories"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Categories
                 </Link>
@@ -99,7 +99,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/about"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   About
                 </Link>
@@ -109,7 +109,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/contact"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Contact
                 </Link>
@@ -135,7 +135,7 @@ export default function SiteHeaderStandard() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={session.user.image ?? ''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                    <AvatarFallback className="bg-white text-primary font-semibold">
                       {session.user.initials ?? ''}
                     </AvatarFallback>
                   </Avatar>
@@ -211,7 +211,7 @@ export default function SiteHeaderStandard() {
                     size="sm"
                     className="relative p-2 rounded-full transition-all duration-300 hover:bg-gray-100"
                   >
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 bg-[#228B22] text-white">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 bg-primary text-white">
                       <User className="w-5 h-5" />
                     </div>
                   </Button>
@@ -229,14 +229,14 @@ export default function SiteHeaderStandard() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="p-2 transition-colors duration-300 text-[#228B22] hover:bg-gray-100"
+                  className="p-2 transition-colors duration-300 text-primary hover:bg-muted"
                 >
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
+                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-primary to-primary/80"
               >
                 <div className="flex flex-col h-full">
                   {/* Mobile Header */}
@@ -253,12 +253,12 @@ export default function SiteHeaderStandard() {
                   {session && (
                     <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={session.user.image ?? ''} alt={''} />
-                          <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                            {session.user.initials ?? ''}
-                          </AvatarFallback>
-                        </Avatar>
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={session.user.image ?? ''} alt={''} />
+                        <AvatarFallback className="bg-white text-primary font-semibold">
+                          {session.user.initials ?? ''}
+                        </AvatarFallback>
+                      </Avatar>
                         <div>
                           <p className="text-white font-medium">{session.user.name}</p>
                           <p className="text-white/70 text-sm">{session.user.email}</p>

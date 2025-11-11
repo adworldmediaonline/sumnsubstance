@@ -138,7 +138,7 @@ export default function Footer({ className = '' }: FooterProps) {
       </div>
 
       {/* Main Footer Content */}
-      <div className="bg-[#233f1c] py-12">
+      <div className="bg-primary py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Newsletter Signup */}
@@ -146,7 +146,7 @@ export default function Footer({ className = '' }: FooterProps) {
               <div className="flex items-center mb-6">
                 <Link href="/" className="block">
                   <h2 className="text-xl font-bold text-white tracking-tight">
-                    <span className="text-[#ffd469]">Sum</span>NSubstance
+                    <span className="text-white font-bold">Sum</span>NSubstance
                   </h2>
                 </Link>
               </div>
@@ -173,7 +173,7 @@ export default function Footer({ className = '' }: FooterProps) {
                     <Button
                       type="submit"
                       disabled={isSubscribing}
-                      className="absolute right-1 top-1 bottom-1 bg-[#ffd469] hover:bg-[#fff2d4] text-[#233f1c] font-semibold px-4 rounded-md"
+                      className="absolute right-1 top-1 bottom-1 bg-white hover:bg-white/90 text-primary font-semibold px-4 rounded-md"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </Button>
@@ -189,9 +189,9 @@ export default function Footer({ className = '' }: FooterProps) {
                     <Link
                       key={social.name}
                       href={social.href}
-                      className="w-8 h-8 bg-white/10 hover:bg-[#ffd469] rounded-lg flex items-center justify-center transition-colors group"
+                      className="w-8 h-8 bg-white/10 hover:bg-white rounded-lg flex items-center justify-center transition-colors group"
                     >
-                      <IconComponent className="w-4 h-4 text-white group-hover:text-[#233f1c]" />
+                      <IconComponent className="w-4 h-4 text-white group-hover:text-primary" />
                     </Link>
                   );
                 })}
@@ -208,7 +208,7 @@ export default function Footer({ className = '' }: FooterProps) {
                   <li key={category.name}>
                     <Link
                       href={category.href}
-                      className="text-white/80 hover:text-[#ffd469] transition-colors text-sm"
+                      className="text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {category.name}
                     </Link>
@@ -227,7 +227,7 @@ export default function Footer({ className = '' }: FooterProps) {
                   <li key={policy.name}>
                     <Link
                       href={policy.href}
-                      className="text-white/80 hover:text-[#ffd469] transition-colors text-sm"
+                      className="text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {policy.name}
                     </Link>
@@ -246,7 +246,7 @@ export default function Footer({ className = '' }: FooterProps) {
                   <li key={product.name}>
                     <Link
                       href={product.href}
-                      className="text-white/80 hover:text-[#ffd469] transition-colors text-sm"
+                      className="text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {product.name}
                     </Link>
@@ -265,7 +265,7 @@ export default function Footer({ className = '' }: FooterProps) {
                   <li key={item.name}>
                     <Link
                       href={item.href}
-                      className="text-white/80 hover:text-[#ffd469] transition-colors text-sm"
+                      className="text-white/80 hover:text-white transition-colors text-sm"
                     >
                       {item.name}
                     </Link>
@@ -278,7 +278,7 @@ export default function Footer({ className = '' }: FooterProps) {
       </div>
 
       {/* Bottom Section */}
-      <div className="bg-[#1a2e13] py-8">
+      <div className="bg-primary py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Copyright */}
           <div className="text-center mb-6">

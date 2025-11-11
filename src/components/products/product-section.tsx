@@ -88,7 +88,7 @@ export default function ProductSection({
           {hasMoreProducts && viewAllUrl && (
             <Link
               href={viewAllUrl}
-              className="group inline-flex items-center gap-2 text-[#9CB86F] hover:text-[#7A9B56] font-medium transition-colors"
+              className="group inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
             >
               <span>{viewAllText}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

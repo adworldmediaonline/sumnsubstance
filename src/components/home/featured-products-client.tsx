@@ -93,7 +93,7 @@ export function FeaturedProductsClient({
 
         return (
           <div key={product.id} className="group">
-            <div className="bg-gradient-to-br from-white to-gray-50/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/50 hover:border-[#ffd469]/30 hover:-translate-y-2">
+            <div className="bg-gradient-to-br from-white to-gray-50/50 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-white/50 hover:border-[#ffffff]/30 hover:-translate-y-2">
               <div
                 className={`flex flex-col lg:flex-row ${
                   isReversed ? 'lg:flex-row-reverse' : ''
@@ -103,18 +103,18 @@ export function FeaturedProductsClient({
                 <div
                   className={`lg:w-1/2 bg-gradient-to-br ${
                     index % 4 === 0
-                      ? 'from-[#ffd469]/15 via-[#fff2d4]/10 to-white'
+                      ? 'from-[#ffffff]/15 via-[#ffffff]/10 to-white'
                       : index % 4 === 1
-                        ? 'from-[#233f1c]/10 via-white to-[#ffd469]/15'
+                        ? 'from-[hsl(var(--primary))]/10 via-white to-[#ffffff]/15'
                         : index % 4 === 2
-                          ? 'from-white via-[#ffd469]/10 to-[#233f1c]/10'
-                          : 'from-[#233f1c]/15 via-[#2b3e1a]/5 to-[#ffd469]/10'
+                          ? 'from-white via-[#ffffff]/10 to-[hsl(var(--primary))]/10'
+                          : 'from-[hsl(var(--primary))]/15 via-[hsl(var(--primary))]/5 to-[#ffffff]/10'
                   } flex items-center justify-center p-8 lg:p-12 relative`}
                 >
                   {/* Subtle floating elements */}
                   <div className="absolute inset-0 opacity-30">
-                    <div className="absolute top-8 right-8 w-16 h-16 bg-gradient-to-br from-[#ffd469]/20 to-transparent rounded-full blur-xl"></div>
-                    <div className="absolute bottom-8 left-8 w-20 h-20 bg-gradient-to-br from-[#233f1c]/15 to-transparent rounded-full blur-2xl"></div>
+                    <div className="absolute top-8 right-8 w-16 h-16 bg-gradient-to-br from-[#ffffff]/20 to-transparent rounded-full blur-xl"></div>
+                    <div className="absolute bottom-8 left-8 w-20 h-20 bg-gradient-to-br from-[hsl(var(--primary))]/15 to-transparent rounded-full blur-2xl"></div>
                   </div>
 
                   {/* Symmetrical Container with Product Image Background */}
@@ -136,16 +136,16 @@ export function FeaturedProductsClient({
                           }}
                         >
                           {/* Overlay gradient for better text visibility */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-[#233f1c]/10"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-[hsl(var(--primary))]/10"></div>
                         </div>
 
                         {/* Corner Accent Diamonds */}
-                        <div className="absolute top-12 left-12 w-6 h-6 bg-gradient-to-br from-[#ffd469] to-[#ffd469]/70 rotate-45 shadow-lg group-hover:scale-110 transition-all duration-300"></div>
-                        <div className="absolute bottom-12 right-12 w-4 h-4 bg-gradient-to-br from-[#233f1c] to-[#233f1c]/70 rotate-45 shadow-lg group-hover:scale-110 transition-all duration-300"></div>
+                        <div className="absolute top-12 left-12 w-6 h-6 bg-white/70 rotate-45 shadow-lg group-hover:scale-110 transition-all duration-300"></div>
+                        <div className="absolute bottom-12 right-12 w-4 h-4 bg-primary/70 rotate-45 shadow-lg group-hover:scale-110 transition-all duration-300"></div>
 
                         {/* Symmetrical Ring Elements */}
                         <div className="absolute inset-8 rounded-full border-2 border-white/30 group-hover:border-white/50 transition-all duration-500"></div>
-                        <div className="absolute inset-12 rounded-full border border-[#ffd469]/20 group-hover:border-[#ffd469]/40 transition-all duration-500"></div>
+                        <div className="absolute inset-12 rounded-full border border-[#ffffff]/20 group-hover:border-[#ffffff]/40 transition-all duration-500"></div>
                       </div>
                     </Link>
 
@@ -157,7 +157,7 @@ export function FeaturedProductsClient({
                     )} */}
 
                     {/* Enhanced Category Badge */}
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-white/95 to-white/90 backdrop-blur-sm text-[#233f1c] text-sm font-semibold px-4 py-2 rounded-full shadow-lg border border-[#ffd469]/20 z-20">
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-white/95 to-white/90 backdrop-blur-sm text-[hsl(var(--primary))] text-sm font-semibold px-4 py-2 rounded-full shadow-lg border border-[#ffffff]/20 z-20">
                       {product.category.name}
                     </div>
 
@@ -166,15 +166,15 @@ export function FeaturedProductsClient({
                       {/* Share Button */}
                       <button
                         onClick={() => handleShare(product)}
-                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffd469]/20 hover:to-[#233f1c]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffffff]/20 hover:to-[hsl(var(--primary))]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
                       >
-                        <Share2 className="w-5 h-5 text-gray-600 hover:text-[#233f1c]" />
+                        <Share2 className="w-5 h-5 text-gray-600 hover:text-[hsl(var(--primary))]" />
                       </button>
 
                       {/* Wishlist Button */}
                       <button
                         onClick={() => handleToggleWishlist(product.id)}
-                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffd469]/20 hover:to-[#233f1c]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="w-12 h-12 bg-white/90 hover:bg-gradient-to-r hover:from-[#ffffff]/20 hover:to-[hsl(var(--primary))]/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300"
                       >
                         <Heart
                           className={`w-5 h-5 transition-all duration-300 ${
@@ -193,7 +193,7 @@ export function FeaturedProductsClient({
                   {/* Product Name & Rating */}
                   <div className="mb-6">
                     <Link href={`/products/${product.slug}`}>
-                      <h3 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-3 hover:from-[#233f1c] hover:to-[#2b3e1a] transition-all duration-300">
+                      <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-3 hover:text-primary/80 transition-all duration-300">
                         {product.name}
                       </h3>
                     </Link>
@@ -206,7 +206,7 @@ export function FeaturedProductsClient({
                               key={i}
                               className={`w-5 h-5 transition-all duration-300 ${
                                 i < Math.round(rating)
-                                  ? 'fill-[#ffd469] text-[#ffd469]'
+                                  ? 'fill-[#ffffff] text-[#ffffff]'
                                   : 'text-gray-200'
                               }`}
                             />
@@ -236,7 +236,7 @@ export function FeaturedProductsClient({
                           <span className="text-xl text-gray-400 line-through">
                             ₹{product.originalPrice.toLocaleString()}
                           </span>
-                          <span className="text-[#233f1c] font-bold bg-gradient-to-r from-[#233f1c]/10 to-[#ffd469]/10 px-3 py-1 rounded-full text-sm border border-[#233f1c]/20">
+                          <span className="text-[hsl(var(--primary))] font-bold bg-gradient-to-r from-[hsl(var(--primary))]/10 to-[#ffffff]/10 px-3 py-1 rounded-full text-sm border border-[hsl(var(--primary))]/20">
                             Save ₹
                             {(
                               product.originalPrice - product.price
@@ -256,7 +256,7 @@ export function FeaturedProductsClient({
                       {product.benefits?.map(benefit => (
                         <span
                           key={benefit}
-                          className="inline-flex items-center gap-1 bg-gradient-to-r from-[#233f1c]/10 to-[#ffd469]/10 text-[#233f1c] text-sm font-medium px-3 py-2 rounded-full border border-[#233f1c]/20 hover:from-[#233f1c]/20 hover:to-[#ffd469]/20 transition-all duration-300"
+                          className="inline-flex items-center gap-1 bg-gradient-to-r from-[hsl(var(--primary))]/10 to-[#ffffff]/10 text-[hsl(var(--primary))] text-sm font-medium px-3 py-2 rounded-full border border-[hsl(var(--primary))]/20 hover:from-[hsl(var(--primary))]/20 hover:to-[#ffffff]/20 transition-all duration-300"
                         >
                           <CheckCircle className="w-3 h-3" />
                           {benefit}
@@ -274,7 +274,7 @@ export function FeaturedProductsClient({
                       <div className="flex items-center bg-gradient-to-r from-gray-50 to-white border-2 border-gray-200 rounded-full overflow-hidden">
                         <button
                           onClick={() => updateQuantity(product.id, -1)}
-                          className="w-10 h-10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#233f1c]/10 hover:to-[#ffd469]/10 transition-all duration-300"
+                          className="w-10 h-10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[hsl(var(--primary))]/10 hover:to-[#ffffff]/10 transition-all duration-300"
                           disabled={quantity <= 1}
                         >
                           <Minus className="w-4 h-4 text-gray-600" />
@@ -284,7 +284,7 @@ export function FeaturedProductsClient({
                         </span>
                         <button
                           onClick={() => updateQuantity(product.id, 1)}
-                          className="w-10 h-10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#233f1c]/10 hover:to-[#ffd469]/10 transition-all duration-300"
+                          className="w-10 h-10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[hsl(var(--primary))]/10 hover:to-[#ffffff]/10 transition-all duration-300"
                         >
                           <Plus className="w-4 h-4 text-gray-600" />
                         </button>
@@ -299,16 +299,15 @@ export function FeaturedProductsClient({
                   <div className="flex flex-col sm:flex-row gap-4">
                     <button
                       onClick={() => handleAddToCart(product.id)}
-                      className="flex-1 bg-gradient-to-r from-[#233f1c] via-[#2b3e1a] to-[#233f1c] hover:from-[#ffd469] hover:via-[#fff2d4] hover:to-[#ffd469] text-white hover:text-[#233f1c] font-bold py-4 px-6 rounded-full transition-all duration-500 flex items-center justify-center gap-2 shadow-lg hover:shadow-2xl hover:shadow-[#ffd469]/40 transform hover:scale-105 relative overflow-hidden group"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-2xl transform hover:scale-105"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#ffd469]/20 to-[#233f1c]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      <ShoppingBag className="w-5 h-5 relative z-10" />
-                      <span className="relative z-10">Add to Cart</span>
+                      <ShoppingBag className="w-5 h-5" />
+                      <span>Add to Cart</span>
                     </button>
 
                     <Link
                       href={`/products/${product.slug}`}
-                      className="flex-1 bg-gradient-to-r from-transparent to-transparent border-2 border-[#233f1c] text-[#233f1c] hover:bg-gradient-to-r hover:from-[#233f1c] hover:to-[#2b3e1a] hover:text-white font-semibold py-4 px-6 rounded-full transition-all duration-300 text-center transform hover:scale-105"
+                      className="flex-1 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-4 px-6 rounded-full transition-all duration-300 text-center transform hover:scale-105"
                     >
                       View Details
                     </Link>

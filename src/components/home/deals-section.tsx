@@ -13,12 +13,12 @@ const deals: Deal[] = [
     originalPrice: 1855,
     savings: 556,
     badge: 'FLAT 30% OFF',
-    badgeColor: 'bg-[#ffd469] text-[#233f1c]',
-    borderColor: 'border-[#ffd469]',
+    badgeColor: 'bg-[#ffffff] text-[hsl(var(--primary))]',
+    borderColor: 'border-[#ffffff]',
     image:
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop&crop=center',
     buttonText: 'Shop Now',
-    buttonStyle: 'bg-[#233f1c] hover:bg-[#2b3e1a] text-white',
+    buttonStyle: 'bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white',
   },
   {
     id: 2,
@@ -28,12 +28,12 @@ const deals: Deal[] = [
     originalPrice: 1497,
     savings: 499,
     badge: 'BUY 2 GET 1 FREE',
-    badgeColor: 'bg-[#233f1c] text-white',
-    borderColor: 'border-[#233f1c]',
+    badgeColor: 'bg-[hsl(var(--primary))] text-white',
+    borderColor: 'border-[hsl(var(--primary))]',
     image:
       'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop&crop=center',
     buttonText: 'Shop Now',
-    buttonStyle: 'bg-[#233f1c] hover:bg-[#2b3e1a] text-white',
+    buttonStyle: 'bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white',
   },
   {
     id: 3,
@@ -42,23 +42,23 @@ const deals: Deal[] = [
     price: 472,
     originalPrice: 590,
     badge: 'FLASH SALE',
-    badgeColor: 'bg-gradient-to-r from-[#ffd469] to-[#233f1c] text-white',
-    borderColor: 'border-[#ffd469]',
+    badgeColor: 'bg-gradient-to-r from-[#ffffff] to-[hsl(var(--primary))] text-white',
+    borderColor: 'border-[#ffffff]',
     image:
       'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop&crop=center',
     buttonText: 'Grab Deal',
     buttonStyle:
-      'bg-[#ffd469] hover:bg-[#233f1c] text-[#233f1c] hover:text-white transition-all duration-300',
+      'bg-[#ffffff] hover:bg-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:text-white transition-all duration-300',
     specialNote: 'Only 20% OFF • Limited Stock',
   },
 ];
 
 export default function DealsSection() {
   return (
-    <section className="py-16 bg-[#ffd469]/10">
+    <section className="py-16 bg-[#ffffff]/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-[#233f1c] mb-4">
+          <h2 className="text-4xl font-bold text-[hsl(var(--primary))] mb-4">
             Today's Best Deals
           </h2>
           <p className="text-lg text-gray-600">
@@ -73,7 +73,7 @@ export default function DealsSection() {
               className={`bg-white rounded-2xl overflow-hidden shadow-lg border-2 ${deal.borderColor}`}
             >
               {/* Product Image */}
-              <div className="relative h-48 bg-gradient-to-br from-[#ffd469]/20 to-[#ffd469]/30 overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-[#ffffff]/20 to-[#ffffff]/30 overflow-hidden">
                 <Image
                   src={deal.image}
                   alt={deal.title}
@@ -90,19 +90,19 @@ export default function DealsSection() {
               </div>
 
               <div className="p-6 text-center">
-                <h3 className="text-xl font-bold text-[#233f1c] mb-2">
+                <h3 className="text-xl font-bold text-[hsl(var(--primary))] mb-2">
                   {deal.title}
                 </h3>
                 <p className="text-gray-600 mb-4 text-sm">{deal.description}</p>
                 <div className="flex items-center justify-center gap-3 mb-4">
-                  <span className="text-2xl font-bold text-[#233f1c]">
+                  <span className="text-2xl font-bold text-[hsl(var(--primary))]">
                     ₹{deal.price.toLocaleString()}
                   </span>
                   <span className="text-lg text-gray-400 line-through">
                     ₹{deal.originalPrice.toLocaleString()}
                   </span>
                 </div>
-                <div className="text-sm text-[#233f1c] font-medium mb-4">
+                <div className="text-sm text-[hsl(var(--primary))] font-medium mb-4">
                   {deal.specialNote || `Save ₹${deal.savings} • Free Shipping`}
                 </div>
                 <Button className={`w-full ${deal.buttonStyle}`}>
@@ -114,7 +114,7 @@ export default function DealsSection() {
         </div>
 
         {/* Deal Banner */}
-        <div className="mt-12 bg-gradient-to-r from-[#233f1c] to-[#2b3e1a] rounded-2xl p-8 text-center text-white">
+        <div className="mt-12 bg-primary rounded-2xl p-8 text-center text-white">
           <h3 className="text-2xl font-bold mb-2">
             🎁 Free Gift with Every Order Above ₹899
           </h3>

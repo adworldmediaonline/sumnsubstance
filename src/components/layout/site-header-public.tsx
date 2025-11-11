@@ -97,75 +97,75 @@ export default function SiteHeaderPublic() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Home
-                </Link>
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Home
+              </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <Link
-                  href="/products"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Products
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/categories"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Categories
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/about"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  About
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/contact"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Contact
-                </Link>
+                href="/products"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Products
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                href="/categories"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Categories
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                href="/about"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                About
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                href="/contact"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Contact
+              </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -188,7 +188,7 @@ export default function SiteHeaderPublic() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={session.user.image ?? ''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                    <AvatarFallback className="bg-white text-primary font-semibold">
                       {session.user.initials ?? ''}
                     </AvatarFallback>
                   </Avatar>
@@ -268,8 +268,8 @@ export default function SiteHeaderPublic() {
                       }`}
                   >
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${isHomePage
-                      ? (isScrolled ? 'bg-[#228B22] text-white' : 'bg-white text-[#228B22]')
-                      : 'bg-[#228B22] text-white'
+                      ? (isScrolled ? 'bg-primary text-white' : 'bg-white text-primary')
+                      : 'bg-primary text-white'
                       }`}>
                       <User className="w-5 h-5" />
                     </div>
@@ -289,8 +289,8 @@ export default function SiteHeaderPublic() {
                   variant="ghost"
                   size="sm"
                   className={`p-2 transition-colors duration-300 ${isHomePage
-                    ? (isScrolled ? 'text-[#228B22] hover:bg-gray-100' : 'text-white hover:bg-white/10')
-                    : 'text-[#228B22] hover:bg-gray-100'
+                    ? (isScrolled ? 'text-primary hover:bg-muted' : 'text-white hover:bg-white/10')
+                    : 'text-primary hover:bg-muted'
                     }`}
                 >
                   <Menu className="w-6 h-6" />
@@ -298,7 +298,7 @@ export default function SiteHeaderPublic() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
+                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-primary to-primary/80"
               >
                 <div className="flex flex-col h-full">
                   {/* Mobile Header */}
@@ -315,12 +315,12 @@ export default function SiteHeaderPublic() {
                   {session && (
                     <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={session.user.image ?? ''} alt={''} />
-                          <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                            {session.user.initials ?? ''}
-                          </AvatarFallback>
-                        </Avatar>
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={session.user.image ?? ''} alt={''} />
+                        <AvatarFallback className="bg-white text-primary font-semibold">
+                          {session.user.initials ?? ''}
+                        </AvatarFallback>
+                      </Avatar>
                         <div>
                           <p className="text-white font-medium">{session.user.name}</p>
                           <p className="text-white/70 text-sm">{session.user.email}</p>

@@ -10,4 +10,3 @@ export { default as CategoriesSection } from './categories-section';
 export { default as DealsSection } from './deals-section';
 export { default as TestimonialsSection } from './testimonials-section';
 export { default as TrustBadges } from './trust-badges';
-export { default as NewsletterSection } from './newsletter-section';

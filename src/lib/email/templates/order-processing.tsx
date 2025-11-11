@@ -223,7 +223,7 @@ const container = {
 };
 
 const header = {
-  backgroundColor: '#228B22',
+  backgroundColor: 'hsl(var(--primary))',
   padding: '32px 20px',
   textAlign: 'center' as const,
 };
@@ -238,7 +238,7 @@ const h1 = {
 };
 
 const headerText = {
-  color: '#FFD700',
+  color: '#ffffff',
   fontSize: '16px',
   lineHeight: '24px',
   margin: '8px 0 0',
@@ -254,7 +254,7 @@ const orderDetails = {
 };
 
 const h2 = {
-  color: '#228B22',
+  color: 'hsl(var(--primary))',
   fontSize: '20px',
   fontWeight: 'bold',
   margin: '0 0 8px',
@@ -262,7 +262,7 @@ const h2 = {
 };
 
 const h3 = {
-  color: '#228B22',
+  color: 'hsl(var(--primary))',
   fontSize: '18px',
   fontWeight: 'bold',
   margin: '0 0 16px',
@@ -278,7 +278,7 @@ const orderDateStyle = {
 
 const statusContainer = {
   backgroundColor: '#e8f5e8',
-  border: '2px solid #228B22',
+  border: '2px solid hsl(var(--primary))',
   borderRadius: '8px',
   margin: '24px 20px',
   padding: '20px',
@@ -357,7 +357,7 @@ const summaryValue = {
 
 const totalSeparator = {
   border: 'none',
-  borderTop: '2px solid #228B22',
+  borderTop: '2px solid hsl(var(--primary))',
   margin: '16px 0',
 };
 
@@ -368,7 +368,7 @@ const totalLabel = {
 };
 
 const totalValue = {
-  color: '#228B22',
+  color: 'hsl(var(--primary))',
   fontSize: '18px',
   fontWeight: 'bold',
   margin: '0',
@@ -403,7 +403,7 @@ const ctaSection = {
 };
 
 const button = {
-  backgroundColor: '#228B22',
+  backgroundColor: 'hsl(var(--primary))',
   color: '#ffffff',
   padding: '12px 24px',
   borderRadius: '8px',
@@ -433,6 +433,6 @@ const footerText = {
 };
 
 const link = {
-  color: '#228B22',
+  color: 'hsl(var(--primary))',
   textDecoration: 'underline',
 };

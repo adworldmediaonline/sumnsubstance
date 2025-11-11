@@ -56,7 +56,7 @@ export function ReviewDetailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-[#233f1c]">
+          <DialogTitle className="text-2xl font-bold text-[hsl(var(--primary))]">
             Review Details
           </DialogTitle>
           <DialogDescription>
@@ -101,7 +101,7 @@ export function ReviewDetailDialog({
               <div className="flex items-center gap-3">
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={review.userImage} alt={review.userName} />
-                  <AvatarFallback className="bg-gradient-to-r from-[#233f1c] to-[#2b3e1a] text-white">
+                  <AvatarFallback className="bg-gradient-to-r from-[hsl(var(--primary))] to-[#2b3e1a] text-white">
                     {review.userInitials || review.userName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>

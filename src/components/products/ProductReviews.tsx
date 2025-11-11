@@ -26,7 +26,7 @@ export default function ProductReviews({
 }: ProductReviewsProps) {
   return (
     <div>
-      <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-4 lg:mb-6">
+      <h3 className="text-xl lg:text-2xl font-bold text-[hsl(var(--primary))] mb-4 lg:mb-6">
         Customer Reviews
       </h3>
 
@@ -34,7 +34,7 @@ export default function ProductReviews({
       <div className="bg-gradient-to-r from-gray-50 to-white rounded-2xl lg:rounded-3xl p-6 lg:p-8 mb-6 lg:mb-8 border border-gray-200">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="text-center lg:border-r lg:border-gray-200">
-            <div className="text-4xl lg:text-5xl font-black text-[#233f1c] mb-2 lg:mb-3">
+            <div className="text-4xl lg:text-5xl font-black text-[hsl(var(--primary))] mb-2 lg:mb-3">
               {averageRating}
             </div>
             <div className="flex items-center justify-center gap-1 mb-2 lg:mb-3">
@@ -84,28 +84,28 @@ export default function ProductReviews({
         <Button
           variant="outline"
           size="sm"
-          className="bg-[#233f1c] text-white border-[#233f1c] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
+          className="bg-[hsl(var(--primary))] text-white border-[hsl(var(--primary))] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
         >
           All Reviews
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="border-gray-300 text-gray-600 hover:border-[#233f1c] hover:text-[#233f1c] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
+          className="border-gray-300 text-gray-600 hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
         >
           With Photos (47)
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="border-gray-300 text-gray-600 hover:border-[#233f1c] hover:text-[#233f1c] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
+          className="border-gray-300 text-gray-600 hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
         >
           5 Stars (1,384)
         </Button>
         <Button
           variant="outline"
           size="sm"
-          className="border-gray-300 text-gray-600 hover:border-[#233f1c] hover:text-[#233f1c] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
+          className="border-gray-300 text-gray-600 hover:border-[hsl(var(--primary))] hover:text-[hsl(var(--primary))] rounded-full px-3 lg:px-4 text-xs lg:text-sm whitespace-nowrap"
         >
           Verified Purchase
         </Button>
@@ -120,7 +120,7 @@ export default function ProductReviews({
           >
             <div className="flex items-start gap-3 lg:gap-6">
               {/* Avatar */}
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-[#233f1c] to-[#2b3e1a] rounded-full flex items-center justify-center text-white font-bold text-sm lg:text-lg flex-shrink-0">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary))] rounded-full flex items-center justify-center text-white font-bold text-sm lg:text-lg flex-shrink-0">
                 {review.user.charAt(0)}
               </div>
 
@@ -174,7 +174,7 @@ export default function ProductReviews({
 
                 {/* Review Actions - Mobile optimized */}
                 <div className="flex items-center gap-4 lg:gap-6">
-                  <button className="flex items-center gap-1 lg:gap-2 text-xs lg:text-sm text-gray-600 hover:text-[#233f1c] transition-colors touch-manipulation">
+                  <button className="flex items-center gap-1 lg:gap-2 text-xs lg:text-sm text-gray-600 hover:text-[hsl(var(--primary))] transition-colors touch-manipulation">
                     <svg
                       className="w-3 h-3 lg:w-4 lg:h-4"
                       fill="none"
@@ -191,7 +191,7 @@ export default function ProductReviews({
                     <span className="hidden sm:inline">Helpful (23)</span>
                     <span className="sm:hidden">23</span>
                   </button>
-                  <button className="flex items-center gap-1 lg:gap-2 text-xs lg:text-sm text-gray-600 hover:text-[#233f1c] transition-colors touch-manipulation">
+                  <button className="flex items-center gap-1 lg:gap-2 text-xs lg:text-sm text-gray-600 hover:text-[hsl(var(--primary))] transition-colors touch-manipulation">
                     <svg
                       className="w-3 h-3 lg:w-4 lg:h-4"
                       fill="none"
@@ -219,7 +219,7 @@ export default function ProductReviews({
         <Button
           variant="outline"
           size="lg"
-          className="border-2 border-[#233f1c] text-[#233f1c] hover:bg-[#233f1c] hover:text-white px-6 lg:px-8 py-3 rounded-2xl font-semibold text-sm lg:text-base touch-manipulation"
+          className="border-2 border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] hover:text-white px-6 lg:px-8 py-3 rounded-2xl font-semibold text-sm lg:text-base touch-manipulation"
         >
           Load More Reviews
         </Button>

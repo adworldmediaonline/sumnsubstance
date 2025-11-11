@@ -45,121 +45,122 @@
 }
 
 :root {
-  /* Brand Colors */
-  /* Yellow Theme */
-  --brand-primary: #ffd469; /* Primary Yellow */
-  --brand-secondary: #233f1c; /* Primary Green */
-
-  /* Green Theme */
-  --brand-green: #2b3e1a; /* Dark Green */
+  /* Brand Colors - Only Primary (#19302A) and White (#FFFFFF) */
+  --brand-primary: #19302a; /* Primary Dark Green */
   --brand-white: #ffffff; /* White */
-
-  /* Light variations */
-  --brand-yellow-light: #fff2d4;
-  --brand-green-light: #4a6633;
 
   /* Base Theme */
   --radius: 0.75rem;
   --background: #ffffff;
-  --foreground: #0f172a;
+  --foreground: #19302a;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #19302a;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
+  --popover-foreground: #19302a;
 
-  /* Primary using brand colors */
-  --primary: #233f1c; /* Brand Green */
+  /* Primary - Using brand primary */
+  --primary: #19302a;
   --primary-foreground: #ffffff;
 
-  /* Secondary using brand yellow */
-  --secondary: #ffd469; /* Brand Yellow */
-  --secondary-foreground: #233f1c;
+  /* Secondary - Using white with primary text */
+  --secondary: #ffffff;
+  --secondary-foreground: #19302a;
 
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
-  --border: #e2e8f0;
+  /* Muted - Light variations of primary */
+  --muted: #f5f7f6;
+  --muted-foreground: #19302a;
+
+  /* Accent - Subtle primary tint */
+  --accent: #e8ebe9;
+  --accent-foreground: #19302a;
+
+  /* Destructive - Using primary for consistency */
+  --destructive: #19302a;
+  --destructive-foreground: #ffffff;
+
+  /* Borders - Very light primary */
+  --border: #e0e4e2;
   --input: #ffffff;
-  --input-border: #d1d5db;
-  --ring: #ffd469; /* Brand Yellow */
+  --input-border: #d1d7d4;
+  --ring: #19302a;
 
-  /* Charts using brand colors */
-  --chart-1: #ffd469; /* Brand Yellow */
-  --chart-2: #233f1c; /* Brand Green */
-  --chart-3: #2b3e1a; /* Dark Green */
-  --chart-4: #fff2d4; /* Light Yellow */
-  --chart-5: #1a2e13; /* Darker Green */
+  /* Charts - Variations of primary and white */
+  --chart-1: #19302a;
+  --chart-2: #2d4a42;
+  --chart-3: #456159;
+  --chart-4: #e8ebe9;
+  --chart-5: #0d1815;
 
-  /* Sidebar */
+  /* Sidebar - Primary and White theme */
   --sidebar: #ffffff;
-  --sidebar-foreground: #233f1c;
-  --sidebar-primary: #ffd469;
-  --sidebar-primary-foreground: #233f1c;
-  --sidebar-accent: #f8fafc;
-  --sidebar-accent-foreground: #233f1c;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #ffd469;
+  --sidebar-foreground: #19302a;
+  --sidebar-primary: #19302a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f5f7f6;
+  --sidebar-accent-foreground: #19302a;
+  --sidebar-border: #e0e4e2;
+  --sidebar-ring: #19302a;
 }
 
 .dark {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --card: #1e293b;
-  --card-foreground: #f8fafc;
-  --popover: #1e293b;
-  --popover-foreground: #f8fafc;
+  /* Dark mode - Inverted: White background with Primary text */
+  --background: #19302a;
+  --foreground: #ffffff;
+  --card: #19302a;
+  --card-foreground: #ffffff;
+  --popover: #19302a;
+  --popover-foreground: #ffffff;
 
-  --primary: #ffd469; /* Brand Yellow for dark mode */
-  --primary-foreground: #233f1c;
+  --primary: #ffffff;
+  --primary-foreground: #19302a;
 
-  --secondary: #233f1c; /* Brand Green for dark mode */
-  --secondary-foreground: #f8fafc;
+  --secondary: #19302a;
+  --secondary-foreground: #ffffff;
 
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
-  --destructive: #ef4444;
-  --border: #334155;
-  --input: #1e293b;
-  --input-border: #475569;
-  --ring: #ffd469;
+  --muted: #2d4a42;
+  --muted-foreground: #ffffff;
+  --accent: #456159;
+  --accent-foreground: #ffffff;
+  --destructive: #ffffff;
+  --destructive-foreground: #19302a;
+  --border: #456159;
+  --input: #19302a;
+  --input-border: #2d4a42;
+  --ring: #ffffff;
 
   /* Dark mode charts */
-  --chart-1: #ffd469;
-  --chart-2: #233f1c;
-  --chart-3: #ffffff;
-  --chart-4: #fff2d4;
-  --chart-5: #1a2e13;
+  --chart-1: #ffffff;
+  --chart-2: #e8ebe9;
+  --chart-3: #d1d7d4;
+  --chart-4: #456159;
+  --chart-5: #2d4a42;
 
   /* Dark sidebar */
-  --sidebar: #1e293b;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #ffd469;
-  --sidebar-primary-foreground: #233f1c;
-  --sidebar-accent: #0f172a;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #334155;
-  --sidebar-ring: #ffd469;
+  --sidebar: #19302a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #19302a;
+  --sidebar-accent: #2d4a42;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #456159;
+  --sidebar-ring: #ffffff;
 }
 
-/* Clean brand utilities */
+/* Clean brand utilities - Only Primary (#19302A) and White */
 .brand-gradient {
-  background: linear-gradient(135deg, #ffd469 0%, #fff2d4 100%);
+  background: linear-gradient(135deg, #19302a 0%, #2d4a42 100%);
 }
 
 .brand-gradient-reverse {
-  background: linear-gradient(135deg, #fff2d4 0%, #ffd469 100%);
+  background: linear-gradient(135deg, #2d4a42 0%, #19302a 100%);
 }
 
 .brand-dark-gradient {
-  background: linear-gradient(135deg, #2b3e1a 0%, #233f1c 100%);
+  background: linear-gradient(135deg, #0d1815 0%, #19302a 100%);
 }
 
 .brand-text-gradient {
-  background: linear-gradient(135deg, #ffd469 0%, #233f1c 100%);
+  background: linear-gradient(135deg, #19302a 0%, #2d4a42 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -203,23 +204,54 @@
     @apply bg-background text-foreground;
   }
 
-  /* Clean scrollbar */
+  /* Section Titles - Primary Color */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-primary;
+  }
+
+  /* Override for white text on dark backgrounds */
+  [class*="bg-primary"] h1,
+  [class*="bg-primary"] h2,
+  [class*="bg-primary"] h3,
+  [class*="bg-primary"] h4,
+  [class*="bg-primary"] h5,
+  [class*="bg-primary"] h6 {
+    @apply text-white;
+  }
+
+  /* Button Styles - Primary Color Theme */
+  button:not([class*="bg-"]):not([class*="border-"]):not([class*="variant"]) {
+    @apply bg-primary text-white;
+  }
+
+  /* Ensure shadcn buttons use primary */
+  [data-slot="button"]:not([class*="variant-outline"]):not([class*="variant-ghost"]):not([class*="variant-link"]) {
+    @apply bg-primary text-white hover:bg-primary/90;
+  }
+
+  /* Outline buttons use primary border */
+  [data-slot="button"][class*="variant-outline"],
+  button[class*="variant-outline"] {
+    @apply border-primary text-primary hover:bg-primary hover:text-white;
+  }
+
+  /* Clean scrollbar - Primary theme */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #f5f7f6;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #d1d7d4;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #19302a;
   }
 
   /* Thin scrollbar for horizontal scroll */
@@ -232,12 +264,12 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #d1d7d4;
     border-radius: 2px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #19302a;
   }
 
   /* Form elements styling */
@@ -325,7 +357,7 @@
 
 .form-container input:focus-visible,
 .form-container button:focus-visible {
-  outline: 2px solid #ffd469;
+  outline: 2px solid #19302a;
   outline-offset: 2px;
 }
 
@@ -362,7 +394,7 @@
 
 .otp-input:focus {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(255, 212, 105, 0.1);
+  box-shadow: 0 0 0 3px rgba(25, 48, 42, 0.1);
 }
 
 /* Product card enhancements */
@@ -393,7 +425,7 @@
 
 /* Focus states */
 .focus-ring:focus {
-  outline: 2px solid #ffd469;
+  outline: 2px solid #19302a;
   outline-offset: 2px;
 }
 
@@ -442,7 +474,7 @@
 .related-pagination .swiper-pagination-bullet {
   width: 12px !important;
   height: 12px !important;
-  background: #d1d5db !important;
+  background: #d1d7d4 !important;
   opacity: 1 !important;
   border-radius: 50% !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -462,16 +494,16 @@
   transform: translate(-50%, -50%) scale(0);
   width: 24px;
   height: 24px;
-  background: rgba(35, 63, 28, 0.1);
+  background: rgba(25, 48, 42, 0.1);
   border-radius: 50%;
   transition: transform 0.3s ease;
   z-index: -1;
 }
 
 .related-pagination .swiper-pagination-bullet:hover {
-  background: #9ca3af !important;
+  background: #456159 !important;
   transform: scale(1.2) !important;
-  border-color: rgba(35, 63, 28, 0.2) !important;
+  border-color: rgba(25, 48, 42, 0.2) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
@@ -480,12 +512,12 @@
 }
 
 .related-pagination .swiper-pagination-bullet-active {
-  background: linear-gradient(135deg, #233f1c 0%, #2b3e1a 100%) !important;
+  background: linear-gradient(135deg, #19302a 0%, #2d4a42 100%) !important;
   width: 36px !important;
   height: 12px !important;
   border-radius: 18px !important;
-  border-color: rgba(35, 63, 28, 0.3) !important;
-  box-shadow: 0 4px 16px rgba(35, 63, 28, 0.3) !important;
+  border-color: rgba(25, 48, 42, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(25, 48, 42, 0.3) !important;
   position: relative !important;
 }
 
@@ -504,18 +536,18 @@
 }
 
 .related-pagination .swiper-pagination-bullet-active-main {
-  background: linear-gradient(135deg, #ffd469 0%, #ffca28 100%) !important;
-  box-shadow: 0 4px 20px rgba(255, 212, 105, 0.5) !important;
-  border-color: rgba(255, 212, 105, 0.4) !important;
+  background: linear-gradient(135deg, #19302a 0%, #2d4a42 100%) !important;
+  box-shadow: 0 4px 20px rgba(25, 48, 42, 0.5) !important;
+  border-color: rgba(25, 48, 42, 0.4) !important;
 }
 
 .related-pagination .swiper-pagination-bullet-active-next,
 .related-pagination .swiper-pagination-bullet-active-prev {
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%) !important;
+  background: linear-gradient(135deg, #456159 0%, #2d4a42 100%) !important;
   width: 20px !important;
   height: 12px !important;
   border-radius: 10px !important;
-  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(69, 97, 89, 0.3) !important;
 }
 
 /* Pagination pulse animation */

@@ -148,7 +148,7 @@ export function SignInForm({
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-[#228B22] hover:bg-[#1e7a1e] text-white transition-all duration-300"
+                  className="w-full bg-[hsl(var(--primary))] hover:bg-[#1e7a1e] text-white transition-all duration-300"
                   disabled={isLoading}
                 >
                   {isLoading && (
@@ -163,14 +163,14 @@ export function SignInForm({
                   <button
                     type="button"
                     onClick={onSwitchToSignUp}
-                    className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                    className="underline underline-offset-4 text-[hsl(var(--primary))] hover:text-[#1e7a1e] font-medium transition-colors"
                   >
                     Sign up
                   </button>
                 ) : (
                   <Link
                     href="/sign-up"
-                    className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                    className="underline underline-offset-4 text-[hsl(var(--primary))] hover:text-[#1e7a1e] font-medium transition-colors"
                   >
                     Sign up
                   </Link>
@@ -252,7 +252,7 @@ export function SignInForm({
                     Don&apos;t have an account?{' '}
                     <Link
                       href="/sign-up"
-                      className="underline underline-offset-4 text-[#228B22] hover:text-[#1e7a1e] font-medium transition-colors"
+                      className="underline underline-offset-4 text-[hsl(var(--primary))] hover:text-[#1e7a1e] font-medium transition-colors"
                     >
                       Sign up
                     </Link>
