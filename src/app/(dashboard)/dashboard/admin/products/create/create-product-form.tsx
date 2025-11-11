@@ -76,7 +76,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
 
       if (result.success) {
         toast.success('Product created successfully!');
-        router.push('/dashboard/products');
+        router.push('/dashboard/admin/products');
       } else {
         toast.error(result.error);
       }
@@ -470,7 +470,7 @@ export function CreateProductForm({ categories }: CreateProductFormProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push('/dashboard/products')}
+            onClick={() => router.push('/dashboard/admin/products')}
             disabled={isSubmitting}
           >
             Cancel

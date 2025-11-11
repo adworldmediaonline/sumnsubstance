@@ -72,7 +72,7 @@ export function FloatingCart() {
           {/* Compact Layout Container */}
           <div className="flex items-center gap-3 px-3 py-3">
             {/* Cart Icon */}
-            <div className="w-8 h-8 bg-gradient-to-r from-[#228B22] to-[#9ACD32] rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary))] rounded-full flex items-center justify-center flex-shrink-0">
               <ShoppingBag className="w-4 h-4 text-white" />
             </div>
 
@@ -92,7 +92,7 @@ export function FloatingCart() {
                     <div
                       className={`relative w-12 h-12 rounded-full overflow-hidden transition-all duration-300 border-2 border-white shadow-sm ${
                         recentlyAdded === item.product.id
-                          ? 'ring-2 ring-[#228B22] scale-110'
+                          ? 'ring-2 ring-[hsl(var(--primary))] scale-110'
                           : 'hover:scale-105'
                       }`}
                     >
@@ -138,7 +138,7 @@ export function FloatingCart() {
                 <Button
                   asChild
                   size="sm"
-                  className="bg-[#228B22] hover:bg-[#1e7a1e] text-white h-8 px-3 text-xs"
+                  className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white h-8 px-3 text-xs"
                   onClick={dismiss}
                 >
                   <Link href="/cart">Cart</Link>

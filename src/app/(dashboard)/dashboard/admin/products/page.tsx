@@ -17,7 +17,7 @@ export default async function ProductsPage() {
           <p className="text-muted-foreground">Manage your products</p>
         </div>
         <Button asChild>
-          <Link href="/dashboard/products/create">
+          <Link href="/dashboard/admin/products/create">
             <Plus className="mr-2 h-4 w-4" />
             Add Product
           </Link>
@@ -33,7 +33,7 @@ export default async function ProductsPage() {
               Get started by creating your first product.
             </p>
             <Button asChild>
-              <Link href="/dashboard/products/create">
+              <Link href="/dashboard/admin/products/create">
                 <Plus className="mr-2 h-4 w-4" />
                 Create Product
               </Link>

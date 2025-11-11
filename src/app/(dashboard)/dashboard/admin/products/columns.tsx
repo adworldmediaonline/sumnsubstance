@@ -135,7 +135,7 @@ export const productColumns: ColumnDef<SerializedProductWithCategory>[] = [
       return (
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/products/${product.id}/edit`}>
+            <Link href={`/dashboard/admin/products/${product.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>

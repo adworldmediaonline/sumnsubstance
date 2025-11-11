@@ -25,7 +25,8 @@ import { toast } from 'sonner';
 import { updateReviewStatus, deleteReviewAdmin } from '@/app/actions/review';
 import { useRouter } from 'next/navigation';
 import { ReviewDetailDialog } from './review-detail-dialog';
-import type { AdminReviewData } from '@/app/(dashboard)/dashboard/reviews/columns';
+import { AdminReviewData } from '@/app/(dashboard)/dashboard/admin/reviews/columns';
+
 
 interface ReviewActionsProps {
   review: AdminReviewData;

@@ -155,15 +155,15 @@ export function CartDropdown({ className, isScrolled }: { className?: string; is
           size="sm"
           className={`relative p-2 transition-colors duration-300 ${
             isScrolled
-              ? 'text-gray-700 hover:text-[#228B22] hover:bg-gray-100'
-              : 'text-white hover:text-[#FFD700] hover:bg-white/10'
+              ? 'text-gray-700 hover:text-[hsl(var(--primary))] hover:bg-gray-100'
+              : 'text-white hover:text-[#ffffff] hover:bg-white/10'
           } ${className}`}
         >
           <ShoppingCart className="h-5 w-5" />
           {isHydrated && itemCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-[#FFD700] text-[#228B22] hover:bg-[#FFD700]/90"
+              className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs bg-[#ffffff] text-[hsl(var(--primary))] hover:bg-[#ffffff]/90"
             >
               {itemCount}
             </Badge>

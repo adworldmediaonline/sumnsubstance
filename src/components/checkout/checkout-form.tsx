@@ -190,7 +190,7 @@ export function CheckoutForm({
             contact: form.getValues('shippingAddress.phone'),
           },
           theme: {
-            color: '#228B22',
+            color: 'hsl(var(--primary))',
           },
           modal: {
             ondismiss: () => {

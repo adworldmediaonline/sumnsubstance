@@ -59,7 +59,7 @@ export default function FeaturesSection({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-[#233f1c] mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-[hsl(var(--primary))] mb-4">
             {title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -72,13 +72,13 @@ export default function FeaturesSection({
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group cursor-pointer border-0 shadow-sm hover:shadow-lg transition-all duration-300 bg-white hover:bg-[#ffd469]/5"
+              className="group cursor-pointer border-0 shadow-sm hover:shadow-lg transition-all duration-300 bg-white hover:bg-[#ffffff]/5"
             >
               <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-[#ffd469]/10 text-[#233f1c] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#ffd469] group-hover:text-[#233f1c] transition-all duration-300">
+                <div className="w-16 h-16 bg-[#ffffff]/10 text-[hsl(var(--primary))] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#ffffff] group-hover:text-[hsl(var(--primary))] transition-all duration-300">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-[#233f1c] mb-4 group-hover:text-[#233f1c]">
+                <h3 className="text-xl font-semibold text-[hsl(var(--primary))] mb-4 group-hover:text-[hsl(var(--primary))]">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">

@@ -15,7 +15,7 @@ export default function CreateCategoryPage() {
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
-          <Link href="/dashboard/categories">
+          <Link href="/dashboard/admin/categories">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Categories
           </Link>

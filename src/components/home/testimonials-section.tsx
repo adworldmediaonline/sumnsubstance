@@ -19,7 +19,7 @@ export default function TestimonialsSection() {
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-5xl font-bold text-[#233f1c] mb-6">
+          <h2 className="text-5xl font-bold text-[hsl(var(--primary))] mb-6">
             Real Results, Real People
           </h2>
           <p className="text-xl text-gray-600 mb-4">

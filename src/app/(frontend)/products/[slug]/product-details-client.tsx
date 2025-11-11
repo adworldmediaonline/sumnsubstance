@@ -15,10 +15,8 @@ import {
   CheckCircle,
   ChevronLeft,
   ChevronRight,
-  Heart,
   Minus,
   Plus,
-  Share2,
   ShoppingCart,
   Sparkles,
   Star,
@@ -56,7 +54,6 @@ export default function ProductDetailsClient({
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState('description');
   const [showStickyCart, setShowStickyCart] = useState(false);
   const [showImageZoom, setShowImageZoom] = useState(false);
@@ -105,25 +102,25 @@ export default function ProductDetailsClient({
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24 pb-4 lg:pb-8 relative overflow-visible">
         {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4 lg:mb-8 overflow-x-auto scrollbar-hide">
-          <Link href="/" className="hover:text-[#233f1c] whitespace-nowrap">
+          <Link href="/" className="hover:text-primary whitespace-nowrap">
             Home
           </Link>
           <span className="text-gray-400">/</span>
           <Link
             href="/products"
-            className="hover:text-[#233f1c] whitespace-nowrap"
+            className="hover:text-primary whitespace-nowrap"
           >
             Products
           </Link>
           <span className="text-gray-400">/</span>
           <Link
             href={`/categories/${product.category.name.toLowerCase()}`}
-            className="hover:text-[#233f1c] whitespace-nowrap"
+            className="hover:text-primary whitespace-nowrap"
           >
             {product.category.name}
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="text-[#233f1c] font-medium truncate">
+          <span className="text-primary font-medium truncate">
             {product.name}
           </span>
         </nav>
@@ -165,26 +162,6 @@ export default function ProductDetailsClient({
                 {/* Badges like "Best Seller" or "New Launch" can be added here based on product metadata */}
               </div>
 
-              {/* Wishlist & Share - Mobile optimized */}
-              <div className="absolute top-3 lg:top-4 right-3 lg:right-4 flex flex-col gap-2 z-20">
-                <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center transition-all touch-manipulation ${
-                    isWishlisted
-                      ? 'bg-red-500 text-white'
-                      : 'bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-white'
-                  }`}
-                >
-                  <Heart
-                    className={`w-4 h-4 lg:w-5 lg:h-5 ${
-                      isWishlisted ? 'fill-current' : ''
-                    }`}
-                  />
-                </button>
-                <button className="w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:bg-white transition-all touch-manipulation">
-                  <Share2 className="w-4 h-4 lg:w-5 lg:h-5" />
-                </button>
-              </div>
             </div>
 
             {/* Mobile Swipe Gallery - Redesigned */}
@@ -211,7 +188,7 @@ export default function ProductDetailsClient({
                       onClick={() => setSelectedImageIndex(index)}
                       className={`w-full h-full rounded-lg overflow-hidden border-2 transition-all duration-300 touch-manipulation relative ${
                         selectedImageIndex === index
-                          ? 'border-[#233f1c] shadow-sm scale-105'
+                          ? 'border-primary shadow-sm scale-105'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -224,8 +201,8 @@ export default function ProductDetailsClient({
                       />
                       {/* Selected indicator */}
                       {selectedImageIndex === index && (
-                        <div className="absolute inset-0 bg-[#233f1c]/10 flex items-center justify-center">
-                          <div className="w-3 h-3 bg-[#233f1c] rounded-full flex items-center justify-center">
+                        <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+                          <div className="w-3 h-3 bg-primary rounded-full flex items-center justify-center">
                             <svg
                               className="w-1.5 h-1.5 text-white"
                               fill="currentColor"
@@ -274,7 +251,7 @@ export default function ProductDetailsClient({
                       onClick={() => setSelectedImageIndex(index)}
                       className={`w-full h-full rounded-lg overflow-hidden border-2 transition-all relative ${
                         selectedImageIndex === index
-                          ? 'border-[#233f1c] shadow-sm'
+                          ? 'border-primary shadow-sm'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -294,14 +271,14 @@ export default function ProductDetailsClient({
               <Button
                 variant="outline"
                 size="icon"
-                className="thumbnail-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-7 h-7 rounded-full border border-[#233f1c] text-[#233f1c] hover:bg-[#233f1c] hover:text-white transition-all z-10"
+                className="thumbnail-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-7 h-7 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-all z-10"
               >
                 <ChevronLeft className="w-3 h-3" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
-                className="thumbnail-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-7 h-7 rounded-full border border-[#233f1c] text-[#233f1c] hover:bg-[#233f1c] hover:text-white transition-all z-10"
+                className="thumbnail-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-7 h-7 rounded-full border border-primary text-primary hover:bg-primary hover:text-white transition-all z-10"
               >
                 <ChevronRight className="w-3 h-3" />
               </Button>
@@ -312,7 +289,7 @@ export default function ProductDetailsClient({
           <div className="space-y-3 lg:space-y-4">
             {/* Product Title & Rating */}
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#233f1c] mb-2 lg:mb-3 leading-tight">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-2 lg:mb-3 leading-tight">
                 {product.name}
               </h1>
               {product.tagline && (
@@ -356,7 +333,7 @@ export default function ProductDetailsClient({
             {/* Price - Mobile optimized */}
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl lg:text-3xl font-bold text-[#233f1c]">
+                <span className="text-2xl lg:text-3xl font-bold text-primary">
                   ₹{product.price}
                 </span>
               </div>
@@ -365,8 +342,8 @@ export default function ProductDetailsClient({
 
             {/* Key Benefits / Why You'll Love It - Mobile optimized */}
             {product.whyLoveIt && (
-              <div className="bg-[#ffd469]/10 rounded-xl p-4">
-                <h3 className="font-bold text-[#233f1c] mb-2 flex items-center text-sm lg:text-base">
+              <div className="bg-[#ffffff]/10 rounded-xl p-4">
+                <h3 className="font-bold text-primary mb-2 flex items-center text-sm lg:text-base">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Why You'll Love It
                 </h3>
@@ -386,19 +363,19 @@ export default function ProductDetailsClient({
                 <div className="flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl p-1.5 w-fit mx-auto lg:mx-0">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 lg:w-12 lg:h-12 bg-white hover:bg-[#233f1c] hover:text-white rounded-lg flex items-center justify-center transition-all duration-200 group touch-manipulation"
+                    className="w-10 h-10 lg:w-12 lg:h-12 bg-white hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-all duration-200 group touch-manipulation"
                     disabled={quantity <= 1}
                   >
                     <Minus className="w-4 h-4 lg:w-5 lg:h-5 group-disabled:text-gray-400" />
                   </button>
                   <div className="w-16 lg:w-20 text-center">
-                    <span className="text-xl lg:text-2xl font-bold text-[#233f1c]">
+                    <span className="text-xl lg:text-2xl font-bold text-primary">
                       {quantity}
                     </span>
                   </div>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 lg:w-12 lg:h-12 bg-white hover:bg-[#233f1c] hover:text-white rounded-lg flex items-center justify-center transition-all duration-200 group touch-manipulation"
+                    className="w-10 h-10 lg:w-12 lg:h-12 bg-white hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-all duration-200 group touch-manipulation"
                   >
                     <Plus className="w-4 h-4 lg:w-5 lg:h-5" />
                   </button>
@@ -411,48 +388,22 @@ export default function ProductDetailsClient({
                   <Button
                     onClick={handleAddToCart}
                     size="lg"
-                    className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl group transition-all duration-300 hover:shadow-lg hover:shadow-[#233f1c]/20 touch-manipulation order-2 sm:order-1"
+                    className="bg-primary hover:bg-primary text-white py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl group transition-all duration-300 hover:shadow-lg hover:shadow-[hsl(var(--primary))]/20 touch-manipulation order-2 sm:order-1"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                     Add to Cart
                   </Button>
                   <Button
                     onClick={handleBuyNow}
+                    variant="outline"
                     size="lg"
-                    className="bg-[#ffd469] hover:bg-[#ffca28] text-[#233f1c] py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl group transition-all duration-300 hover:shadow-lg hover:shadow-[#ffd469]/20 touch-manipulation order-1 sm:order-2"
+                    className="border-2 border-primary text-primary hover:bg-primary hover:text-white py-3 lg:py-4 text-sm lg:text-base font-bold rounded-xl transition-all duration-300 touch-manipulation order-1 sm:order-2"
                   >
-                    ⚡ Buy Now
+                    Buy Now
                   </Button>
                 </div>
 
                 {/* Wishlist & Share - Mobile optimized */}
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-2 border-gray-300 hover:border-red-500 hover:text-red-500 py-3 lg:py-4 rounded-2xl group transition-all duration-300 touch-manipulation"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                  >
-                    <Heart
-                      className={`w-4 h-4 lg:w-5 lg:h-5 mr-2 transition-all ${
-                        isWishlisted
-                          ? 'fill-red-500 text-red-500'
-                          : 'group-hover:fill-red-500'
-                      }`}
-                    />
-                    <span className="text-sm lg:text-base">
-                      {isWishlisted ? 'Saved' : 'Save'}
-                    </span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="border-2 border-gray-300 hover:border-[#233f1c] hover:text-[#233f1c] py-3 lg:py-4 rounded-2xl group transition-all duration-300 touch-manipulation"
-                  >
-                    <Share2 className="w-4 h-4 lg:w-5 lg:h-5 mr-2 group-hover:scale-110 transition-transform" />
-                    <span className="text-sm lg:text-base">Share</span>
-                  </Button>
-                </div>
               </div>
             </div>
           </div>
@@ -475,7 +426,7 @@ export default function ProductDetailsClient({
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-3 lg:py-4 px-4 lg:px-2 border-b-2 font-medium text-sm lg:text-base transition-colors whitespace-nowrap touch-manipulation ${
                     activeTab === tab.id
-                      ? 'border-[#233f1c] text-[#233f1c]'
+                      ? 'border-primary text-primary'
                       : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -490,7 +441,7 @@ export default function ProductDetailsClient({
               <div className="space-y-4 lg:space-y-6">
                 {product.description && (
                   <div>
-                    <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                    <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3 lg:mb-4">
                       Product Description
                     </h3>
                     <div
@@ -502,7 +453,7 @@ export default function ProductDetailsClient({
 
                 {product.whyLoveIt && (
                   <div>
-                    <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
+                    <h4 className="text-base lg:text-lg font-semibold text-primary mb-3">
                       Why You'll Love It
                     </h4>
                     <div
@@ -514,7 +465,7 @@ export default function ProductDetailsClient({
 
                 {product.whatsInside && (
                   <div>
-                    <h4 className="text-base lg:text-lg font-semibold text-[#233f1c] mb-3">
+                    <h4 className="text-base lg:text-lg font-semibold text-primary mb-3">
                       What's Inside
                     </h4>
                     <div
@@ -528,11 +479,11 @@ export default function ProductDetailsClient({
 
             {activeTab === 'usage' && (
               <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3 lg:mb-4">
                   How to Use
                 </h3>
                 {product.howToUse ? (
-                  <div className="bg-[#ffd469]/10 rounded-xl lg:rounded-2xl p-4 lg:p-6">
+                  <div className="bg-[#ffffff]/10 rounded-xl lg:rounded-2xl p-4 lg:p-6">
                     <div
                       className="text-gray-700 leading-relaxed text-sm lg:text-base prose prose-sm max-w-none"
                       dangerouslySetInnerHTML={{ __html: product.howToUse }}
@@ -546,7 +497,7 @@ export default function ProductDetailsClient({
 
             {activeTab === 'ingredients' && (
               <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3 lg:mb-4">
                   Ingredients
                 </h3>
                 {product.ingredients ? (
@@ -573,7 +524,7 @@ export default function ProductDetailsClient({
 
             {activeTab === 'faq' && (
               <div>
-                <h3 className="text-xl lg:text-2xl font-bold text-[#233f1c] mb-3 lg:mb-4">
+                <h3 className="text-xl lg:text-2xl font-bold text-primary mb-3 lg:mb-4">
                   Frequently Asked Questions
                 </h3>
                 <p className="text-gray-600 text-sm">FAQ section will be available soon.</p>
@@ -611,7 +562,7 @@ export default function ProductDetailsClient({
                 {product.name}
               </h3>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-lg font-bold text-[#233f1c]">
+                <span className="text-lg font-bold text-primary">
                   ₹{product.price}
                 </span>
                 <div className="flex items-center">
@@ -649,7 +600,7 @@ export default function ProductDetailsClient({
             <Button
               onClick={handleAddToCart}
               size="sm"
-              className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white px-4 py-2 rounded-xl font-bold shadow-lg transition-all duration-300 touch-manipulation"
+              className="bg-primary hover:bg-primary text-white px-4 py-2 rounded-xl font-bold shadow-lg transition-all duration-300 touch-manipulation"
             >
               <ShoppingCart className="w-4 h-4 mr-1" />
               <span className="text-sm">Add</span>

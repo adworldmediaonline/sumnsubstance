@@ -118,7 +118,7 @@ export const categoryColumns: ColumnDef<CategoryWithCount>[] = [
       return (
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/dashboard/categories/${category.id}/edit`}>
+            <Link href={`/dashboard/admin/categories/${category.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>

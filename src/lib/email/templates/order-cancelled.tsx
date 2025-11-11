@@ -420,7 +420,7 @@ const helpText = {
 };
 
 const button = {
-  backgroundColor: '#228B22',
+  backgroundColor: 'hsl(var(--primary))',
   color: '#ffffff',
   padding: '12px 24px',
   borderRadius: '8px',

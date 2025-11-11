@@ -15,7 +15,7 @@ const categories: Category[] = [
     href: '/categories/acne',
     image:
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop&crop=center',
-    badgeColor: 'bg-[#ffd469] text-[#233f1c]',
+    badgeColor: 'bg-[#ffffff] text-[hsl(var(--primary))]',
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const categories: Category[] = [
     href: '/categories/aging',
     image:
       'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop&crop=center',
-    badgeColor: 'bg-[#233f1c] text-white',
+    badgeColor: 'bg-[hsl(var(--primary))] text-white',
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ const categories: Category[] = [
     href: '/categories/brightening',
     image:
       'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=400&h=300&fit=crop&crop=center',
-    badgeColor: 'bg-[#ffd469] text-[#233f1c]',
+    badgeColor: 'bg-[#ffffff] text-[hsl(var(--primary))]',
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const categories: Category[] = [
     href: '/categories/hydration',
     image:
       'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=400&h=300&fit=crop&crop=center',
-    badgeColor: 'bg-[#233f1c] text-white',
+    badgeColor: 'bg-[hsl(var(--primary))] text-white',
   },
 ];
 
@@ -60,7 +60,7 @@ export default function CategoriesSection() {
             <Link key={category.id} href={category.href} className="group">
               <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 {/* Category Image */}
-                <div className="relative h-48 bg-gradient-to-br from-[#233f1c]/10 to-[#233f1c]/20 overflow-hidden">
+                <div className="relative h-48 bg-gradient-to-br from-[hsl(var(--primary))]/10 to-[hsl(var(--primary))]/20 overflow-hidden">
                   <Image
                     src={category.image}
                     alt={category.name}
@@ -78,13 +78,13 @@ export default function CategoriesSection() {
 
                 {/* Category Info */}
                 <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-[#233f1c] mb-2">
+                  <h3 className="text-xl font-bold text-[hsl(var(--primary))] mb-2">
                     {category.name}
                   </h3>
                   <p className="text-gray-600 text-sm mb-4">
                     {category.description}
                   </p>
-                  <div className="inline-flex items-center text-[#233f1c] font-medium text-sm group-hover:text-[#ffd469] transition-colors">
+                  <div className="inline-flex items-center text-[hsl(var(--primary))] font-medium text-sm group-hover:text-[#ffffff] transition-colors">
                     Shop Now
                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -98,7 +98,7 @@ export default function CategoriesSection() {
         <div className="text-center mt-12">
           <Button
             size="lg"
-            className="bg-[#233f1c] hover:bg-[#2b3e1a] text-white px-12 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white px-12 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             asChild
           >
             <Link href="/categories">

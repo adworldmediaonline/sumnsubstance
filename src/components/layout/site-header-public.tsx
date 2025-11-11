@@ -19,11 +19,9 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
-  Heart,
   LogOut,
   Menu,
   Package,
-  Settings,
   User,
   UserIcon
 } from 'lucide-react';
@@ -92,7 +90,6 @@ export default function SiteHeaderPublic() {
         />
       </Link>
 
-      {/* Desktop Navigation */}
       <div className="hidden lg:flex items-center">
         <NavigationMenu>
           <NavigationMenuList className="space-x-1">
@@ -100,75 +97,45 @@ export default function SiteHeaderPublic() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Home
-                </Link>
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Home
+              </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <Link
-                  href="/products"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Products
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/categories"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Categories
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/about"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  About
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/contact"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
-                    ? (isScrolled
-                      ? 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                      : 'text-white hover:text-[#FFD700] bg-transparent hover:bg-white/10')
-                    : 'text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100'
-                    }`}
-                >
-                  Contact
-                </Link>
+                href="/about"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                About
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                href="/contact"
+                className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium ${isHomePage
+                  ? (isScrolled
+                    ? 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                    : 'text-white hover:text-white/80 bg-transparent hover:bg-white/10')
+                  : 'text-primary hover:text-primary/80 bg-transparent hover:bg-muted'
+                  }`}
+              >
+                Contact
+              </Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -191,7 +158,7 @@ export default function SiteHeaderPublic() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={session.user.image ?? ''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                    <AvatarFallback className="bg-white text-primary font-semibold">
                       {session.user.initials ?? ''}
                     </AvatarFallback>
                   </Avatar>
@@ -215,26 +182,26 @@ export default function SiteHeaderPublic() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/" className="cursor-pointer">
+                  <Link href={session?.user.role === 'admin' ? '/dashboard/admin/' : '/dashboard/user/'} className="cursor-pointer">
                     <UserIcon className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link
-                    href="/dashboard/user/profile"
+                    href="/dashboard/admin/user/profile"
                     className="cursor-pointer"
                   >
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Account Settings</span>
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuItem asChild>
-                  <Link href="/orders" className="cursor-pointer">
+                  <Link href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'} className="cursor-pointer">
                     <Package className="mr-2 h-4 w-4" />
-                    <span>My Orders</span>
+                    <span>Orders</span>
                   </Link>
                 </DropdownMenuItem>
 
@@ -271,8 +238,8 @@ export default function SiteHeaderPublic() {
                       }`}
                   >
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${isHomePage
-                      ? (isScrolled ? 'bg-[#228B22] text-white' : 'bg-white text-[#228B22]')
-                      : 'bg-[#228B22] text-white'
+                      ? (isScrolled ? 'bg-primary text-white' : 'bg-white text-primary')
+                      : 'bg-primary text-white'
                       }`}>
                       <User className="w-5 h-5" />
                     </div>
@@ -292,8 +259,8 @@ export default function SiteHeaderPublic() {
                   variant="ghost"
                   size="sm"
                   className={`p-2 transition-colors duration-300 ${isHomePage
-                    ? (isScrolled ? 'text-[#228B22] hover:bg-gray-100' : 'text-white hover:bg-white/10')
-                    : 'text-[#228B22] hover:bg-gray-100'
+                    ? (isScrolled ? 'text-primary hover:bg-muted' : 'text-white hover:bg-white/10')
+                    : 'text-primary hover:bg-muted'
                     }`}
                 >
                   <Menu className="w-6 h-6" />
@@ -301,7 +268,7 @@ export default function SiteHeaderPublic() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
+                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-primary to-primary/80"
               >
                 <div className="flex flex-col h-full">
                   {/* Mobile Header */}
@@ -318,12 +285,12 @@ export default function SiteHeaderPublic() {
                   {session && (
                     <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={session.user.image ?? ''} alt={''} />
-                          <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                            {session.user.initials ?? ''}
-                          </AvatarFallback>
-                        </Avatar>
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={session.user.image ?? ''} alt={''} />
+                        <AvatarFallback className="bg-white text-primary font-semibold">
+                          {session.user.initials ?? ''}
+                        </AvatarFallback>
+                      </Avatar>
                         <div>
                           <p className="text-white font-medium">{session.user.name}</p>
                           <p className="text-white/70 text-sm">{session.user.email}</p>
@@ -340,20 +307,6 @@ export default function SiteHeaderPublic() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <span className="font-medium">Home</span>
-                    </Link>
-                    <Link
-                      href="/products"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Products</span>
-                    </Link>
-                    <Link
-                      href="/categories"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Categories</span>
                     </Link>
                     <Link
                       href="/about"
@@ -375,7 +328,7 @@ export default function SiteHeaderPublic() {
                     {session && (
                       <>
                         <Link
-                          href="/dashboard"
+                          href={session?.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
@@ -383,21 +336,14 @@ export default function SiteHeaderPublic() {
                           <span className="font-medium">Dashboard</span>
                         </Link>
                         <Link
-                          href="/orders"
+                          href={session?.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Package className="w-5 h-5" />
-                          <span className="font-medium">My Orders</span>
+                          <span className="font-medium">Orders</span>
                         </Link>
-                        <Link
-                          href="/wishlist"
-                          className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <Heart className="w-5 h-5" />
-                          <span className="font-medium">Wishlist</span>
-                        </Link>
+
                       </>
                     )}
                   </nav>

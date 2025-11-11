@@ -32,17 +32,17 @@ interface OrderEmailData {
       productSnapshot?: { mainImage?: { url?: string } };
     }>;
     shippingAddress:
-      | string
-      | {
-          fullName: string;
-          addressLine1: string;
-          addressLine2?: string;
-          city: string;
-          state: string;
-          postalCode: string;
-          country: string;
-          phone: string;
-        };
+    | string
+    | {
+      fullName: string;
+      addressLine1: string;
+      addressLine2?: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+      phone: string;
+    };
   };
   customerEmail: string;
   customerName: string;
@@ -420,15 +420,15 @@ export async function sendAdminOrderNotification(order: {
         <h3>Order Items:</h3>
         <ul>
           ${order.items
-            .map(
-              item => `
+          .map(
+            item => `
             <li>${item.name} x ${item.quantity} = ₹${toNumber(item.total).toLocaleString()}</li>
           `
-            )
-            .join('')}
+          )
+          .join('')}
         </ul>
 
-        <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/orders/${order.id}" target="_blank">View Order in Dashboard</a></p>
+        <p><a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/admin/orders/${order.id}" target="_blank">View Order in Dashboard</a></p>
       `,
     });
 

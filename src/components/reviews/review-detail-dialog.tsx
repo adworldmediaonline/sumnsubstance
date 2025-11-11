@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
-import type { AdminReviewData } from '@/app/(dashboard)/dashboard/reviews/columns';
+import { AdminReviewData } from '@/app/(dashboard)/dashboard/admin/reviews/columns';
 
 interface ReviewDetailDialogProps {
   review: AdminReviewData;
@@ -56,7 +56,7 @@ export function ReviewDetailDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-[#233f1c]">
+          <DialogTitle className="text-2xl font-bold text-[hsl(var(--primary))]">
             Review Details
           </DialogTitle>
           <DialogDescription>
@@ -101,7 +101,7 @@ export function ReviewDetailDialog({
               <div className="flex items-center gap-3">
                 <Avatar className="h-12 w-12">
                   <AvatarImage src={review.userImage} alt={review.userName} />
-                  <AvatarFallback className="bg-gradient-to-r from-[#233f1c] to-[#2b3e1a] text-white">
+                  <AvatarFallback className="bg-gradient-to-r from-[hsl(var(--primary))] to-[#2b3e1a] text-white">
                     {review.userInitials || review.userName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
@@ -134,11 +134,10 @@ export function ReviewDetailDialog({
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${
-                      i < review.rating
-                        ? 'text-yellow-500 fill-current'
-                        : 'text-gray-300'
-                    }`}
+                    className={`w-5 h-5 ${i < review.rating
+                      ? 'text-yellow-500 fill-current'
+                      : 'text-gray-300'
+                      }`}
                   />
                 ))}
                 <span className="font-semibold text-lg">{review.rating}/5</span>

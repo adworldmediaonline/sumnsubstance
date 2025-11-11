@@ -89,7 +89,7 @@ export function ReviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-[#233f1c]">
+          <DialogTitle className="text-2xl font-bold text-[hsl(var(--primary))]">
             Write a Review
           </DialogTitle>
           <DialogDescription className="text-gray-600">
@@ -224,7 +224,7 @@ export function ReviewDialog({
               <Button
                 type="submit"
                 disabled={isSubmitting || !watchedRating}
-                className="flex-1 bg-[#233f1c] hover:bg-[#2b3e1a] text-white font-semibold py-3 rounded-xl"
+                className="flex-1 bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] text-white font-semibold py-3 rounded-xl"
               >
                 {isSubmitting ? (
                   <>

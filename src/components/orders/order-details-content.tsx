@@ -38,7 +38,7 @@ export function OrderDetailsContent({ order }: OrderDetailsContentProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard/orders">
+            <Link href="/dashboard/admin/orders">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Orders
             </Link>

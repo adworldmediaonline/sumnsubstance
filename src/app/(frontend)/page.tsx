@@ -1,10 +1,6 @@
 import { getProducts } from '@/server/queries/product';
 import { getReviewAggregates } from '@/server/queries/review';
-import {
-  FeaturedProductsV3,
-  NewsletterSection,
-  TrustBadges,
-} from '../../components/home';
+import { FeaturedProductsV3 } from '../../components/home';
 import HeroContent from '../../components/home/hero-content';
 
 export default async function Home() {
@@ -33,8 +29,6 @@ export default async function Home() {
     <>
       <HeroContent />
       <FeaturedProductsV3 products={featuredProducts} />
-      <TrustBadges />
-      <NewsletterSection />
     </>
   );
 }

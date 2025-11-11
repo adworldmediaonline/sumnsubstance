@@ -79,7 +79,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
 
       if (result.success) {
         toast.success('Product updated successfully!');
-        router.push('/dashboard/products');
+        router.push('/dashboard/admin/products');
       } else {
         toast.error(result.error);
       }
@@ -480,7 +480,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => router.push('/dashboard/products')}
+            onClick={() => router.push('/dashboard/admin/products')}
             disabled={isSubmitting}
           >
             Cancel

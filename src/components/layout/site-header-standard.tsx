@@ -69,7 +69,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Home
                 </Link>
@@ -78,28 +78,8 @@ export default function SiteHeaderStandard() {
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <Link
-                  href="/products"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
-                >
-                  Products
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  href="/categories"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
-                >
-                  Categories
-                </Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
                   href="/about"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   About
                 </Link>
@@ -109,7 +89,7 @@ export default function SiteHeaderStandard() {
               <NavigationMenuLink asChild>
                 <Link
                   href="/contact"
-                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-gray-700 hover:text-[#228B22] bg-transparent hover:bg-gray-100`}
+                  className={`${navigationMenuTriggerStyle()} transition-colors duration-300 font-medium text-primary hover:text-primary/80 bg-transparent hover:bg-muted`}
                 >
                   Contact
                 </Link>
@@ -135,7 +115,7 @@ export default function SiteHeaderStandard() {
                 >
                   <Avatar className="h-9 w-9">
                     <AvatarImage src={session.user.image ?? ''} alt={''} />
-                    <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                    <AvatarFallback className="bg-white text-primary font-semibold">
                       {session.user.initials ?? ''}
                     </AvatarFallback>
                   </Avatar>
@@ -159,13 +139,13 @@ export default function SiteHeaderStandard() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/" className="cursor-pointer">
+                  <Link href={session.user.role === 'admin' ? '/dashboard/admin/' : '/dashboard/user/'} className="cursor-pointer">
                     <UserIcon className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/user/profile"
                     className="cursor-pointer"
@@ -173,12 +153,12 @@ export default function SiteHeaderStandard() {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Account Settings</span>
                   </Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuItem asChild>
-                  <Link href="/orders" className="cursor-pointer">
+                  <Link href={session.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'} className="cursor-pointer">
                     <Package className="mr-2 h-4 w-4" />
-                    <span>My Orders</span>
+                    <span>Orders</span>
                   </Link>
                 </DropdownMenuItem>
 
@@ -211,7 +191,7 @@ export default function SiteHeaderStandard() {
                     size="sm"
                     className="relative p-2 rounded-full transition-all duration-300 hover:bg-gray-100"
                   >
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 bg-[#228B22] text-white">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 bg-primary text-white">
                       <User className="w-5 h-5" />
                     </div>
                   </Button>
@@ -229,14 +209,14 @@ export default function SiteHeaderStandard() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="p-2 transition-colors duration-300 text-[#228B22] hover:bg-gray-100"
+                  className="p-2 transition-colors duration-300 text-primary hover:bg-muted"
                 >
                   <Menu className="w-6 h-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
+                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-primary to-primary/80"
               >
                 <div className="flex flex-col h-full">
                   {/* Mobile Header */}
@@ -253,12 +233,12 @@ export default function SiteHeaderStandard() {
                   {session && (
                     <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-12 w-12">
-                          <AvatarImage src={session.user.image ?? ''} alt={''} />
-                          <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                            {session.user.initials ?? ''}
-                          </AvatarFallback>
-                        </Avatar>
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage src={session.user.image ?? ''} alt={''} />
+                        <AvatarFallback className="bg-white text-primary font-semibold">
+                          {session.user.initials ?? ''}
+                        </AvatarFallback>
+                      </Avatar>
                         <div>
                           <p className="text-white font-medium">{session.user.name}</p>
                           <p className="text-white/70 text-sm">{session.user.email}</p>
@@ -275,20 +255,6 @@ export default function SiteHeaderStandard() {
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <span className="font-medium">Home</span>
-                    </Link>
-                    <Link
-                      href="/products"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Products</span>
-                    </Link>
-                    <Link
-                      href="/categories"
-                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <span className="font-medium">Categories</span>
                     </Link>
                     <Link
                       href="/about"
@@ -310,7 +276,7 @@ export default function SiteHeaderStandard() {
                     {session && (
                       <>
                         <Link
-                          href="/dashboard"
+                          href={session.user.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
@@ -318,21 +284,21 @@ export default function SiteHeaderStandard() {
                           <span className="font-medium">Dashboard</span>
                         </Link>
                         <Link
-                          href="/orders"
+                          href={session.user.role === 'admin' ? '/dashboard/admin/orders' : '/dashboard/user/orders'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Package className="w-5 h-5" />
-                          <span className="font-medium">My Orders</span>
+                          <span className="font-medium">Orders</span>
                         </Link>
-                        <Link
-                          href="/wishlist"
+                        {/* <Link
+                          href={session.user.role === 'admin' ? '/dashboard/admin/wishlist' : '/dashboard/user/wishlist'}
                           className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           <Heart className="w-5 h-5" />
-                          <span className="font-medium">Wishlist</span>
-                        </Link>
+                          <span className="font-medium">Favorites</span>
+                        </Link> */}
                       </>
                     )}
                   </nav>

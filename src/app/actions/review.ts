@@ -102,7 +102,7 @@ export async function createReview(data: z.infer<typeof createReviewSchema>) {
 
     // Revalidate relevant paths
     revalidatePath(`/products/${product.slug}`);
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
 
     return {
       success: true,
@@ -170,7 +170,7 @@ export async function updateReviewStatus(
     });
 
     // Revalidate paths
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
     revalidatePath(`/products/${review.product.slug}`);
 
     return {
@@ -290,10 +290,10 @@ export async function deleteReview(data: z.infer<typeof deleteReviewSchema>) {
     if (review.userId !== session.user.id) {
       // TODO: Add admin check
       // if (session.user.role !== 'admin') {
-        return {
-          success: false,
-          error: 'You can only delete your own reviews',
-        };
+      return {
+        success: false,
+        error: 'You can only delete your own reviews',
+      };
       // }
     }
 
@@ -304,7 +304,7 @@ export async function deleteReview(data: z.infer<typeof deleteReviewSchema>) {
 
     // Revalidate paths
     revalidatePath(`/products/${review.product.slug}`);
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
 
     return {
       success: true,
@@ -365,7 +365,7 @@ export async function bulkUpdateReviewStatus(data: {
     });
 
     // Revalidate dashboard
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
 
     return {
       success: true,
@@ -415,7 +415,7 @@ export async function deleteReviewAdmin(reviewId: string) {
 
     // Revalidate paths
     revalidatePath(`/products/${review.product.slug}`);
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
 
     return {
       success: true,
@@ -459,7 +459,7 @@ export async function bulkDeleteReviews(reviewIds: string[]) {
     });
 
     // Revalidate dashboard
-    revalidatePath('/dashboard/reviews');
+    revalidatePath('/dashboard/admin/reviews');
 
     return {
       success: true,

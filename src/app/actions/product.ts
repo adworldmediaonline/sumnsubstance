@@ -88,8 +88,8 @@ export async function createProduct(data: z.infer<typeof createProductSchema>) {
       },
     });
 
-    revalidatePath('/dashboard/products');
-    revalidatePath('/dashboard/categories');
+    revalidatePath('/dashboard/admin/products');
+    revalidatePath('/dashboard/admin/categories');
 
     return {
       success: true,
@@ -249,9 +249,9 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
       };
     }
 
-    revalidatePath('/dashboard/products');
-    revalidatePath(`/dashboard/products/${id}/edit`);
-    revalidatePath('/dashboard/categories');
+    revalidatePath('/dashboard/admin/products');
+    revalidatePath(`/dashboard/admin/products/${id}/edit`);
+    revalidatePath('/dashboard/admin/categories');
 
     return {
       success: true,
@@ -299,8 +299,8 @@ export async function deleteProduct(data: z.infer<typeof deleteProductSchema>) {
       where: { id },
     });
 
-    revalidatePath('/dashboard/products');
-    revalidatePath('/dashboard/categories');
+    revalidatePath('/dashboard/admin/products');
+    revalidatePath('/dashboard/admin/categories');
 
     return {
       success: true,
