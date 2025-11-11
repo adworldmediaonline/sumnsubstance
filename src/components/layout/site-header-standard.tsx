@@ -20,7 +20,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   Heart,
-  Leaf,
+
   LogOut,
   Menu,
   Package,
@@ -29,6 +29,8 @@ import {
   UserIcon
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import logo from '../../../public/brand/S&S Logo-01.png';
 
 import { AuthDialog } from '@/components/auth/auth-dialog';
 import { CartDropdown } from '@/components/cart/cart-dropdown';
@@ -50,11 +52,13 @@ export default function SiteHeaderStandard() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 lg:px-12 bg-white/95 backdrop-blur-md shadow-lg py-3">
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2">
-        <div className="bg-white rounded-full flex items-center justify-center shadow-lg w-10 h-10">
-          <Leaf className="text-[#228B22] w-5 h-5" />
-        </div>
-        <span className="font-bold text-xl text-[#228B22]">SumNSubstance</span>
+      <Link href="/" className="flex items-center">
+        <Image
+          src={logo}
+          alt="SumNSubstance Logo"
+          style={{ height: 'auto', width: '200px' }}
+          priority
+        />
       </Link>
 
       {/* Desktop Navigation */}
@@ -220,156 +224,158 @@ export default function SiteHeaderStandard() {
         {/* Mobile Menu */}
         <div className="md:hidden">
           {isMounted && (
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-2 transition-colors duration-300 text-[#228B22] hover:bg-gray-100"
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="p-2 transition-colors duration-300 text-[#228B22] hover:bg-gray-100"
+                >
+                  <Menu className="w-6 h-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
               >
-                <Menu className="w-6 h-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[300px] sm:w-[400px] bg-gradient-to-br from-[#228B22] to-[#7CB342]"
-            >
-              <div className="flex flex-col h-full">
-                {/* Mobile Header */}
-                <div className="flex items-center gap-2 mb-8">
-                  <div className="bg-white rounded-full p-2 shadow-lg">
-                    <Leaf className="w-6 h-6 text-[#228B22]" />
+                <div className="flex flex-col h-full">
+                  {/* Mobile Header */}
+                  <div className="flex items-center mb-8">
+                    <Image
+                      src={logo}
+                      alt="SumNSubstance Logo"
+                      className="brightness-0 invert"
+                      style={{ height: 'auto', width: '180px' }}
+                    />
                   </div>
-                  <span className="font-bold text-xl text-white">SumNSubstance</span>
-                </div>
 
-                {/* User Info (Mobile) */}
-                {session && (
-                  <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={session.user.image ?? ''} alt={''} />
-                        <AvatarFallback className="bg-white text-[#228B22] font-semibold">
-                          {session.user.initials ?? ''}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-white font-medium">{session.user.name}</p>
-                        <p className="text-white/70 text-sm">{session.user.email}</p>
+                  {/* User Info (Mobile) */}
+                  {session && (
+                    <div className="mb-6 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={session.user.image ?? ''} alt={''} />
+                          <AvatarFallback className="bg-white text-[#228B22] font-semibold">
+                            {session.user.initials ?? ''}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-white font-medium">{session.user.name}</p>
+                          <p className="text-white/70 text-sm">{session.user.email}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-
-                {/* Mobile Navigation Links */}
-                <nav className="flex-1 space-y-2">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="font-medium">Home</span>
-                  </Link>
-                  <Link
-                    href="/products"
-                    className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="font-medium">Products</span>
-                  </Link>
-                  <Link
-                    href="/categories"
-                    className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="font-medium">Categories</span>
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="font-medium">About</span>
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="font-medium">Contact</span>
-                  </Link>
-
-                  <div className="my-4 h-px bg-white/20" />
-
-                  {session && (
-                    <>
-                      <Link
-                        href="/dashboard"
-                        className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <UserIcon className="w-5 h-5" />
-                        <span className="font-medium">Dashboard</span>
-                      </Link>
-                      <Link
-                        href="/orders"
-                        className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <Package className="w-5 h-5" />
-                        <span className="font-medium">My Orders</span>
-                      </Link>
-                      <Link
-                        href="/wishlist"
-                        className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <Heart className="w-5 h-5" />
-                        <span className="font-medium">Wishlist</span>
-                      </Link>
-                    </>
                   )}
-                </nav>
 
-                {/* Mobile Bottom Actions */}
-                <div className="pt-4 border-t border-white/20">
-                  {session ? (
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-white hover:bg-red-500/20 hover:text-white"
-                      onClick={() => {
-                        authClient.signOut({
-                          fetchOptions: {
-                            onSuccess: () => {
-                              setIsMobileMenuOpen(false);
-                              router.push('/');
-                            },
-                          },
-                        });
-                      }}
+                  {/* Mobile Navigation Links */}
+                  <nav className="flex-1 space-y-2">
+                    <Link
+                      href="/"
+                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <LogOut className="mr-2 h-5 w-5" />
-                      <span className="font-medium">Log out</span>
-                    </Button>
-                  ) : (
-                    <AuthDialog
-                      trigger={
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-start text-white hover:bg-white/10"
-                          >
-                            <User className="mr-2 h-5 w-5" />
-                            <span className="font-medium">Sign In</span>
-                          </Button>
-                        </DialogTrigger>
-                      }
-                    />
-                  )}
+                      <span className="font-medium">Home</span>
+                    </Link>
+                    <Link
+                      href="/products"
+                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="font-medium">Products</span>
+                    </Link>
+                    <Link
+                      href="/categories"
+                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="font-medium">Categories</span>
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="font-medium">About</span>
+                    </Link>
+                    <Link
+                      href="/contact"
+                      className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="font-medium">Contact</span>
+                    </Link>
+
+                    <div className="my-4 h-px bg-white/20" />
+
+                    {session && (
+                      <>
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <UserIcon className="w-5 h-5" />
+                          <span className="font-medium">Dashboard</span>
+                        </Link>
+                        <Link
+                          href="/orders"
+                          className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Package className="w-5 h-5" />
+                          <span className="font-medium">My Orders</span>
+                        </Link>
+                        <Link
+                          href="/wishlist"
+                          className="flex items-center gap-3 text-white hover:bg-white/10 px-4 py-3 rounded-lg transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Heart className="w-5 h-5" />
+                          <span className="font-medium">Wishlist</span>
+                        </Link>
+                      </>
+                    )}
+                  </nav>
+
+                  {/* Mobile Bottom Actions */}
+                  <div className="pt-4 border-t border-white/20">
+                    {session ? (
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-white hover:bg-red-500/20 hover:text-white"
+                        onClick={() => {
+                          authClient.signOut({
+                            fetchOptions: {
+                              onSuccess: () => {
+                                setIsMobileMenuOpen(false);
+                                router.push('/');
+                              },
+                            },
+                          });
+                        }}
+                      >
+                        <LogOut className="mr-2 h-5 w-5" />
+                        <span className="font-medium">Log out</span>
+                      </Button>
+                    ) : (
+                      <AuthDialog
+                        trigger={
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start text-white hover:bg-white/10"
+                            >
+                              <User className="mr-2 h-5 w-5" />
+                              <span className="font-medium">Sign In</span>
+                            </Button>
+                          </DialogTrigger>
+                        }
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
           )}
         </div>
       </div>
