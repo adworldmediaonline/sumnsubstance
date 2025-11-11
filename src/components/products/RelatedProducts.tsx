@@ -29,7 +29,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
 
   return (
     <div className="relative mt-8 lg:mt-16">
-      <h3 className="text-2xl lg:text-3xl font-bold text-[hsl(var(--primary))] mb-6 lg:mb-8 text-center">
+      <h3 className="text-2xl lg:text-3xl font-bold text-primary mb-6 lg:mb-8 text-center">
         You May Also Like
       </h3>
 
@@ -82,7 +82,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
 
                   {/* Quick view button - Hidden on mobile */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden lg:flex items-center justify-center">
-                    <Button className="bg-white/90 text-[hsl(var(--primary))] hover:bg-white hover:text-[hsl(var(--primary))] backdrop-blur-sm">
+                    <Button className="bg-white/90 text-primary hover:bg-white hover:text-primary backdrop-blur-sm">
                       Quick View
                     </Button>
                   </div>
@@ -90,7 +90,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
 
                 {/* Product Info */}
                 <div className="p-4 lg:p-6 flex flex-col flex-1">
-                  <h4 className="font-bold text-[hsl(var(--primary))] mb-2 lg:mb-3 text-sm lg:text-lg group-hover:text-[hsl(var(--primary))] transition-colors min-h-[2.5rem] lg:min-h-[3.5rem] flex items-center line-clamp-2">
+                  <h4 className="font-bold text-primary mb-2 lg:mb-3 text-sm lg:text-lg group-hover:text-primary transition-colors min-h-[2.5rem] lg:min-h-[3.5rem] flex items-center line-clamp-2">
                     {product.name}
                   </h4>
 
@@ -109,7 +109,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
 
                   {/* Price */}
                   <div className="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
-                    <span className="text-lg lg:text-2xl font-bold text-[hsl(var(--primary))]">
+                    <span className="text-lg lg:text-2xl font-bold text-primary">
                       ₹{product.price}
                     </span>
                   </div>
@@ -132,7 +132,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
           <Button
             variant="outline"
             size="icon"
-            className="related-prev w-12 h-12 rounded-full border-2 border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] hover:text-white transition-all duration-300"
+            className="related-prev w-12 h-12 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
           >
             <ChevronLeft className="w-6 h-6" />
           </Button>
@@ -140,7 +140,7 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
           <Button
             variant="outline"
             size="icon"
-            className="related-next w-12 h-12 rounded-full border-2 border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))] hover:text-white transition-all duration-300"
+            className="related-next w-12 h-12 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
           >
             <ChevronRight className="w-6 h-6" />
           </Button>

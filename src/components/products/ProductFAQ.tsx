@@ -17,7 +17,7 @@ export default function ProductFAQ({ faq }: ProductFAQProps) {
 
   return (
     <div>
-      <h3 className="text-xl lg:text-2xl font-bold text-[hsl(var(--primary))] mb-4 lg:mb-6">
+      <h3 className="text-xl lg:text-2xl font-bold text-primary mb-4 lg:mb-6">
         Frequently Asked Questions
       </h3>
       <div className="space-y-3 lg:space-y-4">
@@ -32,7 +32,7 @@ export default function ProductFAQ({ faq }: ProductFAQProps) {
               }
               className="w-full px-4 lg:px-6 py-4 lg:py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors touch-manipulation"
             >
-              <span className="font-semibold text-[hsl(var(--primary))] text-sm lg:text-base pr-4">
+              <span className="font-semibold text-primary text-sm lg:text-base pr-4">
                 {item.question}
               </span>
               {expandedFAQ === index ? (
